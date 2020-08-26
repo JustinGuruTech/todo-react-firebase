@@ -9,13 +9,12 @@ import './App.css';
 import * as Firestore from './components/Firestore'
 
 const styles = {
-  
+
 }
 
 function App(props) {
 
-  const { classes } = props;
-
+  /* #region firestore query testing */
   // // testing addTodo query and async await
   // Firestore.addtodo("test adding todo").then(() => {
   //   // testing getAllTodos query
@@ -56,6 +55,36 @@ function App(props) {
   //     })
   //   })
   // })
+  /* #endregion */
+
+  const { classes } = props;
+  // state hooks
+  const [todoList, setTodoList] = useState([]);
+
+  // run once on startup
+  useEffect(() => {
+    Firestore.addtodo("timestamp test").then(() => {
+      addTodosToState();
+    })
+    // addTodosToState();
+  }, []);
+
+  // get all todos from db and store in todoList hook
+  function addTodosToState() {
+    Firestore.getAllTodos().then(allTodos => {
+      var todos = []; // stores parsed todos
+      // for each oc, get data and push to todos
+      allTodos.forEach(doc => {
+        var todo = doc.data();
+        todo.id = doc.id;
+        todos.push(todo);
+      })
+      // console.log(todos);
+      // todos.sort();
+      // console.log(todos);
+      setTodoList(todos); // add todos to hook
+    })
+  }
 
   return (
     <div className={classes.container}>

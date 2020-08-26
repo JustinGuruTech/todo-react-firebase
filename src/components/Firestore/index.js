@@ -36,6 +36,8 @@ export const getAllTodos = async() => {
 export const addtodo = async (body) => {
     let taskRef = await db.collection("todos").add({
         body: body,
+        // store current time in todo doc
+        created: firebase.firestore.Timestamp.fromDate(new Date()),
         status: "pending"   // automatic set to pending
     })
     .catch(error => {
