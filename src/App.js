@@ -18,27 +18,36 @@ const styles = {
   toolbar: {
     height: 64,
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
+    backgroundColor: "#4e8fef",
+    borderBottom: "2px solid #d9ecff"
   },
   addText: {
     width: "72%",
-    height: 55
+    height: 55,
+    color: "white"
+  },
+  addTextBG: {
+    backgroundColor: "white"
   },
   todoList: {
     marginTop: 20,
-    maxWidth: 500,
     minHeight: 600
   },
   mainTodoContainer: {
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
+    background: "linear-gradient(135deg, #708090 21px, #d9ecff 22px, #d9ecff 24px, transparent 24px, transparent 67px, #d9ecff 67px, #d9ecff 69px, transparent 69px), linear-gradient(225deg, #708090 21px, #d9ecff 22px, #d9ecff 24px, transparent 24px, transparent 67px, #d9ecff 67px, #d9ecff 69px, transparent 69px)0 64px",
+    backgroundColor: "#708090",
+    backgroundSize: "64px 128px",
+    paddingBottom: 50
   },
   verticalFlex: {
     display: "flex",
     flexDirection: "column"
   },
   todoContainer: {
-    backgroundColor: "#eaeaea78",
+    backgroundColor: "#e2e2e2",
     marginTop: 40,
     padding: 40,
     width: 500,
@@ -189,7 +198,10 @@ function App(props) {
         <Paper elevation={3} className={classes.todoContainer}>
           <Paper elevation={0} className={classes.searchFlex}>
             <TextField variant="outlined" className={classes.addText} placeholder="Add a todo..."
-            onChange={handleTextInput} value={todoInput} aria-label="Type Todo">
+            onChange={handleTextInput} value={todoInput} aria-label="Type Todo"
+            InputProps={{
+              className: classes.addTextBG,
+            }}> :
             </TextField>
             <Button className={classes.addButton}
             onClick={handleAddItem} aria-label="Add Typed Todo">Add</Button>

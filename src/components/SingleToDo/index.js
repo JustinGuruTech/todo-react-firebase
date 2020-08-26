@@ -104,6 +104,7 @@ function SingleToDo(props) {
         })
     }
 
+    // handles user saving change to todo
     function handleEdit(e) {
         setBody(e.target.value);
     }
