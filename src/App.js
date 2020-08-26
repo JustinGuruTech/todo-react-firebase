@@ -26,7 +26,7 @@ const styles = {
   },
   todoList: {
     marginTop: 20,
-    width: 500,
+    maxWidth: 500,
     minHeight: 600
   },
   mainTodoContainer: {
@@ -132,7 +132,7 @@ function App(props) {
   }, []);
 
   // get all todos from db and store in todoList hook
-  function addTodosToState() {
+  const addTodosToState = () => {
     Firestore.getAllTodos().then(allTodos => {
       var todos = []; // stores parsed todos
       // for each doc, get data and push to todos
@@ -141,9 +141,6 @@ function App(props) {
         todo.id = doc.id;
         todos.push(todo);
       })
-      // console.log(todos);
-      // todos.sort();
-      // console.log(todos);
       setTodoList(todos); // add todos to hook
     })
   }
@@ -155,7 +152,7 @@ function App(props) {
 
   function handleAddItem() {
     // make sure input isn't empty
-    if (todoInput != "") {
+    if (todoInput !== "") {
       Firestore.addTodo(todoInput).then(() => {
         setTodoInput("");
         addTodosToState();
@@ -201,7 +198,7 @@ function App(props) {
           </Paper>
           <Paper elevation={1} className={classes.todoList}>
             {todoList.map(todo => {
-              return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id}></SingleToDo>
+              return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} refresh={addTodosToState}></SingleToDo>
             })}
           </Paper>
         </Paper>

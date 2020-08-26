@@ -2,15 +2,19 @@
 // 08/26/2020
 // Single todo list component
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-import { Typography, Paper, Divider, Checkbox, 
-    IconButton, withStyles } from '@material-ui/core';
+import { Button, Typography, Paper, Divider, Checkbox, 
+    IconButton, Dialog, DialogActions, DialogContent, 
+    DialogContentText, DialogTitle, withStyles } from '@material-ui/core';
 import { RadioButtonUnchecked, RadioButtonChecked, 
-    DeleteOutlineOutlined, Edit, Done, Autorenew } from '@material-ui/icons';
+    DeleteOutlineOutlined, Edit, Done } from '@material-ui/icons';
+
+import * as Firestore from '../Firestore'
 
 const styles = {
     mainContainer: {
+        width: "100%",
         minHeight: 40,
         display: "flex",
         flexDirection: "column",
@@ -41,16 +45,46 @@ function SingleToDo(props) {
     const [body, setBody] = useState(props.body);
     const [status, setStatus] = useState(props.status);
     const [editing, setEditing] = useState(false);
+    const [confirmTrashOpen, setConfirmTrashOpen] = useState(false);
+    const isFirstRun = useRef(true);
 
     // cross off/un-cross off todo item
     function handleIconChange() {
-
+        if (status === "pending") {
+            setStatus("completed");
+        } else {
+            setStatus("pending");
+        }
     }
 
     // toggle editing on a todo
     function toggleEditing() {
-
+        setEditing(!editing);
     }
+
+    function trashTodo() {
+        setConfirmTrashOpen(true);
+    }
+
+    function handleTrashClose() {
+        setConfirmTrashOpen(false);
+    }
+
+    function handleTrashConfirm() {
+        Firestore.deleteTodo(id).then(() => {
+            setConfirmTrashOpen(false);
+            props.refresh();
+        })
+    }
+
+    // called after status hook changes to update status in db
+    useEffect(() => {
+        if (isFirstRun.current) {
+            isFirstRun.current = false;
+            return;
+        }
+        Firestore.updateTodoStatus(id, status);
+    }, [id, status])
 
     return (
         <div>
@@ -65,10 +99,31 @@ function SingleToDo(props) {
                         <IconButton color="primary" component="span" className={classes.smallIcon} onClick={toggleEditing}>
                             {editing ? <Done /> : <Edit /> }
                         </IconButton>
-                        <IconButton color="primary" component="span" className={classes.trashIcon}>
+                        <IconButton color="primary" component="span" className={classes.trashIcon} onClick={trashTodo}>
                             <DeleteOutlineOutlined />
                         </IconButton>
                     </div>
+                    <Dialog
+                        open={confirmTrashOpen}
+                        keepMounted
+                        onClose={handleTrashClose}
+                    >
+                        <DialogTitle>{"Confirm Delete"}</DialogTitle>
+                        <DialogContent>
+                        <DialogContentText>
+                            Are you sure you want to delete this todo? It will no longer show up
+                            as a completed item.
+                        </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                        <Button onClick={handleTrashClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={handleTrashConfirm} color="primary">
+                            Delete
+                        </Button>
+                        </DialogActions>
+                    </Dialog>
                 </Paper>
             </Paper>
             <Divider />
