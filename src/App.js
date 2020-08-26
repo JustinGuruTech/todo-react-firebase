@@ -1,3 +1,7 @@
+// Justin Edwards
+// 08/26/2020
+// Main app for todo list. 
+
 import React, { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core';
 import './App.css';
