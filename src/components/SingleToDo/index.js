@@ -3,16 +3,75 @@
 // Single todo list component
 
 import React, { useState, useEffect } from 'react';
-import { withStyles } from '@material-ui/core';
+
+import { Typography, Paper, Divider, Checkbox, 
+    IconButton, withStyles } from '@material-ui/core';
+import { RadioButtonUnchecked, RadioButtonChecked, 
+    DeleteOutlineOutlined, Edit, Done, Autorenew } from '@material-ui/icons';
 
 const styles = {
-
+    mainContainer: {
+        minHeight: 40,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center"
+    },
+    horizontalFlex: {
+        display: "flex",
+        justifyContent: "space-between"
+    },
+    bodyLabel: {
+        lineHeight: "20px",
+        margin: "auto"
+    },
+    bodyLabelCompleted: {
+        lineHeight: "20px",
+        margin: "auto",
+        textDecoration: "line-through"
+    },
+    trashIcon: {
+        color: "#e63939"
+    }
 }
 
 function SingleToDo(props) {
+
+    const { classes, id } = props;
+    // state hooks
+    const [body, setBody] = useState(props.body);
+    const [status, setStatus] = useState(props.status);
+    const [editing, setEditing] = useState(false);
+
+    // cross off/un-cross off todo item
+    function handleIconChange() {
+
+    }
+
+    // toggle editing on a todo
+    function toggleEditing() {
+
+    }
+
     return (
         <div>
-            Single todo item
+            <Paper elevation={0} className={classes.mainContainer}>
+                <Paper elevation={0} className={classes.horizontalFlex}>
+                    <div className={classes.horizontalFlex}>
+                        <Checkbox className={classes.checkbox} icon={<RadioButtonUnchecked />} checkedIcon={<RadioButtonChecked />} 
+                        checked={status === "completed"} name="gilad" onChange={handleIconChange}/>
+                        <Typography className={status === "completed" ? classes.bodyLabelCompleted : classes.bodyLabel}>{body}</Typography>
+                    </div>
+                    <div className={classes.horizontalFlex}>
+                        <IconButton color="primary" component="span" className={classes.smallIcon} onClick={toggleEditing}>
+                            {editing ? <Done /> : <Edit /> }
+                        </IconButton>
+                        <IconButton color="primary" component="span" className={classes.trashIcon}>
+                            <DeleteOutlineOutlined />
+                        </IconButton>
+                    </div>
+                </Paper>
+            </Paper>
+            <Divider />
         </div>
     )
 }
