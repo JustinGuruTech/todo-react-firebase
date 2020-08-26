@@ -72,6 +72,10 @@ const styles = {
     backgroundColor: "#ffffff00",
     justifyContent: "space-between",
     marginTop: 20
+  },
+  noTasks: {
+    fontSize: 24,
+    margin: "24px 10px"
   }
 }
 
@@ -160,9 +164,6 @@ function App(props) {
         setTodoInput("");
         addTodosToState();
       })
-    // TODO: Show error on invalid input
-    } else {
-      console.log("invalid")
     }
   }
 
@@ -171,7 +172,7 @@ function App(props) {
     setFilterSelected(value);
   }
 
-  // 
+  //  toggles editing on and off
   function toggleEditing() {
     setEditing(!editing);
   }
@@ -188,24 +189,24 @@ function App(props) {
         <Paper elevation={3} className={classes.todoContainer}>
           <Paper elevation={0} className={classes.searchFlex}>
             <TextField variant="outlined" className={classes.addText} placeholder="Add a todo..."
-            onChange={handleTextInput} value={todoInput}>
+            onChange={handleTextInput} value={todoInput} aria-label="Type Todo">
             </TextField>
             <Button className={classes.addButton}
-            onClick={handleAddItem}>Add</Button>
+            onClick={handleAddItem} aria-label="Add Typed Todo">Add</Button>
           </Paper>
           <Paper elevation={0} className={classes.filterButtons}>
             <Button className={filterSelected === "all" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}
-            onClick={e => filterButtonHandler("all")}
+            onClick={e => filterButtonHandler("all")} aria-label="Show all tasks"
             >Show All</Button>
             <Button className={filterSelected === "pending" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}
-            onClick={e => filterButtonHandler("pending")}
+            onClick={e => filterButtonHandler("pending")} aria-label="Show pending tasks"
             >Pending</Button>
             <Button className={filterSelected === "completed" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}
-            onClick={e => filterButtonHandler("completed")}
+            onClick={e => filterButtonHandler("completed")} aria-label="Show completed tasks"
             >Completed</Button>
           </Paper>
-          <Paper elevation={1} className={classes.todoList}>
-            {todoList.map(todo => {
+          <Paper elevation={1} className={classes.todoList} aria-label="Task Container">
+            {todoList.length === 0 ? <Typography className={classes.noTasks}>No tasks yet</Typography> : todoList.map(todo => {
               // map all if filter set to all
               if (filterSelected === "all") {
                 return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 

@@ -121,24 +121,24 @@ function SingleToDo(props) {
     }, [id, status])
 
     return (
-        <div>
+        <div aria-label="Single Task">
             <Paper elevation={0} className={classes.mainContainer}>
                 <Paper elevation={0} className={classes.horizontalFlex}>
                     <div className={classes.leftFlex}>
                         <Checkbox className={classes.checkbox} icon={<RadioButtonUnchecked />} checkedIcon={<RadioButtonChecked />} 
-                        checked={status === "completed"} name="gilad" onChange={handleIconChange}/>
+                        checked={status === "completed"} name="gilad" onChange={handleIconChange} aria-label="Completion checkbox"/>
                         {editing ? <TextField autoFocus className={classes.todoEdit} value={body} onChange={handleEdit}
                         InputProps={{
                             className: classes.todoEdit,
                         }}/> : 
                         <Typography className={status === "completed" ? 
-                        classes.bodyLabelCompleted : classes.bodyLabel}>{body}</Typography> }
+                        classes.bodyLabelCompleted : classes.bodyLabel} aria-label="Task name">{body}</Typography> }
                     </div>
                     <div className={classes.horizontalFlex}>
-                        <IconButton color="primary" component="span" className={classes.smallIcon} onClick={toggleEditing}>
-                            {editing ? <Done /> : <Edit /> }
+                        <IconButton color="primary" component="span" className={classes.smallIcon} onClick={toggleEditing} aria-label={editing ? "Save task name" : "Edit task name"}>
+                            {editing ? <Done/> : <Edit/> }
                         </IconButton>
-                        <IconButton color="primary" component="span" className={classes.trashIcon} onClick={trashTodo}>
+                        <IconButton color="primary" component="span" className={classes.trashIcon} onClick={trashTodo} aria-label="Delete task">
                             <DeleteOutlineOutlined />
                         </IconButton>
                     </div>
@@ -146,6 +146,7 @@ function SingleToDo(props) {
                         open={confirmTrashOpen}
                         keepMounted
                         onClose={handleTrashClose}
+                        aria-label="Delete confirmation"
                     >
                         <DialogTitle>{"Confirm Delete"}</DialogTitle>
                         <DialogContent>
