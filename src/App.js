@@ -3,13 +3,45 @@
 // Main app for todo list. 
 
 import React, { useState, useEffect } from 'react';
-import { withStyles } from '@material-ui/core';
+import { Paper, Button, TextField, AppBar, Toolbar, Typography, withStyles } from '@material-ui/core';
 import './App.css';
+import SingleToDo from './components/SingleToDo';
 
 import * as Firestore from './components/Firestore'
 
 const styles = {
-
+  background: {
+    padding: 0,
+    margin: 0,
+    backgroundColor: "white"
+  },
+  toolbar: {
+    height: 64,
+    display: "flex",
+    justifyContent: "center"
+  },
+  addText: {
+    width: 395,
+    height: 55
+  },
+  todoList: {
+    marginTop: 20,
+    width: 500,
+    minHeight: 600
+  },
+  mainTodoContainer: {
+    display: "flex",
+    justifyContent: "center"
+  },
+  verticalFlex: {
+    display: "flex",
+    flexDirection: "column"
+  },
+  todoContainer: {
+    backgroundColor: "#eaeaea78",
+    marginTop: 40,
+    padding: 40
+  }
 }
 
 function App(props) {
@@ -59,7 +91,9 @@ function App(props) {
 
   const { classes } = props;
   // state hooks
+  const [todoInput, setTodoInput] = useState("");
   const [todoList, setTodoList] = useState([]);
+  const [filterSelected, setFilterSelected] = useState("all");
 
   // run once on startup
   useEffect(() => {
@@ -86,10 +120,54 @@ function App(props) {
     })
   }
 
+  function handleTextInput() {
+
+  }
+
+  function handleAddItem() {
+
+  }
+
+  function filterButtonHandler() {
+
+  }
+
   return (
-    <div className={classes.container}>
-      Main app
-    </div>
+    <Paper elevation={0}
+    className={classes.background}>
+      <AppBar color="primary" position="static" style={{ height: 64 }}>
+        <Toolbar className={classes.toolbar}>
+          <Typography color="inherit" variant="h4">To-Do</Typography>
+        </Toolbar>
+      </AppBar>
+      <div className={classes.mainTodoContainer}>
+        <Paper elevation={3} className={classes.todoContainer}>
+          <Paper elevation={0} className={classes.searchFlex}>
+            <TextField variant="outlined" className={classes.addText} placeholder="Add a todo..."
+            onChange={handleTextInput} value={todoInput}>
+            </TextField>
+            <Button className={classes.addButton}
+            onClick={handleAddItem}>Add</Button>
+          </Paper>
+          <Paper elevation={0} className={classes.filterButtons}>
+            <Button className={filterSelected === "all" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}
+            onClick={e => filterButtonHandler("all")}
+            >Show All</Button>
+            <Button className={filterSelected === "pending" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}
+            onClick={e => filterButtonHandler("pending")}
+            >Pending</Button>
+            <Button className={filterSelected === "completed" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}
+            onClick={e => filterButtonHandler("completed")}
+            >Completed</Button>
+          </Paper>
+          <Paper elevation={1} className={classes.todoList}>
+            {todoList.map(todo => {
+              return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id}></SingleToDo>
+            })}
+          </Paper>
+        </Paper>
+      </div>
+    </Paper>
   );
 }
 
