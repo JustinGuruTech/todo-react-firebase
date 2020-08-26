@@ -206,8 +206,24 @@ function App(props) {
           </Paper>
           <Paper elevation={1} className={classes.todoList}>
             {todoList.map(todo => {
-              return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
+              // map all if filter set to all
+              if (filterSelected === "all") {
+                return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
               refresh={addTodosToState} toggleEditing={toggleEditing} todoEditing={editing}></SingleToDo>
+              // map only those with status pending
+              } else if (filterSelected === "pending") {
+                if (todo.status === "pending") {
+                  return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
+                  refresh={addTodosToState} toggleEditing={toggleEditing} todoEditing={editing}></SingleToDo>
+                }
+              // map only those with status completed
+              } else if (filterSelected === "completed") {
+                if (todo.status === "completed") {
+                  return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
+                  refresh={addTodosToState} toggleEditing={toggleEditing} todoEditing={editing}></SingleToDo>
+                }
+              }
+              return null;
             })}
           </Paper>
         </Paper>

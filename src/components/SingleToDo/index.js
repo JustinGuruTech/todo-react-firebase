@@ -114,7 +114,10 @@ function SingleToDo(props) {
             isFirstRun.current = false;
             return;
         }
-        Firestore.updateTodoStatus(id, status);
+        Firestore.updateTodoStatus(id, status).then(() => {
+            props.refresh();
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, status])
 
     return (
