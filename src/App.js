@@ -125,6 +125,7 @@ function App(props) {
   const [todoInput, setTodoInput] = useState("");
   const [todoList, setTodoList] = useState([]);
   const [filterSelected, setFilterSelected] = useState("all");
+  const [editing, setEditing] = useState(false);
 
   // run once on startup
   useEffect(() => {
@@ -141,6 +142,8 @@ function App(props) {
         todo.id = doc.id;
         todos.push(todo);
       })
+      // sort list by timestamp
+      todos.sort((a, b) => (a.created > b.created) ? 1 : -1)
       setTodoList(todos); // add todos to hook
     })
   }
@@ -166,6 +169,11 @@ function App(props) {
   // set filter applied 
   function filterButtonHandler(value) {
     setFilterSelected(value);
+  }
+
+  // 
+  function toggleEditing() {
+    setEditing(!editing);
   }
 
   return (
@@ -198,7 +206,8 @@ function App(props) {
           </Paper>
           <Paper elevation={1} className={classes.todoList}>
             {todoList.map(todo => {
-              return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} refresh={addTodosToState}></SingleToDo>
+              return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
+              refresh={addTodosToState} toggleEditing={toggleEditing} todoEditing={editing}></SingleToDo>
             })}
           </Paper>
         </Paper>

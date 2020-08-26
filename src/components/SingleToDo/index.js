@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
-import { Button, Typography, Paper, Divider, Checkbox, 
+import { Button, Typography, Paper, Divider, Checkbox, TextField,
     IconButton, Dialog, DialogActions, DialogContent, 
     DialogContentText, DialogTitle, withStyles } from '@material-ui/core';
 import { RadioButtonUnchecked, RadioButtonChecked, 
@@ -24,17 +24,26 @@ const styles = {
         display: "flex",
         justifyContent: "space-between"
     },
+    leftFlex: {
+        display: "flex",
+        justifyContent: "space-between",
+        flex: 1
+    },
     bodyLabel: {
         lineHeight: "20px",
-        margin: "auto"
+        margin: "auto auto auto 0"
     },
     bodyLabelCompleted: {
         lineHeight: "20px",
-        margin: "auto",
+        margin: "auto auto auto 0",
         textDecoration: "line-through"
     },
     trashIcon: {
         color: "#e63939"
+    },
+    todoEdit: {
+        margin: "auto",
+        width: "100%"
     }
 }
 
@@ -59,22 +68,44 @@ function SingleToDo(props) {
 
     // toggle editing on a todo
     function toggleEditing() {
+        // this checks the value passed in from App.js (editing hook) to
+        // see if a todo is already being edited. If so, nothing happens,
+        // otherwise the todo edit pressed toggles editing
+        if (props.todoEditing) {
+            // this checks if the todo pressed is the one already being 
+            // edited. If so it leaves edit mode, otherwise it returns
+            if (editing) {
+                Firestore.updateTodoBody(id, body).then(() => {
+                    setEditing(!editing);
+                    props.toggleEditing();
+                });
+            }
+            return;
+        }
         setEditing(!editing);
+        props.toggleEditing();
     }
 
+    // opens delete confirm dialogue
     function trashTodo() {
         setConfirmTrashOpen(true);
     }
 
+    // closes delete confirm dialogue
     function handleTrashClose() {
         setConfirmTrashOpen(false);
     }
 
+    // deletes from db and closes confirm dialogue
     function handleTrashConfirm() {
         Firestore.deleteTodo(id).then(() => {
             setConfirmTrashOpen(false);
             props.refresh();
         })
+    }
+
+    function handleEdit(e) {
+        setBody(e.target.value);
     }
 
     // called after status hook changes to update status in db
@@ -90,10 +121,15 @@ function SingleToDo(props) {
         <div>
             <Paper elevation={0} className={classes.mainContainer}>
                 <Paper elevation={0} className={classes.horizontalFlex}>
-                    <div className={classes.horizontalFlex}>
+                    <div className={classes.leftFlex}>
                         <Checkbox className={classes.checkbox} icon={<RadioButtonUnchecked />} checkedIcon={<RadioButtonChecked />} 
                         checked={status === "completed"} name="gilad" onChange={handleIconChange}/>
-                        <Typography className={status === "completed" ? classes.bodyLabelCompleted : classes.bodyLabel}>{body}</Typography>
+                        {editing ? <TextField autoFocus className={classes.todoEdit} value={body} onChange={handleEdit}
+                        InputProps={{
+                            className: classes.todoEdit,
+                        }}/> : 
+                        <Typography className={status === "completed" ? 
+                        classes.bodyLabelCompleted : classes.bodyLabel}>{body}</Typography> }
                     </div>
                     <div className={classes.horizontalFlex}>
                         <IconButton color="primary" component="span" className={classes.smallIcon} onClick={toggleEditing}>
