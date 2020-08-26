@@ -21,7 +21,7 @@ const styles = {
     justifyContent: "center"
   },
   addText: {
-    width: 395,
+    width: "72%",
     height: 55
   },
   todoList: {
@@ -40,7 +40,38 @@ const styles = {
   todoContainer: {
     backgroundColor: "#eaeaea78",
     marginTop: 40,
-    padding: 40
+    padding: 40,
+    width: 500,
+    minWidth: "40%",
+    maxWidth: 500,
+  }, 
+  searchFlex: {
+    backgroundColor: "#ffffff00",
+    display: "flex",
+    justifyContent: "space-between"
+  },
+  addButton: {
+    width: "25%",
+    height: 55,
+    backgroundColor: "#9dcef7",
+    border: "1px solid #929292",
+    color: "252525"
+  },
+  filterButton: {
+    backgroundColor: "#d2d2d2",
+    height: 55,
+    width: "32%"
+  },
+  filterButtonSelected: {
+    backgroundColor: "#3bce4d",
+    height: 55,
+    width: "32%"
+  },
+  filterButtons: {
+    display: "flex",
+    backgroundColor: "#ffffff00",
+    justifyContent: "space-between",
+    marginTop: 20
   }
 }
 
@@ -48,7 +79,7 @@ function App(props) {
 
   /* #region firestore query testing */
   // // testing addTodo query and async await
-  // Firestore.addtodo("test adding todo").then(() => {
+  // Firestore.addTodo("test adding todo").then(() => {
   //   // testing getAllTodos query
   //   Firestore.getAllTodos().then(allTodos => {
   //     allTodos.forEach(doc => {
@@ -97,17 +128,14 @@ function App(props) {
 
   // run once on startup
   useEffect(() => {
-    Firestore.addtodo("timestamp test").then(() => {
-      addTodosToState();
-    })
-    // addTodosToState();
+    addTodosToState();
   }, []);
 
   // get all todos from db and store in todoList hook
   function addTodosToState() {
     Firestore.getAllTodos().then(allTodos => {
       var todos = []; // stores parsed todos
-      // for each oc, get data and push to todos
+      // for each doc, get data and push to todos
       allTodos.forEach(doc => {
         var todo = doc.data();
         todo.id = doc.id;
@@ -120,16 +148,27 @@ function App(props) {
     })
   }
 
-  function handleTextInput() {
-
+  // set react hook val on text change
+  function handleTextInput(e) {
+    setTodoInput(e.target.value);
   }
 
   function handleAddItem() {
-
+    // make sure input isn't empty
+    if (todoInput != "") {
+      Firestore.addTodo(todoInput).then(() => {
+        setTodoInput("");
+        addTodosToState();
+      })
+    // TODO: Show error on invalid input
+    } else {
+      console.log("invalid")
+    }
   }
 
-  function filterButtonHandler() {
-
+  // set filter applied 
+  function filterButtonHandler(value) {
+    setFilterSelected(value);
   }
 
   return (

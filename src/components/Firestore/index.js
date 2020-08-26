@@ -33,7 +33,7 @@ export const getAllTodos = async() => {
 }
 
 // add new todo to db
-export const addtodo = async (body) => {
+export const addTodo = async (body) => {
     let taskRef = await db.collection("todos").add({
         body: body,
         // store current time in todo doc
