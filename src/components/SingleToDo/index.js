@@ -83,9 +83,10 @@ function SingleToDo(props) {
             }
             return;
         }
-        setEditing(!editing);
+        setEditing(true);
     }
 
+    // whenever editing is changed in SingleToDo, editing in App.js changes to reflect it
     useEffect(() => {
         props.setEditing(editing);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,6 +138,12 @@ function SingleToDo(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, status])
 
+    function handleEnterEdit(e) {
+        if (e.keyCode === 13) {
+            toggleEditing();
+        }
+    }
+
     return (
         <div aria-label="Single Task">
             <Paper elevation={0} className={classes.mainContainer}>
@@ -144,7 +151,8 @@ function SingleToDo(props) {
                     <div className={classes.leftFlex}>
                         <Checkbox className={classes.checkbox} icon={<RadioButtonUnchecked />} checkedIcon={<RadioButtonChecked />} 
                         checked={status === "completed"} name="gilad" onChange={handleIconChange} aria-label="Completion checkbox"/>
-                        {editing ? <TextField autoFocus className={classes.todoEdit} value={body} onChange={handleEdit}
+                        {editing ? 
+                        <TextField autoFocus className={classes.todoEdit} value={body} onChange={handleEdit} onKeyDown={handleEnterEdit}
                         InputProps={{
                             className: classes.todoEdit,
                         }}/> : 

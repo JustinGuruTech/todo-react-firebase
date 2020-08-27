@@ -205,9 +205,9 @@ function App(props) {
   }
 
   function handleAddItem() {
-    setSynced(false);  // show syncing symbol
     // make sure input isn't empty
     if (todoInput !== "") {
+      setSynced(false);  // show syncing symbol
       // add todo locally while syncing with db
       var todo = {
         body: todoInput,
@@ -226,9 +226,11 @@ function App(props) {
     }
   }
 
-  // set filter applied 
-  function filterButtonHandler(value) {
-    setFilterSelected(value);
+  // enter key functionality for add item
+  function handleEnterAdd(e) {
+    if (e.keyCode === 13) {
+      handleAddItem();
+    }
   }
 
   return (
@@ -252,7 +254,8 @@ function App(props) {
         </span> }
           <Paper elevation={0} className={classes.searchFlex}>
             <TextField variant="outlined" className={classes.addText} placeholder="Add a todo..."
-            onChange={handleTextInput} value={todoInput} aria-label="Type Todo"
+            onChange={handleTextInput} value={todoInput} aria-label="Type Todo" disabled={!synced}
+            onKeyDown={handleEnterAdd}
             InputProps={{
               className: classes.addTextBG
             }}>
@@ -262,13 +265,13 @@ function App(props) {
           </Paper>
           <Paper elevation={0} className={classes.filterButtons}>
             <Button className={filterSelected === "all" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}
-            onClick={e => filterButtonHandler("all")} aria-label="Show all tasks"
+            onClick={e => setFilterSelected("all")} aria-label="Show all tasks"
             >Show All</Button>
             <Button className={filterSelected === "pending" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}
-            onClick={e => filterButtonHandler("pending")} aria-label="Show pending tasks"
+            onClick={e => setFilterSelected("pending")} aria-label="Show pending tasks"
             >Pending</Button>
             <Button className={filterSelected === "completed" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}
-            onClick={e => filterButtonHandler("completed")} aria-label="Show completed tasks"
+            onClick={e => setFilterSelected("completed")} aria-label="Show completed tasks"
             >Completed</Button>
           </Paper>
           <Paper elevation={1} className={classes.todoList} aria-label="Task Container">
