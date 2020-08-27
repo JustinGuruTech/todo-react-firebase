@@ -1,6 +1,9 @@
-// Justin Edwards
-// 08/26/2020
-// Main app for todo list. 
+/* Justin Edwards
+ * 08/26/2020
+ * Main app for todo list - rendering of main page and todo list container.
+ * Maps todo list to SingleToDo items passing in relevant information. Uses
+ * Firestore/index.js functions for database connectivity
+ */ 
 
 import React, { useState, useEffect } from 'react';
 import { Paper, Button, TextField, AppBar, Toolbar, 

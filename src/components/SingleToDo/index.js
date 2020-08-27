@@ -1,6 +1,10 @@
-// Justin Edwards
-// 08/26/2020
-// Single todo list component
+/* Justin Edwards
+ * 08/26/2020
+ * Single todo list component, handles events when user clicks on
+ * anything within a single todo (check/edit/delete). App.js maps
+ * items in todo to these components passing in relevant info.
+ * Uses Firestore/index.js functions for database connectivity
+ */ 
 
 import React, { useState, useEffect, useRef } from 'react';
 
@@ -138,6 +142,7 @@ function SingleToDo(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, status])
 
+    // enter key functionality to finish editing
     function handleEnterEdit(e) {
         if (e.keyCode === 13) {
             toggleEditing();
