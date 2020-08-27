@@ -7,7 +7,6 @@ import { Paper, Button, TextField, AppBar, Toolbar,
         CircularProgress, Typography, withStyles } from '@material-ui/core';
 
 import SingleToDo from './components/SingleToDo';
-
 import * as Firestore from './components/Firestore'
 
 const styles = {
@@ -145,15 +144,16 @@ function App(props) {
 
   const { classes } = props;
   // state hooks
-  const [todoInput, setTodoInput] = useState("");
-  const [todoList, setTodoList] = useState([]);
-  const [filterSelected, setFilterSelected] = useState("all");
-  const [editing, setEditing] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-  const [added, setAdded] = useState(true);
+  const [todoInput, setTodoInput] = useState(""); // stores new todo input
+  const [todoList, setTodoList] = useState([]); // stores todo list synced with db
+  const [filterSelected, setFilterSelected] = useState("all");  // reflects which filter button is active
+  const [editing, setEditing] = useState(false);  // reflects whether one of SingleToDo is being edited
+  const [loaded, setLoaded] = useState(false);  // set to true after initial load from db
+  const [added, setAdded] = useState(true); // set to false in between pressing add and updating db
 
   // run once on startup
   useEffect(() => {
+    // load todo list from db then setLoaded to hide loading circle
     addTodosToState().then(() => {
       setLoaded(true);
     });
@@ -182,13 +182,14 @@ function App(props) {
   }
 
   function handleAddItem() {
+    setAdded(false);  // show loading symbol
     // make sure input isn't empty
-    setAdded(false);
     if (todoInput !== "") {
+      // add todo to db then update todo list from db
       Firestore.addTodo(todoInput).then(() => {
         addTodosToState().then(() => {
-          setTodoInput("");
-          setAdded(true);
+          setTodoInput(""); // clear input
+          setAdded(true); // hide loading symbol
         });
       })
     }

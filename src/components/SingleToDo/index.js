@@ -98,6 +98,7 @@ function SingleToDo(props) {
 
     // deletes from db and closes confirm dialogue
     function handleTrashConfirm() {
+        // delete todo in db then refresh todo list on frontend
         Firestore.deleteTodo(id).then(() => {
             setConfirmTrashOpen(false);
             props.refresh();
@@ -111,10 +112,12 @@ function SingleToDo(props) {
 
     // called after status hook changes to update status in db
     useEffect(() => {
+        // don't run on initial load
         if (isFirstRun.current) {
             isFirstRun.current = false;
             return;
         }
+        // update status in db then refresh todo list on frontend
         Firestore.updateTodoStatus(id, status).then(() => {
             props.refresh();
         });
