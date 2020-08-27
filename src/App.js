@@ -11,6 +11,7 @@ import * as Firestore from './components/Firestore'
 
 const styles = {
   background: {
+    height: "100%",
     padding: 0,
     margin: 0,
     backgroundColor: "white"
@@ -35,6 +36,7 @@ const styles = {
     minHeight: 600
   },
   mainTodoContainer: {
+    height: "100%",
     display: "flex",
     justifyContent: "center",
     background: "linear-gradient(135deg, #708090 21px, #d9ecff 22px, #d9ecff 24px, transparent 24px, transparent 67px, #d9ecff 67px, #d9ecff 69px, transparent 69px), linear-gradient(225deg, #708090 21px, #d9ecff 22px, #d9ecff 24px, transparent 24px, transparent 67px, #d9ecff 67px, #d9ecff 69px, transparent 69px)0 64px",
@@ -47,6 +49,7 @@ const styles = {
     flexDirection: "column"
   },
   todoContainer: {
+    margin: "auto",
     backgroundColor: "#e2e2e2",
     marginTop: 40,
     padding: 40,
@@ -84,7 +87,7 @@ const styles = {
   },
   noTasks: {
     fontSize: 24,
-    margin: "24px 10px"
+    padding: "0px 0px 0px 10px"
   }
 }
 
