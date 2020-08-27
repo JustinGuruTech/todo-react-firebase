@@ -231,11 +231,6 @@ function App(props) {
     setFilterSelected(value);
   }
 
-  //  toggles editing on and off
-  function toggleEditing() {
-    setEditing(!editing);
-  }
-
   return (
     <Paper elevation={0}
     className={classes.background}>
@@ -281,18 +276,18 @@ function App(props) {
               // map all if filter set to all
               if (filterSelected === "all") {
                 return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
-              refresh={addTodosToState} toggleEditing={toggleEditing} todoEditing={editing} setSynced={setSynced}></SingleToDo>
+              refresh={addTodosToState} setEditing={setEditing} todoEditing={editing} setSynced={setSynced}></SingleToDo>
               // map only those with status pending
               } else if (filterSelected === "pending") {
                 if (todo.status === "pending") {
                   return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
-                  refresh={addTodosToState} toggleEditing={toggleEditing} todoEditing={editing} setSynced={setSynced}></SingleToDo>
+                  refresh={addTodosToState} setEditing={setEditing} todoEditing={editing} setSynced={setSynced}></SingleToDo>
                 }
               // map only those with status completed
               } else if (filterSelected === "completed") {
                 if (todo.status === "completed") {
                   return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
-                  refresh={addTodosToState} toggleEditing={toggleEditing} todoEditing={editing} setSynced={setSynced}></SingleToDo>
+                  refresh={addTodosToState} setEditing={setEditing} todoEditing={editing} setSynced={setSynced}></SingleToDo>
                 }
               }
               return null;
