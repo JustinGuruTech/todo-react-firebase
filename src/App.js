@@ -5,6 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { Paper, Button, TextField, AppBar, Toolbar, 
         CircularProgress, Typography, withStyles } from '@material-ui/core';
+import { Check } from '@material-ui/icons';
 
 import SingleToDo from './components/SingleToDo';
 import * as Firestore from './components/Firestore'
@@ -22,6 +23,25 @@ const styles = {
     justifyContent: "center",
     backgroundColor: "#4e8fef",
     borderBottom: "2px solid #d9ecff"
+  },
+  syncSpan: {
+    display: "flex",
+    color: "#5ad85a",
+    justifyContent: "center",
+    paddingBottom: 10
+  },
+  syncSpanLoading: {
+    display: "flex",
+    color: "#4949c3",
+    justifyContent: "center",
+    paddingBottom: 10
+  },
+  syncText: {
+    marginRight: 5,
+    lineHeight: "27px"
+  },
+  syncLoadSymbol: {
+    marginTop: 3
   },
   addText: {
     width: "72%",
@@ -53,6 +73,7 @@ const styles = {
     backgroundColor: "#e2e2e2",
     marginTop: 40,
     padding: 40,
+    paddingTop: 15,
     width: 500,
     minWidth: "40%",
     maxWidth: 500,
@@ -94,7 +115,7 @@ const styles = {
     margin: "auto",
     position: "relative",
     top: "20px"
-  }
+  },
 }
 
 function App(props) {
@@ -149,13 +170,14 @@ function App(props) {
   const [filterSelected, setFilterSelected] = useState("all");  // reflects which filter button is active
   const [editing, setEditing] = useState(false);  // reflects whether one of SingleToDo is being edited
   const [loaded, setLoaded] = useState(false);  // set to true after initial load from db
-  const [added, setAdded] = useState(true); // set to false in between pressing add and updating db
+  const [synced, setSynced] = useState(false); // set to false in between pressing add and updating db
 
   // run once on startup
   useEffect(() => {
     // load todo list from db then setLoaded to hide loading circle
     addTodosToState().then(() => {
-      setLoaded(true);
+      setLoaded(true);  // initial load complete
+      setSynced(true);  // done syncing
     });
   }, []);
 
@@ -182,14 +204,22 @@ function App(props) {
   }
 
   function handleAddItem() {
-    setAdded(false);  // show loading symbol
+    setSynced(false);  // show syncing symbol
     // make sure input isn't empty
     if (todoInput !== "") {
+      // add todo locally while syncing with db
+      var todo = {
+        body: todoInput,
+        status: "pending",
+        created: Number.MAX_SAFE_INTEGER,
+        id: -1
+      }
+      todoList.push(todo);
       // add todo to db then update todo list from db
       Firestore.addTodo(todoInput).then(() => {
         addTodosToState().then(() => {
           setTodoInput(""); // clear input
-          setAdded(true); // hide loading symbol
+          setSynced(true); // hide syncing symbol
         });
       })
     }
@@ -215,12 +245,20 @@ function App(props) {
       </AppBar>
       <div className={classes.mainTodoContainer}>
         <Paper elevation={3} className={classes.todoContainer}>
+        {synced ? 
+        <span className={classes.syncSpan}>
+          <Typography className={classes.syncText}>Synced</Typography>
+          <Check size={10}/>
+        </span> :
+        <span className={classes.syncSpanLoading}>
+          <Typography className={classes.syncText}>Syncing</Typography>
+          <CircularProgress className={classes.syncLoadSymbol} size={17}/>
+        </span> }
           <Paper elevation={0} className={classes.searchFlex}>
             <TextField variant="outlined" className={classes.addText} placeholder="Add a todo..."
             onChange={handleTextInput} value={todoInput} aria-label="Type Todo"
             InputProps={{
-              className: classes.addTextBG,
-              endAdornment: !added ? <CircularProgress /> : null
+              className: classes.addTextBG
             }}>
             </TextField>
             <Button className={classes.addButton}
@@ -242,18 +280,18 @@ function App(props) {
               // map all if filter set to all
               if (filterSelected === "all") {
                 return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
-              refresh={addTodosToState} toggleEditing={toggleEditing} todoEditing={editing}></SingleToDo>
+              refresh={addTodosToState} toggleEditing={toggleEditing} todoEditing={editing} setSynced={setSynced}></SingleToDo>
               // map only those with status pending
               } else if (filterSelected === "pending") {
                 if (todo.status === "pending") {
                   return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
-                  refresh={addTodosToState} toggleEditing={toggleEditing} todoEditing={editing}></SingleToDo>
+                  refresh={addTodosToState} toggleEditing={toggleEditing} todoEditing={editing} setSynced={setSynced}></SingleToDo>
                 }
               // map only those with status completed
               } else if (filterSelected === "completed") {
                 if (todo.status === "completed") {
                   return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
-                  refresh={addTodosToState} toggleEditing={toggleEditing} todoEditing={editing}></SingleToDo>
+                  refresh={addTodosToState} toggleEditing={toggleEditing} todoEditing={editing} setSynced={setSynced}></SingleToDo>
                 }
               }
               return null;

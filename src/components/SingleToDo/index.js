@@ -75,9 +75,11 @@ function SingleToDo(props) {
             // this checks if the todo pressed is the one already being 
             // edited. If so it leaves edit mode, otherwise it returns
             if (editing) {
+                props.setSynced(false); // set to syncing
+                props.toggleEditing();
                 Firestore.updateTodoBody(id, body).then(() => {
                     setEditing(!editing);
-                    props.toggleEditing();
+                    props.setSynced(true);  // set to synced
                 });
             }
             return;
@@ -98,10 +100,13 @@ function SingleToDo(props) {
 
     // deletes from db and closes confirm dialogue
     function handleTrashConfirm() {
+        props.setSynced(false); // set to syncing
+        setConfirmTrashOpen(false);
         // delete todo in db then refresh todo list on frontend
         Firestore.deleteTodo(id).then(() => {
-            setConfirmTrashOpen(false);
-            props.refresh();
+            props.refresh().then(() => {
+                props.setSynced(true);  // set to synced
+            });
         })
     }
 
@@ -117,9 +122,13 @@ function SingleToDo(props) {
             isFirstRun.current = false;
             return;
         }
+
+        props.setSynced(false); // set to syncing
         // update status in db then refresh todo list on frontend
         Firestore.updateTodoStatus(id, status).then(() => {
-            props.refresh();
+            props.refresh().then(() => {
+                props.setSynced(true);  // set to synced
+            });
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, status])
