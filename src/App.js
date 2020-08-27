@@ -3,8 +3,9 @@
 // Main app for todo list. 
 
 import React, { useState, useEffect } from 'react';
-import { Paper, Button, TextField, AppBar, Toolbar, Typography, withStyles } from '@material-ui/core';
-import './App.css';
+import { Paper, Button, TextField, AppBar, Toolbar, 
+        CircularProgress, Typography, withStyles } from '@material-ui/core';
+
 import SingleToDo from './components/SingleToDo';
 
 import * as Firestore from './components/Firestore'
@@ -88,6 +89,12 @@ const styles = {
   noTasks: {
     fontSize: 24,
     padding: "0px 0px 0px 10px"
+  },
+  todoLoading: {
+    display: "inherit",
+    margin: "auto",
+    position: "relative",
+    top: "20px"
   }
 }
 
@@ -142,15 +149,19 @@ function App(props) {
   const [todoList, setTodoList] = useState([]);
   const [filterSelected, setFilterSelected] = useState("all");
   const [editing, setEditing] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [added, setAdded] = useState(true);
 
   // run once on startup
   useEffect(() => {
-    addTodosToState();
+    addTodosToState().then(() => {
+      setLoaded(true);
+    });
   }, []);
 
   // get all todos from db and store in todoList hook
-  const addTodosToState = () => {
-    Firestore.getAllTodos().then(allTodos => {
+  async function addTodosToState() {
+    let setRef = await Firestore.getAllTodos().then(allTodos => {
       var todos = []; // stores parsed todos
       // for each doc, get data and push to todos
       allTodos.forEach(doc => {
@@ -162,6 +173,7 @@ function App(props) {
       todos.sort((a, b) => (a.created > b.created) ? 1 : -1)
       setTodoList(todos); // add todos to hook
     })
+    return setRef;
   }
 
   // set react hook val on text change
@@ -171,10 +183,13 @@ function App(props) {
 
   function handleAddItem() {
     // make sure input isn't empty
+    setAdded(false);
     if (todoInput !== "") {
       Firestore.addTodo(todoInput).then(() => {
-        setTodoInput("");
-        addTodosToState();
+        addTodosToState().then(() => {
+          setTodoInput("");
+          setAdded(true);
+        });
       })
     }
   }
@@ -204,7 +219,8 @@ function App(props) {
             onChange={handleTextInput} value={todoInput} aria-label="Type Todo"
             InputProps={{
               className: classes.addTextBG,
-            }}> :
+              endAdornment: !added ? <CircularProgress /> : null
+            }}>
             </TextField>
             <Button className={classes.addButton}
             onClick={handleAddItem} aria-label="Add Typed Todo">Add</Button>
@@ -221,7 +237,7 @@ function App(props) {
             >Completed</Button>
           </Paper>
           <Paper elevation={1} className={classes.todoList} aria-label="Task Container">
-            {todoList.length === 0 ? <Typography className={classes.noTasks}>No tasks yet</Typography> : todoList.map(todo => {
+            {loaded ? (todoList.length === 0 ? <Typography className={classes.noTasks}>No tasks yet</Typography> : todoList.map(todo => {
               // map all if filter set to all
               if (filterSelected === "all") {
                 return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
@@ -240,7 +256,7 @@ function App(props) {
                 }
               }
               return null;
-            })}
+            })) : <div><CircularProgress className={classes.todoLoading} size={80}/></div>}
           </Paper>
         </Paper>
       </div>
