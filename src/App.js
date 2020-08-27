@@ -108,7 +108,8 @@ const styles = {
   },
   noTasks: {
     fontSize: 24,
-    padding: "0px 0px 0px 10px"
+    textAlign: "center",
+    color: "#66b9e2"
   },
   todoLoading: {
     display: "inherit",
