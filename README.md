@@ -19,3 +19,25 @@ switches from 'synced' to 'syncing' then back once the promise is
 fulfilled.
 
 <b>Deployment:<b> https://todo-react-d4370.web.app
+  
+<b>How To Use</b>
+
+To get this application running using your own firebase credentials, 
+simply create a .env file and add your information in the following format:
+
+REACT_APP_API_KEY="<your_api_key>"
+
+REACT_APP_AUTH_DOMAIN="<your_auth_domain>"
+
+REACT_APP_DATABASE_URL="<your_database_url"
+
+REACT_APP_PROJECT_ID="<your_project_id>"
+
+REACT_APP_STORAGE_BUCKET="<your_storage_bucket>"
+
+REACT_APP_MESSAGING_SENDER_ID="<your_messaging_sender_id>"
+
+REACT_APP_APP_ID="<your_app_id>"
+
+REACT_APP_MEASUREMENT_ID="<your_app_measurement_id>"
+
