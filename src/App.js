@@ -230,6 +230,7 @@ function App(props) {
       // add todo to db then update todo list from db
       Firestore.addTodo(todoInput, todo.created).then(docRef => {
         todo.id = docRef.id;  // set correct id of todo
+        setTodoInput("");
         setSynced(true);  // now synced
       })
     }

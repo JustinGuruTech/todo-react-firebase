@@ -115,10 +115,6 @@ function SingleToDo(props) {
         // delete todo in db then refresh todo list on frontend
         Firestore.deleteTodo(id).then(() => {
             props.setSynced(true);  // set to synced
-
-            // props.refresh().then(() => {
-            //     props.setSynced(true);  // set to synced
-            // });
         })
     }
 
@@ -138,9 +134,7 @@ function SingleToDo(props) {
         props.setSynced(false); // set to syncing
         // update status in db then refresh todo list on frontend
         Firestore.updateTodoStatus(id, status).then(() => {
-            props.refresh().then(() => {
                 props.setSynced(true);  // set to synced
-            });
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, status])
