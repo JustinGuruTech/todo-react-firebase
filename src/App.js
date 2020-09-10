@@ -215,16 +215,14 @@ function App(props) {
       let todo = {
         body: todoInput,
         status: "pending",
-        created: Number.MAX_SAFE_INTEGER,
-        id: -1
+        created: Firestore.getCurrentTimestamp(), // get firestore db timestamp
+        id: -1  // temporarily set id to -1
       }
       todoList.push(todo);
       // add todo to db then update todo list from db
-      Firestore.addTodo(todoInput).then(() => {
-        addTodosToState().then(() => {
-          setTodoInput(""); // clear input
-          setSynced(true); // hide syncing symbol
-        });
+      Firestore.addTodo(todoInput, todo.created).then(docRef => {
+        todo.id = docRef.id;  // set correct id of todo
+        setSynced(true);  // now synced
       })
     }
   }
