@@ -33,11 +33,11 @@ export const getAllTodos = async() => {
 }
 
 // add new todo to db
-export const addTodo = async (body) => {
+export const addTodo = async (body, timestamp) => {
     let taskRef = await db.collection("todos").add({
         body: body,
         // store current time in todo doc
-        created: firebase.firestore.Timestamp.fromDate(new Date()),
+        created: timestamp,
         status: "pending"   // automatic set to pending
     })
     .catch(error => {
@@ -81,3 +81,7 @@ export const deleteTodo = async (id) => {
     return taskRef;
 }
 
+// gets the current timestamp of the db
+export const getCurrentTimestamp = () => {
+    return firebase.firestore.Timestamp.fromDate(new Date());
+}

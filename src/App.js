@@ -208,6 +208,14 @@ function App(props) {
   }
 
   function handleAddItem() {
+    
+    //  TODO: Decide if this will be helpful later with sync errors
+    // // only allow add when synced
+    // if (synced === false) {
+    //   console.log("Syncing...")
+    //   return;
+    // }
+
     // make sure input isn't empty
     if (todoInput !== "") {
       setSynced(false);  // show syncing symbol
@@ -215,16 +223,15 @@ function App(props) {
       let todo = {
         body: todoInput,
         status: "pending",
-        created: Number.MAX_SAFE_INTEGER,
-        id: -1
+        created: Firestore.getCurrentTimestamp(), // get firestore db timestamp
+        id: -1  // temporarily set id to -1
       }
       todoList.push(todo);
       // add todo to db then update todo list from db
-      Firestore.addTodo(todoInput).then(() => {
-        addTodosToState().then(() => {
-          setTodoInput(""); // clear input
-          setSynced(true); // hide syncing symbol
-        });
+      Firestore.addTodo(todoInput, todo.created).then(docRef => {
+        todo.id = docRef.id;  // set correct id of todo
+        setTodoInput("");
+        setSynced(true);  // now synced
       })
     }
   }
@@ -234,6 +241,15 @@ function App(props) {
     if (e.keyCode === 13) {
       handleAddItem();
     }
+  }
+
+  // function to remove a todo item based on it's id
+  function removeTodoById(id) {
+
+    // TODO: do some neat animation
+    setTodoList(todoList.filter(todo => {
+      return todo.id !== id;
+    }))
   }
 
   return (
@@ -282,7 +298,7 @@ function App(props) {
               // map all if filter set to all
               if (filterSelected === "all") {
                 return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
-              refresh={addTodosToState} setEditing={setEditing} todoEditing={editing} setSynced={setSynced}></SingleToDo>
+              refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing} todoEditing={editing} setSynced={setSynced}></SingleToDo>
               // map only those with status pending
               } else if (filterSelected === "pending") {
                 if (todo.status === "pending") {
