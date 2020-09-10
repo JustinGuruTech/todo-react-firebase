@@ -109,13 +109,16 @@ function SingleToDo(props) {
     // deletes from db and closes confirm dialogue
     function handleTrashConfirm() {
         props.setSynced(false); // set to syncing
+        props.removeTodoById(id);
         setConfirmTrashOpen(false);
         setEditing(false);
         // delete todo in db then refresh todo list on frontend
         Firestore.deleteTodo(id).then(() => {
-            props.refresh().then(() => {
-                props.setSynced(true);  // set to synced
-            });
+            props.setSynced(true);  // set to synced
+
+            // props.refresh().then(() => {
+            //     props.setSynced(true);  // set to synced
+            // });
         })
     }
 
