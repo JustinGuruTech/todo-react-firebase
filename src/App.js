@@ -130,7 +130,7 @@ function App(props) {
   //   // testing getAllTodos query
   //   Firestore.getAllTodos().then(allTodos => {
   //     allTodos.forEach(doc => {
-  //       var todo = doc.data();
+  //       let todo = doc.data();
   //       console.log(todo.body);
   //     })
   //   })
@@ -140,7 +140,7 @@ function App(props) {
   // Firestore.updateTodoBody("Gql2YEfpeRa8tJ8Orgsw", "testing update new body").then(() => {
   //   Firestore.getAllTodos().then(allTodos => {
   //     allTodos.forEach(doc => {
-  //       var todo = doc.data();
+  //       let todo = doc.data();
   //       console.log(todo.body);
   //     })
   //   })
@@ -150,7 +150,7 @@ function App(props) {
   // Firestore.updateTodoStatus("Gql2YEfpeRa8tJ8Orgsw", "completed").then(() => {
   //   Firestore.getAllTodos().then(allTodos => {
   //     allTodos.forEach(doc => {
-  //       var todo = doc.data();
+  //       let todo = doc.data();
   //       console.log(todo.status);
   //     })
   //   })
@@ -160,7 +160,7 @@ function App(props) {
   // Firestore.deleteTodo("Gql2YEfpeRa8tJ8Orgsw").then(() => {
   //   Firestore.getAllTodos().then(allTodos => {
   //     allTodos.forEach(doc => {
-  //       var todo = doc.data();
+  //       let todo = doc.data();
   //       console.log(todo.status);
   //     })
   //   })
@@ -188,10 +188,10 @@ function App(props) {
   // get all todos from db and store in todoList hook
   async function addTodosToState() {
     let setRef = await Firestore.getAllTodos().then(allTodos => {
-      var todos = []; // stores parsed todos
+      let todos = []; // stores parsed todos
       // for each doc, get data and push to todos
       allTodos.forEach(doc => {
-        var todo = doc.data();
+        let todo = doc.data();
         todo.id = doc.id;
         todos.push(todo);
       })
@@ -212,7 +212,7 @@ function App(props) {
     if (todoInput !== "") {
       setSynced(false);  // show syncing symbol
       // add todo locally while syncing with db
-      var todo = {
+      let todo = {
         body: todoInput,
         status: "pending",
         created: Number.MAX_SAFE_INTEGER,
