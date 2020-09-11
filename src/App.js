@@ -122,7 +122,7 @@ const styles = {
   },
 }
 
-function App(props) {
+React.memo(function App(props) {
 
   /* #region firestore query testing */
   // // testing addTodo query and async await
@@ -230,7 +230,7 @@ function App(props) {
       // add todo to db then update todo list from db
       Firestore.addTodo(todoInput, todo.created).then(docRef => {
         todo.id = docRef.id;  // set correct id of todo
-        setTodoInput("");
+        setTodoInput(""); // reset todo input
         setSynced(true);  // now synced
       })
     }
@@ -319,6 +319,6 @@ function App(props) {
       </div>
     </Paper>
   );
-}
+}, );
 
 export default withStyles(styles)(App);
