@@ -6,10 +6,11 @@
  */ 
 
 import React, { useState, useEffect } from 'react';
-import { Paper, Button, TextField, AppBar, Toolbar, 
+import { Paper, Button, AppBar, Toolbar, 
         CircularProgress, Typography, withStyles } from '@material-ui/core';
 import { Check } from '@material-ui/icons';
 
+import AddToDo from './components/AddToDo'
 import SingleToDo from './components/SingleToDo';
 import * as Firestore from './components/Firestore'
 
@@ -46,14 +47,14 @@ const styles = {
   syncLoadSymbol: {
     marginTop: 3
   },
-  addText: {
-    width: "72%",
-    height: 55,
-    color: "white"
-  },
-  addTextBG: {
-    backgroundColor: "white"
-  },
+  // addText: {
+  //   width: "72%",
+  //   height: 55,
+  //   color: "white"
+  // },
+  // addTextBG: {
+  //   backgroundColor: "white"
+  // },
   todoList: {
     marginTop: 20,
     minHeight: 600
@@ -81,18 +82,6 @@ const styles = {
     minWidth: "40%",
     maxWidth: 500,
   }, 
-  searchFlex: {
-    backgroundColor: "#ffffff00",
-    display: "flex",
-    justifyContent: "space-between"
-  },
-  addButton: {
-    width: "25%",
-    height: 55,
-    backgroundColor: "#9dcef7",
-    border: "1px solid #929292",
-    color: "252525"
-  },
   filterButton: {
     backgroundColor: "#d2d2d2",
     height: 55,
@@ -169,7 +158,7 @@ function App(props) {
 
   const { classes } = props;
   // state hooks
-  const [todoInput, setTodoInput] = useState(""); // stores new todo input
+  // const [todoInput, setTodoInput] = useState(""); // stores new todo input
   const [todoList, setTodoList] = useState([]); // stores todo list synced with db
   const [filterSelected, setFilterSelected] = useState("all");  // reflects which filter button is active
   const [editing, setEditing] = useState(false);  // reflects whether one of SingleToDo is being edited
@@ -202,47 +191,6 @@ function App(props) {
     return setRef;
   }
 
-  // set react hook val on text change
-  function handleTextInput(e) {
-    setTodoInput(e.target.value);
-  }
-
-  function handleAddItem() {
-    
-    //  TODO: Decide if this will be helpful later with sync errors
-    // // only allow add when synced
-    // if (synced === false) {
-    //   console.log("Syncing...")
-    //   return;
-    // }
-
-    // make sure input isn't empty
-    if (todoInput !== "") {
-      setSynced(false);  // show syncing symbol
-      // add todo locally while syncing with db
-      let todo = {
-        body: todoInput,
-        status: "pending",
-        created: Firestore.getCurrentTimestamp(), // get firestore db timestamp
-        id: -1  // temporarily set id to -1
-      }
-      todoList.push(todo);
-      // add todo to db then update todo list from db
-      Firestore.addTodo(todoInput, todo.created).then(docRef => {
-        todo.id = docRef.id;  // set correct id of todo
-        setTodoInput("");
-        setSynced(true);  // now synced
-      })
-    }
-  }
-
-  // enter key functionality for add item
-  function handleEnterAdd(e) {
-    if (e.keyCode === 13) {
-      handleAddItem();
-    }
-  }
-
   // function to remove a todo item based on it's id
   function removeTodoById(id) {
 
@@ -271,17 +219,7 @@ function App(props) {
           <Typography className={classes.syncText}>Syncing</Typography>
           <CircularProgress className={classes.syncLoadSymbol} size={17}/>
         </span> }
-          <Paper elevation={0} className={classes.searchFlex}>
-            <TextField variant="outlined" className={classes.addText} placeholder="Add a todo..."
-            onChange={handleTextInput} value={todoInput} aria-label="Type Todo" disabled={!synced}
-            onKeyDown={handleEnterAdd}
-            InputProps={{
-              className: classes.addTextBG
-            }}>
-            </TextField>
-            <Button className={classes.addButton}
-            onClick={handleAddItem} aria-label="Add Typed Todo">Add</Button>
-          </Paper>
+          <AddToDo todoList={todoList} setSynced={setSynced} synced={synced}/>
           <Paper elevation={0} className={classes.filterButtons}>
             <Button className={filterSelected === "all" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}
             onClick={e => setFilterSelected("all")} aria-label="Show all tasks"
@@ -319,6 +257,6 @@ function App(props) {
       </div>
     </Paper>
   );
-}
+};
 
 export default withStyles(styles)(App);
