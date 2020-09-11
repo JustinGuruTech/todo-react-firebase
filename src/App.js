@@ -47,20 +47,12 @@ const styles = {
   syncLoadSymbol: {
     marginTop: 3
   },
-  // addText: {
-  //   width: "72%",
-  //   height: 55,
-  //   color: "white"
-  // },
-  // addTextBG: {
-  //   backgroundColor: "white"
-  // },
   todoList: {
     marginTop: 20,
     minHeight: 600
   },
   mainTodoContainer: {
-    // height: "100%",
+    minHeight: "100%",
     display: "flex",
     justifyContent: "center",
     background: "linear-gradient(135deg, #708090 21px, #d9ecff 22px, #d9ecff 24px, transparent 24px, transparent 67px, #d9ecff 67px, #d9ecff 69px, transparent 69px), linear-gradient(225deg, #708090 21px, #d9ecff 22px, #d9ecff 24px, transparent 24px, transparent 67px, #d9ecff 67px, #d9ecff 69px, transparent 69px)0 64px",
