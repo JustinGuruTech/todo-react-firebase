@@ -6,9 +6,9 @@
  */ 
 
 import React, { useState, useEffect } from 'react';
-import { Paper, Button, AppBar, Toolbar, 
+import { Paper, Button, AppBar, Toolbar, Link,
         CircularProgress, Typography, withStyles } from '@material-ui/core';
-import { Check } from '@material-ui/icons';
+import { Check, SyncProblem } from '@material-ui/icons';
 
 import AddToDo from './components/AddToDo'
 import SingleToDo from './components/SingleToDo';
@@ -40,7 +40,18 @@ const styles = {
     justifyContent: "center",
     paddingBottom: 10
   },
+  syncSpanError: {
+    display: "flex",
+    color: "#e63939",
+    justifyContent: "center",
+    paddingBottom: 10
+  },
   syncText: {
+    marginRight: 5,
+    lineHeight: "27px"
+  },
+  tryAgainText: {
+    marginLeft: 5,
     marginRight: 5,
     lineHeight: "27px"
   },
@@ -156,6 +167,7 @@ function App(props) {
   const [editing, setEditing] = useState(false);  // reflects whether one of SingleToDo is being edited
   const [loaded, setLoaded] = useState(false);  // set to true after initial load from db
   const [synced, setSynced] = useState(false); // set to false in between pressing add and updating db
+  const [syncError, setSyncError] = useState("");  // for when sync fails
 
   // run once on startup
   useEffect(() => {
@@ -163,8 +175,18 @@ function App(props) {
     addTodosToState().then(() => {
       setLoaded(true);  // initial load complete
       setSynced(true);  // done syncing
+    })
+    // set sync error if loading todos from db fails
+    .catch((error) => {
+      setSyncError(error);
     });
   }, []);
+
+  useEffect(() => {
+    if (synced === true) {
+      setSyncError("");
+    }
+  }, [synced])
 
   // get all todos from db and store in todoList hook
   async function addTodosToState() {
@@ -183,9 +205,20 @@ function App(props) {
     return setRef;
   }
 
+  // function for when user tries to resync after sync error
+  function handleResync() {
+    // refetch todo items
+    addTodosToState().then(() => {
+      setSynced(true);
+    })
+    // set sync error if loading todos from db fails
+    .catch((error) => {
+      setSyncError(error);
+    });
+  }
+
   // function to remove a todo item based on it's id
   function removeTodoById(id) {
-
     // TODO: do some neat animation
     setTodoList(todoList.filter(todo => {
       return todo.id !== id;
@@ -202,7 +235,7 @@ function App(props) {
       </AppBar>
       <div className={classes.mainTodoContainer}>
         <Paper elevation={3} className={classes.todoContainer}>
-        {synced ? 
+        {syncError === "" ? (synced ? 
         <span className={classes.syncSpan}>
           <Typography className={classes.syncText}>Synced</Typography>
           <Check size={10}/>
@@ -210,8 +243,13 @@ function App(props) {
         <span className={classes.syncSpanLoading}>
           <Typography className={classes.syncText}>Syncing</Typography>
           <CircularProgress className={classes.syncLoadSymbol} size={17}/>
+        </span> ) : 
+        <span className={classes.syncSpanError}>
+          <Typography className={classes.syncText}>{syncError}</Typography>
+          <SyncProblem size={10}/>
+          <Link onClick={handleResync} className={classes.tryAgainText}>Resync</Link>
         </span> }
-          <AddToDo todoList={todoList} setSynced={setSynced} synced={synced}/>
+          <AddToDo todoList={todoList} setSynced={setSynced} synced={synced} setSyncError={setSyncError} />
           <Paper elevation={0} className={classes.filterButtons}>
             <Button className={filterSelected === "all" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}
             onClick={e => setFilterSelected("all")} aria-label="Show all tasks"
@@ -228,18 +266,21 @@ function App(props) {
               // map all if filter set to all
               if (filterSelected === "all") {
                 return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
-              refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing} todoEditing={editing} setSynced={setSynced}></SingleToDo>
+              refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing} 
+              todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}></SingleToDo>
               // map only those with status pending
               } else if (filterSelected === "pending") {
                 if (todo.status === "pending") {
                   return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
-                  refresh={addTodosToState} setEditing={setEditing} todoEditing={editing} setSynced={setSynced}></SingleToDo>
+                  refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing} 
+                  todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}></SingleToDo>
                 }
               // map only those with status completed
               } else if (filterSelected === "completed") {
                 if (todo.status === "completed") {
                   return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
-                  refresh={addTodosToState} setEditing={setEditing} todoEditing={editing} setSynced={setSynced}></SingleToDo>
+                  refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing} 
+                  todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}></SingleToDo>
                 }
               }
               return null;

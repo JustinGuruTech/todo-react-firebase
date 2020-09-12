@@ -72,6 +72,10 @@ function AddToDo(props) {
             setTodoInput(""); // reset todo input
             setSynced(true);  // now synced
           })
+          // catch error from Firestore function and set syncError
+          .catch((error) => {
+              props.setSyncError(error);
+          })
         }
     }
     

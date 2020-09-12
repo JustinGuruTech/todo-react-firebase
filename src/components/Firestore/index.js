@@ -27,7 +27,9 @@ export const getAllTodos = async() => {
     let collection = await db.collection("todos")
     .get()
     .catch(error => {
+        // log error and return reason for rejection
         console.log("Error getting documents: ", error);
+        return Promise.reject("Error loading list");
     });
     return collection;
 }
@@ -41,7 +43,9 @@ export const addTodo = async (body, timestamp) => {
         status: "pending"   // automatic set to pending
     })
     .catch(error => {
+        // log error and return reason for rejection
         console.log("Error adding todo: ", error);
+        return Promise.reject("Error adding item");
     })
     return taskRef;
 }
@@ -53,7 +57,9 @@ export const updateTodoBody = async (id, newBody) => {
         body: newBody
     })
     .catch(error => {
-        console.log("Error updating body: ", error)
+        // log error and return reason for rejection
+        console.log("Error updating body: ", error);
+        return Promise.reject("Error updating body");
     })
     return taskRef;
 }
@@ -65,7 +71,9 @@ export const updateTodoStatus = async (id, newStatus) => {
         status: newStatus
     })
     .catch(error => {
+        // log error and return reason for rejection
         console.log("Error updating status: ", error);
+        return Promise.reject("Error updating status");
     })
     return taskRef;
 }
@@ -76,7 +84,9 @@ export const deleteTodo = async (id) => {
     .doc(id)
     .delete()
     .catch(error => {
+        // log error and return reason for rejection
         console.log("Error deleting todo: ", error);
+        return Promise.reject("Error deleting item");
     })
     return taskRef;
 }

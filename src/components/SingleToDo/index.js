@@ -83,6 +83,10 @@ function SingleToDo(props) {
                 props.setSynced(false); // set to syncing;
                 Firestore.updateTodoBody(id, body).then(() => {
                     props.setSynced(true);  // set to synced
+                })
+                // catch error from Firestore function and set syncError
+                .catch((error) => {
+                    props.setSyncError(error);
                 });
             }
             return;
@@ -116,6 +120,10 @@ function SingleToDo(props) {
         Firestore.deleteTodo(id).then(() => {
             props.setSynced(true);  // set to synced
         })
+        // catch error from Firestore function and set syncError
+        .catch((error) => {
+            props.setSyncError(error);
+        })
     }
 
     // handles user saving change to todo
@@ -130,11 +138,14 @@ function SingleToDo(props) {
             isFirstRun.current = false;
             return;
         }
-
         props.setSynced(false); // set to syncing
         // update status in db then refresh todo list on frontend
         Firestore.updateTodoStatus(id, status).then(() => {
                 props.setSynced(true);  // set to synced
+        })
+        // catch error from Firestore function and set syncError
+        .catch((error) => {
+            props.setSyncError(error);
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, status])
