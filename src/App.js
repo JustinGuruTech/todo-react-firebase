@@ -228,6 +228,7 @@ function App(props) {
   return (
     <Paper elevation={0}
     className={classes.background}>
+      {/* AppBar - Main Header */}
       <AppBar color="primary" position="static" style={{ height: 64 }}>
         <Toolbar className={classes.toolbar}>
           <Typography color="inherit" variant="h4">To-Do</Typography>
@@ -235,6 +236,7 @@ function App(props) {
       </AppBar>
       <div className={classes.mainTodoContainer}>
         <Paper elevation={3} className={classes.todoContainer}>
+        {/* Sync Information Display */}
         {syncError === "" ? (synced ? 
         <span className={classes.syncSpan}>
           <Typography className={classes.syncText}>Synced</Typography>
@@ -249,7 +251,9 @@ function App(props) {
           <SyncProblem size={10}/>
           <Link onClick={handleResync} className={classes.tryAgainText}>Resync</Link>
         </span> }
+          {/* Add Todos */}
           <AddToDo todoList={todoList} setSynced={setSynced} synced={synced} setSyncError={setSyncError} />
+          {/* Filter Buttons */}
           <Paper elevation={0} className={classes.filterButtons}>
             <Button className={filterSelected === "all" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}
             onClick={e => setFilterSelected("all")} aria-label="Show all tasks"
@@ -261,6 +265,7 @@ function App(props) {
             onClick={e => setFilterSelected("completed")} aria-label="Show completed tasks"
             >Completed</Button>
           </Paper>
+          {/* Actual todo list */}
           <Paper elevation={1} className={classes.todoList} aria-label="Task Container">
             {loaded ? (todoList.length === 0 ? <Typography className={classes.noTasks}>No tasks yet</Typography> : todoList.map(todo => {
               // map all if filter set to all
@@ -284,6 +289,7 @@ function App(props) {
                 }
               }
               return null;
+            {/* Loading circle for list */}
             })) : <div><CircularProgress className={classes.todoLoading} size={80}/></div>}
           </Paper>
         </Paper>

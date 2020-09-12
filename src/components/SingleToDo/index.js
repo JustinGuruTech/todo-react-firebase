@@ -162,30 +162,35 @@ function SingleToDo(props) {
             <Paper elevation={0} className={classes.mainContainer}>
                 <Paper elevation={0} className={classes.horizontalFlex}>
                     <div className={classes.leftFlex}>
+                        {/* Todo item checkbox */}
                         <Checkbox className={classes.checkbox} icon={<RadioButtonUnchecked />} checkedIcon={<RadioButtonChecked />} 
                         checked={status === "completed"} name="gilad" onChange={handleIconChange} aria-label="Completion checkbox"/>
                         {editing ? 
+                        // show textfield for editing if user is editing todo
                         <TextField autoFocus className={classes.todoEdit} value={body} onChange={handleEdit} onKeyDown={handleEnterEdit}
                         InputProps={{
                             className: classes.todoEdit,
                         }}/> : 
+                        // show uneditable todo
                         <Typography className={status === "completed" ? 
                         classes.bodyLabelCompleted : classes.bodyLabel} aria-label="Task name">{body}</Typography> }
                     </div>
+                    {/* Edit and trash icons */}
                     <div className={classes.horizontalFlex}>
                         <IconButton color="primary" component="span" className={classes.smallIcon} onClick={toggleEditing} aria-label={editing ? "Save task name" : "Edit task name"}>
-                            {editing ? <Done/> : <Edit/> }
+                            {// show done button if editing, edit button if not
+                            editing ? <Done/> : <Edit/> }
                         </IconButton>
                         <IconButton color="primary" component="span" className={classes.trashIcon} onClick={trashTodo} aria-label="Delete task">
                             <DeleteOutlineOutlined />
                         </IconButton>
                     </div>
+                    {/* Deletion confirmation */}
                     <Dialog
                         open={confirmTrashOpen}
                         keepMounted
                         onClose={handleTrashClose}
-                        aria-label="Delete confirmation"
-                    >
+                        aria-label="Delete confirmation">
                         <DialogTitle>{"Confirm Delete"}</DialogTitle>
                         <DialogContent>
                         <DialogContentText>

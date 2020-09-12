@@ -47,14 +47,6 @@ function AddToDo(props) {
     }
 
     function handleAddItem() {
-    
-        //  TODO: Decide if this will be helpful later with sync errors
-        // // only allow add when synced
-        // if (synced === false) {
-        //   console.log("Syncing...")
-        //   return;
-        // }
-    
         // make sure input isn't empty
         if (todoInput !== "") {
           setSynced(false);  // show syncing symbol
@@ -88,6 +80,7 @@ function AddToDo(props) {
 
     return (
         <Paper elevation={0} className={classes.searchFlex}>
+            {/* Text input */}
             <TextField variant="outlined" className={classes.addText} placeholder="Add a todo..."
             onChange={handleTextInput} value={todoInput} aria-label="Type Todo" disabled={!synced}
             onKeyDown={handleEnterAdd}
@@ -95,6 +88,7 @@ function AddToDo(props) {
               className: classes.addTextBG
             }}>
             </TextField>
+            {/* Add button */}
             <Button className={classes.addButton}
             onClick={handleAddItem} aria-label="Add Typed Todo">Add</Button>
         </Paper>
