@@ -164,7 +164,8 @@ function SingleToDo(props) {
                     <div className={classes.leftFlex}>
                         {/* Todo item checkbox */}
                         <Checkbox className={classes.checkbox} icon={<RadioButtonUnchecked />} checkedIcon={<RadioButtonChecked />} 
-                        checked={status === "completed"} name="gilad" onChange={handleIconChange} aria-label="Completion checkbox"/>
+                        checked={status === "completed"} name="gilad" onChange={handleIconChange} aria-label="Completion checkbox"
+                        disabled={id === -1}/>
                         {editing ? 
                         // show textfield for editing if user is editing todo
                         <TextField autoFocus className={classes.todoEdit} value={body} onChange={handleEdit} onKeyDown={handleEnterEdit}
@@ -178,11 +179,13 @@ function SingleToDo(props) {
                     </div>
                     {/* Edit and trash icons */}
                     <div className={classes.horizontalFlex}>
-                        <IconButton color="primary" component="span" className={classes.smallIcon} onClick={toggleEditing} aria-label={editing ? "Save task name" : "Edit task name"}>
+                        <IconButton color="primary" component="span" className={classes.smallIcon} onClick={toggleEditing} 
+                                    aria-label={editing ? "Save task name" : "Edit task name"} disabled={id === -1}>
                             {// show done button if editing, edit button if not
                             editing ? <Done data-testid="confirm-edit-button"/> : <Edit data-testid="edit-button"/> }
                         </IconButton>
-                        <IconButton color="primary" component="span" className={classes.trashIcon} onClick={trashTodo} aria-label="Delete task" data-testid="delete-icon">
+                        <IconButton color="primary" component="span" className={classes.trashIcon} onClick={trashTodo} 
+                                    aria-label="Delete task" data-testid="delete-icon" disabled={id === -1}>
                             <DeleteOutlineOutlined />
                         </IconButton>
                     </div>
