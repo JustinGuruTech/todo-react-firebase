@@ -61,6 +61,7 @@ function SingleToDo(props) {
     const [confirmTrashOpen, setConfirmTrashOpen] = useState(false);
     const isFirstRun = useRef(true);
 
+    // sends updated local values to parent to update todoList hook
     function sendUpdatedTodoToParent() {
         let tempTodo = {
             id: id,

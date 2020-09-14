@@ -227,6 +227,7 @@ function Todo(props) {
     }))
   }
 
+  // finds the todo in the todoList hook and updates it's values
   function updateLocalTodo(newTodo) {
     setTodoList(todoList.filter(todo => {
         if (todo.id === newTodo.id) {
