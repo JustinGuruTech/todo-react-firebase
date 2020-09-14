@@ -12,9 +12,9 @@ import { Paper, Button, AppBar, Toolbar, Link,
         CircularProgress, Typography, withStyles } from '@material-ui/core';
 import { Check, SyncProblem } from '@material-ui/icons';
 
-import AddToDo from '../AddToDo'
+import AddToDo from '../AddToDo';
 import SingleToDo from '../SingleToDo';
-import * as Firestore from '../Firestore'
+import * as Firestore from '../Firestore';
 
 const styles = {
   background: {
@@ -227,6 +227,17 @@ function Todo(props) {
     }))
   }
 
+  function updateLocalTodo(newTodo) {
+    setTodoList(todoList.filter(todo => {
+        if (todo.id === newTodo.id) {
+            todo.body = newTodo.body;
+            todo.status = newTodo.status;
+            return newTodo;
+        }
+        return todo;
+    }));
+  }
+
   return (
     <Paper elevation={0}
     className={classes.background}>
@@ -275,20 +286,23 @@ function Todo(props) {
               if (filterSelected === "all") {
                 return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
               refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing} 
-              todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}></SingleToDo>
+              todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}
+              updateLocalTodo={updateLocalTodo}></SingleToDo>
               // map only those with status pending
               } else if (filterSelected === "pending") {
                 if (todo.status === "pending") {
                   return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
                   refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing} 
-                  todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}></SingleToDo>
+                  todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}
+                  updateLocalTodo={updateLocalTodo}></SingleToDo>
                 }
               // map only those with status completed
               } else if (filterSelected === "completed") {
                 if (todo.status === "completed") {
                   return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id} 
                   refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing} 
-                  todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}></SingleToDo>
+                  todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}
+                  updateLocalTodo={updateLocalTodo}></SingleToDo>
                 }
               }
               return null;
