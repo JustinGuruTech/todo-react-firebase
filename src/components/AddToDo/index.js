@@ -83,16 +83,16 @@ function AddToDo(props) {
             {/* Text input */}
             <TextField variant="outlined" className={classes.addText} placeholder="Add a todo..."
             onChange={handleTextInput} value={todoInput} aria-label="Type Todo" disabled={!synced}
-            onKeyDown={handleEnterAdd}
+            onKeyDown={handleEnterAdd} data-testid="todo-input"
             InputProps={{
               className: classes.addTextBG
             }}>
             </TextField>
             {/* Add button */}
-            <Button className={classes.addButton}
+            <Button className={classes.addButton} data-testid="add-button"
             onClick={handleAddItem} aria-label="Add Typed Todo">Add</Button>
         </Paper>
-    )
+    );
 }
 
 export default withStyles(styles)(AddToDo);

@@ -9,12 +9,12 @@
     "firebase": "^7.19.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.3"
+    "react-scripts": "3.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jsdom-fourteen",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -31,5 +31,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.0.2",
+    "@types/jest": "^26.0.13",
+    "firebase-functions-test": "^0.2.2",
+    "mutationobserver-shim": "^0.3.7",
+    "ts-jest": "^26.3.0"
   }
 }

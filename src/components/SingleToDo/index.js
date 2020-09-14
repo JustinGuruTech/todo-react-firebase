@@ -168,6 +168,7 @@ function SingleToDo(props) {
                         {editing ? 
                         // show textfield for editing if user is editing todo
                         <TextField autoFocus className={classes.todoEdit} value={body} onChange={handleEdit} onKeyDown={handleEnterEdit}
+                        data-testid="edit-input"
                         InputProps={{
                             className: classes.todoEdit,
                         }}/> : 
@@ -179,9 +180,9 @@ function SingleToDo(props) {
                     <div className={classes.horizontalFlex}>
                         <IconButton color="primary" component="span" className={classes.smallIcon} onClick={toggleEditing} aria-label={editing ? "Save task name" : "Edit task name"}>
                             {// show done button if editing, edit button if not
-                            editing ? <Done/> : <Edit/> }
+                            editing ? <Done data-testid="confirm-edit-button"/> : <Edit data-testid="edit-button"/> }
                         </IconButton>
-                        <IconButton color="primary" component="span" className={classes.trashIcon} onClick={trashTodo} aria-label="Delete task">
+                        <IconButton color="primary" component="span" className={classes.trashIcon} onClick={trashTodo} aria-label="Delete task" data-testid="delete-icon">
                             <DeleteOutlineOutlined />
                         </IconButton>
                     </div>
@@ -190,7 +191,8 @@ function SingleToDo(props) {
                         open={confirmTrashOpen}
                         keepMounted
                         onClose={handleTrashClose}
-                        aria-label="Delete confirmation">
+                        aria-label="Delete confirmation"
+                        data-testid="confirm-dialog">
                         <DialogTitle>{"Confirm Delete"}</DialogTitle>
                         <DialogContent>
                         <DialogContentText>
@@ -199,19 +201,19 @@ function SingleToDo(props) {
                         </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                        <Button onClick={handleTrashClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={handleTrashConfirm} color="primary">
-                            Delete
-                        </Button>
+                            <Button onClick={handleTrashClose} color="primary">
+                                Cancel
+                            </Button>
+                            <Button onClick={handleTrashConfirm} color="primary" data-testid="confirm-delete-btn">
+                                Delete
+                            </Button>
                         </DialogActions>
                     </Dialog>
                 </Paper>
             </Paper>
             <Divider />
         </div>
-    )
+    );
 }
 
 export default withStyles(styles)(SingleToDo);

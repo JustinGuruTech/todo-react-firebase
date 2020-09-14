@@ -238,11 +238,11 @@ function App(props) {
         <Paper elevation={3} className={classes.todoContainer}>
         {/* Sync Information Display */}
         {syncError === "" ? (synced ? 
-        <span className={classes.syncSpan}>
+        <span className={classes.syncSpan} data-testid="synced-icon">
           <Typography className={classes.syncText}>Synced</Typography>
           <Check size={10}/>
         </span> :
-        <span className={classes.syncSpanLoading}>
+        <span className={classes.syncSpanLoading} data-testid="syncing-icon"> 
           <Typography className={classes.syncText}>Syncing</Typography>
           <CircularProgress className={classes.syncLoadSymbol} size={17}/>
         </span> ) : 
@@ -267,6 +267,7 @@ function App(props) {
           </Paper>
           {/* Actual todo list */}
           <Paper elevation={1} className={classes.todoList} aria-label="Task Container">
+            <div data-testid="todo-list">
             {loaded ? (todoList.length === 0 ? <Typography className={classes.noTasks}>No tasks yet</Typography> : todoList.map(todo => {
               // map all if filter set to all
               if (filterSelected === "all") {
@@ -289,8 +290,9 @@ function App(props) {
                 }
               }
               return null;
-            {/* Loading circle for list */}
-            })) : <div><CircularProgress className={classes.todoLoading} size={80}/></div>}
+            /* Loading circle for list */
+            })) : <div><CircularProgress data-testid="load-symbol" className={classes.todoLoading} size={80}/></div>}
+            </div>
           </Paper>
         </Paper>
       </div>
