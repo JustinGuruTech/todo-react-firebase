@@ -61,6 +61,16 @@ function SingleToDo(props) {
     const [confirmTrashOpen, setConfirmTrashOpen] = useState(false);
     const isFirstRun = useRef(true);
 
+    function sendUpdatedTodoToParent() {
+        let tempTodo = {
+            id: id,
+            body: body,
+            status: status,
+        }
+        props.updateLocalTodo(tempTodo);
+        
+    }
+
     // cross off/un-cross off todo item
     function handleIconChange() {
         if (status === "pending") {
@@ -69,6 +79,28 @@ function SingleToDo(props) {
             setStatus("pending");
         }
     }
+
+    // called after status hook changes to update status in db
+    useEffect(() => {
+        // don't run on initial load
+        if (isFirstRun.current) {
+            isFirstRun.current = false;
+            return;
+        }
+        props.setSynced(false); // set to syncing
+        // send updated todo to parent to reflect status change
+        sendUpdatedTodoToParent(); 
+        // update status in db then refresh todo list on frontend
+        Firestore.updateTodoStatus(id, status).then(() => {
+                props.setSynced(true);  // set to synced
+        })
+        // catch error from Firestore function and set syncError
+        .catch((error) => {
+            props.setSyncError(error);
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id, status])
+
 
     // toggle editing on a todo
     function toggleEditing() {
@@ -97,8 +129,22 @@ function SingleToDo(props) {
     // whenever editing is changed in SingleToDo, editing in App.js changes to reflect it
     useEffect(() => {
         props.setEditing(editing);
+        // send updated todo to parent when edited todo is confirmed
+        sendUpdatedTodoToParent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editing])
+
+    // handles user saving change to todo
+    function handleEdit(e) {
+        setBody(e.target.value);
+    }
+
+    // enter key functionality to finish editing
+    function handleEnterEdit(e) {
+        if (e.keyCode === 13) {
+            toggleEditing();
+        }
+    }
 
     // opens delete confirm dialogue
     function trashTodo() {
@@ -124,37 +170,6 @@ function SingleToDo(props) {
         .catch((error) => {
             props.setSyncError(error);
         })
-    }
-
-    // handles user saving change to todo
-    function handleEdit(e) {
-        setBody(e.target.value);
-    }
-
-    // called after status hook changes to update status in db
-    useEffect(() => {
-        // don't run on initial load
-        if (isFirstRun.current) {
-            isFirstRun.current = false;
-            return;
-        }
-        props.setSynced(false); // set to syncing
-        // update status in db then refresh todo list on frontend
-        Firestore.updateTodoStatus(id, status).then(() => {
-                props.setSynced(true);  // set to synced
-        })
-        // catch error from Firestore function and set syncError
-        .catch((error) => {
-            props.setSyncError(error);
-        });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id, status])
-
-    // enter key functionality to finish editing
-    function handleEnterEdit(e) {
-        if (e.keyCode === 13) {
-            toggleEditing();
-        }
     }
 
     return (
