@@ -11,15 +11,17 @@ import React from 'react';
 import Todo from './components/Todo';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
+import Home from './components/Home';
 
 function App(props) {
 
   return (
     // <Todo />
-    <SignUp />
+    // <SignUp />
     // <div>
     // <Login />
     // </div>
+    <Home />
   );
 };
 
