@@ -5,10 +5,10 @@
  * in pages
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-    Button, Link, Typography, Container, CssBaseline,
-    AppBar, Toolbar, Paper, Dialog, DialogTitle, DialogContent, DialogActions,
+    Button, Typography,
+    AppBar, Toolbar, Paper, Dialog, DialogContent, DialogActions,
     withStyles
 } from '@material-ui/core';
 
@@ -16,7 +16,24 @@ import SignUp from '../SignUp';
 import Login from '../Login';
 
 const styles = {
+    mainContainer: {
+        width: "80%",
+        height: 300,
+        margin: "auto",
+        marginTop: 20,
+    },
+    tagline: {
+        textAlign: "center",
 
+    },
+    dialogDiv: {
+        textAlign: "center"
+    },
+    buttons: {
+        width: 150,
+        margin: "auto",
+        marginTop: 15
+    }
 }
 
 function Home(props) {
@@ -52,36 +69,41 @@ function Home(props) {
                     <Typography color="inherit" variant="h4">To-Do</Typography>
                 </Toolbar>
             </AppBar>
-            <div>
-                <Button variant="outlined" color="primary" onClick={handleSignUpOpen}>
-                    Open form dialog
-                </Button>
-                <Dialog open={signUpOpen} onClose={handleSignUpClose} aria-labelledby="form-dialog-title">
-                    <DialogContent>
-                        <SignUp />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleSignUpClose} color="primary">
-                            Cancel
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-            <div>
-                <Button variant="outlined" color="primary" onClick={handleSignInOpen}>
-                    Open form dialog
-                </Button>
-                <Dialog open={signInOpen} onClose={handleSignInClose} aria-labelledby="form-dialog-title">
-                    <DialogContent>
-                        <Login />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleSignInClose} color="primary">
-                            Cancel
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
+            <Paper elevation={1} className={classes.mainContainer}>
+                <Typography variant="h4" component="h4" className={classes.tagline}>
+                    To-Do or not To-Do? That is the question.
+                </Typography>
+                <div className={classes.dialogDiv}>
+                    <Button className={classes.buttons} variant="outlined" color="primary" onClick={handleSignUpOpen}>
+                        Sign Up
+                    </Button>
+                    <Dialog open={signUpOpen} onClose={handleSignUpClose} aria-labelledby="form-dialog-title">
+                        <DialogContent>
+                            <SignUp setSignInModalOpen={handleSignInOpen}/>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleSignUpClose} color="primary">
+                                Cancel
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
+                <div className={classes.dialogDiv}>
+                    <Button className={classes.buttons} variant="outlined" color="primary" onClick={handleSignInOpen}>
+                        Sign In
+                    </Button>
+                    <Dialog open={signInOpen} onClose={handleSignInClose} aria-labelledby="form-dialog-title">
+                        <DialogContent>
+                            <Login setSignUpModalOpen={handleSignUpOpen}/>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleSignInClose} color="primary">
+                                Cancel
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
+            </Paper>
         </Paper>
     );
 }

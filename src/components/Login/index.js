@@ -7,7 +7,7 @@
 
 import React, { useState } from 'react';
 import {Button, Link, Typography, TextField, Grid, Container, 
-    CssBaseline, Avatar, withStyles } from '@material-ui/core';
+    CssBaseline, Avatar, withStyles, LinearProgress } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons'
 
 import * as Firestore from '../Firestore';
@@ -27,6 +27,25 @@ const styles = {
     submit: {
         backgroundColor: "#45bd6a",
         marginTop: 15
+    },
+    linearProgress: {
+        height: 5,
+        width: 200,
+        backgroundColor: "#f9f9f9"
+    },
+    signInError: {
+        color: "#de2020",
+        height: 25,
+        paddingTop: 5
+    },
+    grid: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        textAlign: "center"
+    },
+    signUpLink: {
+        cursor: "pointer",
     }
 }
 
@@ -34,21 +53,71 @@ function Login(props) {
 
     const { classes } = props;
 
+    // input hooks
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    // error hooks
+    const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [signInError, setSignInError] = useState("");
+    const [signingIn, setSigningIn] = useState(false);
 
+    // INPUT HANDLERS //
     function handleEmailChange({target}) {
         setEmail(target.value);
     }
-
     function handlePasswordChange({target}) {
         setPassword(target.value);
     }
 
-    function handleSubmit() {
-        Firestore.signInUser(email, password).then(() => {
-            console.log("success");
-        });
+    // BASIC VALIDATION //
+    function validateEmail() {
+        // empty email
+        if (email === "") {
+            setEmailError("Email Required");
+            return false;
+        // basic regex test for any@any.any - NOT exhaustive
+        } else if (!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))) {
+            setEmailError("Enter a valid email");
+            return false;
+        } else {
+            setEmailError("");
+            return true;
+        }
+    }
+    function validatePassword() {
+        // empty password
+        if (password === "") {
+            setPasswordError("Password Required");
+            return false;
+        // short password
+        } else if (password.length < 6) {
+            setPasswordError("Password Too Short");
+            return false;
+        } else {
+            setEmailError("");
+            return true;
+        }
+    }
+
+    // handle form submission
+    function handleSubmit(event) {
+        event.preventDefault(); // prevent default post event
+        // check for valid email/password first
+        if (validateEmail() && validatePassword()) {
+            setSigningIn(false);
+            setSignInError("");
+            // use information to sign in
+            Firestore.signInUser(email, password)
+            .then(() => {
+                console.log("success");
+                setSigningIn(false);
+            })
+            .catch(error => {
+                setSigningIn(false);
+                setSignInError(error);
+            });
+        }
     }
 
     return (
@@ -76,6 +145,9 @@ function Login(props) {
                                     name="email"
                                     autoComplete="email"
                                     onChange={handleEmailChange}
+                                    onBlur={validateEmail}
+                                    error={emailError !== ""}
+                                    helperText={emailError}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -89,6 +161,9 @@ function Login(props) {
                                     id="password"
                                     autoComplete="current-password"
                                     onChange={handlePasswordChange}
+                                    onBlur={validatePassword}
+                                    error={passwordError !== ""}
+                                    helperText={passwordError}
                                 />
                             </Grid>
                         </Grid>
@@ -99,13 +174,20 @@ function Login(props) {
                             color="primary"
                             className={classes.submit}
                         >
-                            Sign In
+                            {signingIn ? 
+                                <div>
+                                    <LinearProgress className={classes.linearProgress} />
+                                </div> : <div>Sign In</div>}
                         </Button>
-                        <Grid container justify="flex-end">
+                        <Grid container justify="center" className={classes.grid}>
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link onClick={props.setSignUpModalOpen} variant="body2"
+                                className={classes.signUpLink}>
                                     Don't have an account? Sign Up!
                                 </Link>
+                            </Grid>
+                            <Grid item className={classes.signInError}>
+                                {signInError}
                             </Grid>
                         </Grid>
                     </form>

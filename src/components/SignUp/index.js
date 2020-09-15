@@ -5,10 +5,10 @@
  * functions for database connectivity
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     Button, Link, Typography, TextField, Grid, Container,
-    CssBaseline, Avatar, withStyles
+    CssBaseline, Avatar, withStyles, LinearProgress
 } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
 
@@ -28,7 +28,27 @@ const styles = {
     },
     submit: {
         backgroundColor: "#3f51b5",
-        marginTop: 15
+        marginTop: 15,
+        height: 36
+    },
+    linearProgress: {
+        height: 5,
+        width: 200,
+        backgroundColor: "#f9f9f9"
+    },
+    signUpError: {
+        color: "#de2020",
+        height: 25,
+        paddingTop: 5,
+    },
+    grid: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        textAlign: "center"
+    },
+    signUpLink: {
+        cursor: "pointer"
     }
 }
 
@@ -36,45 +56,113 @@ function SignUp(props) {
 
     const { classes } = props;
 
+    // input hooks
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    // error hooks
+    const [firstNameError, setFirstNameError] = useState("");
+    const [lastNameError, setLastNameError] = useState("");
+    const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = useState("");
+    const [signUpError, setSignUpError] = useState("This is an error");
+    const [signingUp, setSigningUp] = useState(false);
 
-    useEffect(() => {
-        Firestore.getCurrentUser();
-    })
+    // INPUT HANDLERS //
+    function handleFirstNameChange({ target }) { setFirstName(target.value); }
+    function handleLastNameChange({ target }) { setLastName(target.value); }
+    function handleEmailChange({ target }) { setEmail(target.value); }
+    function handlePasswordChange({ target }) { setPassword(target.value); }
+    function handleConfirmPasswordChange({ target }) { setConfirmPassword(target.value); }
 
-    function handleFirstNameChange({ target }) {
-        setFirstName(target.value);
+    // BASIC VALIDATION //
+    function validateFirstName() {
+        // empty first name
+        if (firstName === "") {
+            setFirstNameError("First Name Required");
+            return false;
+        } else {
+            setFirstNameError("");
+            return true;
+        }
     }
-
-    function handleLastNameChange({ target }) {
-        setLastName(target.value);
+    function validateLastName() {
+        // empty last name
+        if (lastName === "") {
+            setLastNameError("Last Name Required")
+            return false;
+        } else {
+            setLastNameError("");
+            return true;
+        }
     }
-
-    // handle
-
-    function handleEmailChange({ target }) {
-        setEmail(target.value);
+    function validateEmail() {
+        // empty email
+        if (email === "") {
+            setEmailError("Email Required");
+            return false;
+            // basic regex test for any@any.any - NOT exhaustive
+        } else if (!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))) {
+            setEmailError("Enter a valid email");
+            return false;
+        } else {
+            setEmailError("");
+            return true;
+        }
     }
-
-    function handlePasswordChange({ target }) {
-        setPassword(target.value);
+    function validatePassword() {
+        // empty password
+        if (password === "") {
+            setPasswordError("Password Required");
+            return false;
+            // short password
+        } else if (password.length < 6) {
+            setPasswordError("Password Too Short");
+            return false;
+        } else {
+            setPasswordError("");
+            return true;
+        }
     }
-
-    function handleConfirmPasswordChange({ target }) {
-        setConfirmPassword(target.value);
-    }
-
-    function handleSubmit(event) {
-        event.preventDefault();
-        if (password === confirmPassword) {
-            Firestore.createUserAccount(email, password);
+    function validateConfirmPassword() {
+        // empty confirm password
+        if (password === "") {
+            setConfirmPasswordError("Password Confirmation Required");
+            return false;
+            // password confirmation mismatch
+        } else if (password !== confirmPassword) {
+            setConfirmPasswordError("Passwords Must Match");
+            return false;
+        } else {
+            setConfirmPasswordError("");
+            return true;
         }
     }
 
+    // handle submit form
+    function handleSubmit(event) {
+        event.preventDefault(); // prevent default post
+        // check for all valid inputs
+        if (validateFirstName && validateLastName && validateEmail
+            && validatePassword && validateConfirmPassword) {
+            // hooks for sign up indication/error
+            setSigningUp(true);
+            setSignUpError("");
+            // attempt to create user in firebase
+            Firestore.createUserAccount(email, password)
+                .then(() => {
+                    setSigningUp(false);
+                    console.log("successfully registered");
+                })
+                .catch(error => {
+                    setSigningUp(false);
+                    setSignUpError(error);
+                });
+        }
+    }
 
     return (
         <div>
@@ -102,6 +190,9 @@ function SignUp(props) {
                                     label="First Name"
                                     autoFocus
                                     onChange={handleFirstNameChange}
+                                    onBlur={validateFirstName}
+                                    error={firstNameError !== ""}
+                                    helperText={firstNameError}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -114,6 +205,9 @@ function SignUp(props) {
                                     name="lastName"
                                     autoComplete="lname"
                                     onChange={handleLastNameChange}
+                                    onBlur={validateLastName}
+                                    error={lastNameError !== ""}
+                                    helperText={lastNameError}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -126,6 +220,9 @@ function SignUp(props) {
                                     name="email"
                                     autoComplete="email"
                                     onChange={handleEmailChange}
+                                    onBlur={validateEmail}
+                                    error={emailError !== ""}
+                                    helperText={emailError}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -139,6 +236,9 @@ function SignUp(props) {
                                     id="password"
                                     autoComplete="current-password"
                                     onChange={handlePasswordChange}
+                                    onBlur={validatePassword}
+                                    error={passwordError !== ""}
+                                    helperText={passwordError}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -152,6 +252,9 @@ function SignUp(props) {
                                     id="confirmPassword"
                                     autoComplete="current-password"
                                     onChange={handleConfirmPasswordChange}
+                                    onBlur={validateConfirmPassword}
+                                    error={confirmPasswordError !== ""}
+                                    helperText={confirmPasswordError}
                                 />
                             </Grid>
                         </Grid>
@@ -162,13 +265,21 @@ function SignUp(props) {
                             color="primary"
                             className={classes.submit}
                         >
-                            Sign Up
+                            {signingUp ?
+                                <div>
+                                    <LinearProgress className={classes.linearProgress} />
+                                    {/* <p>Test</p> */}
+                                </div> : <div>Sign Up</div>}
                         </Button>
-                        <Grid container justify="flex-end">
+                        <Grid container className={classes.grid}>
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link onClick={props.setSignInModalOpen} variant="body2"
+                                className={classes.signUpLink}>
                                     Already have an account? Sign in!
                                 </Link>
+                            </Grid>
+                            <Grid item className={classes.signUpError}>
+                                {signUpError}
                             </Grid>
                         </Grid>
                     </form>

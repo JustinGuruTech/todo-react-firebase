@@ -105,7 +105,9 @@ export const createUserAccount = async (email, password) => {
         console.log("created user");
     })
     .catch(error => {
-        console.log("error");
+        console.log("Sign Up Error: ", error);
+        // return Promise.reject("Error Signing Up");
+        return Promise.reject(error.message);
     })
     return taskRef;
 }
@@ -117,7 +119,9 @@ export const signInUser = async (email, password) => {
         console.log("signed in user");
     })
     .catch(error => {
-        console.log("error");
+        console.log("Sign In Error: ", error);
+        // return Promise.reject("Error Signing In");
+        return Promise.reject(error.message);
     })
     return taskRef;
 }
@@ -129,7 +133,9 @@ export const signOutUser = async () => {
         console.log("signed out");
     })
     .catch(error => {
-        console.log("error");
+        console.log("Error Signing Out: ", error);
+        // return Promise.reject("Error Signing Out");
+        return Promise.reject(error.message);
     })
     return taskRef;
 }
