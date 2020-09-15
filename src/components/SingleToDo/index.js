@@ -4,15 +4,19 @@
  * anything within a single todo (check/edit/delete). Todo/index.js maps
  * items in todo to these components passing in relevant info.
  * Uses Firestore/index.js functions for database connectivity
- */ 
+ */
 
 import React, { useState, useEffect, useRef } from 'react';
 
-import { Button, Typography, Paper, Divider, Checkbox, TextField,
-    IconButton, Dialog, DialogActions, DialogContent, 
-    DialogContentText, DialogTitle, withStyles } from '@material-ui/core';
-import { RadioButtonUnchecked, RadioButtonChecked, 
-    DeleteOutlineOutlined, Edit, Done } from '@material-ui/icons';
+import {
+    Button, Typography, Paper, Divider, Checkbox, TextField,
+    IconButton, Dialog, DialogActions, DialogContent,
+    DialogContentText, DialogTitle, withStyles
+} from '@material-ui/core';
+import {
+    RadioButtonUnchecked, RadioButtonChecked,
+    DeleteOutlineOutlined, Edit, Done
+} from '@material-ui/icons';
 
 import * as Firestore from '../Firestore'
 
@@ -69,7 +73,7 @@ function SingleToDo(props) {
             status: status,
         }
         props.updateLocalTodo(tempTodo);
-        
+
     }
 
     // cross off/un-cross off todo item
@@ -90,16 +94,16 @@ function SingleToDo(props) {
         }
         props.setSynced(false); // set to syncing
         // send updated todo to parent to reflect status change
-        sendUpdatedTodoToParent(); 
+        sendUpdatedTodoToParent();
         // update status in db then refresh todo list on frontend
         Firestore.updateTodoStatus(id, status).then(() => {
-                props.setSynced(true);  // set to synced
+            props.setSynced(true);  // set to synced
         })
-        // catch error from Firestore function and set syncError
-        .catch((error) => {
-            props.setSyncError(error);
-        });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+            // catch error from Firestore function and set syncError
+            .catch((error) => {
+                props.setSyncError(error);
+            });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, status])
 
 
@@ -117,10 +121,10 @@ function SingleToDo(props) {
                 Firestore.updateTodoBody(id, body).then(() => {
                     props.setSynced(true);  // set to synced
                 })
-                // catch error from Firestore function and set syncError
-                .catch((error) => {
-                    props.setSyncError(error);
-                });
+                    // catch error from Firestore function and set syncError
+                    .catch((error) => {
+                        props.setSyncError(error);
+                    });
             }
             return;
         }
@@ -132,7 +136,7 @@ function SingleToDo(props) {
         props.setEditing(editing);
         // send updated todo to parent when edited todo is confirmed
         sendUpdatedTodoToParent();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editing])
 
     // handles user saving change to todo
@@ -167,10 +171,10 @@ function SingleToDo(props) {
         Firestore.deleteTodo(id).then(() => {
             props.setSynced(true);  // set to synced
         })
-        // catch error from Firestore function and set syncError
-        .catch((error) => {
-            props.setSyncError(error);
-        })
+            // catch error from Firestore function and set syncError
+            .catch((error) => {
+                props.setSyncError(error);
+            })
     }
 
     return (
@@ -179,29 +183,29 @@ function SingleToDo(props) {
                 <Paper elevation={0} className={classes.horizontalFlex}>
                     <div className={classes.leftFlex}>
                         {/* Todo item checkbox */}
-                        <Checkbox className={classes.checkbox} icon={<RadioButtonUnchecked />} checkedIcon={<RadioButtonChecked />} 
-                        checked={status === "completed"} name="gilad" onChange={handleIconChange} aria-label="Completion checkbox"
-                        disabled={id === -1}/>
-                        {editing ? 
-                        // show textfield for editing if user is editing todo
-                        <TextField autoFocus className={classes.todoEdit} value={body} onChange={handleEdit} onKeyDown={handleEnterEdit}
-                        data-testid="edit-input"
-                        InputProps={{
-                            className: classes.todoEdit,
-                        }}/> : 
-                        // show uneditable todo
-                        <Typography className={status === "completed" ? 
-                        classes.bodyLabelCompleted : classes.bodyLabel} aria-label="Task name">{body}</Typography> }
+                        <Checkbox className={classes.checkbox} icon={<RadioButtonUnchecked />} checkedIcon={<RadioButtonChecked />}
+                            checked={status === "completed"} name="gilad" onChange={handleIconChange} aria-label="Completion checkbox"
+                            disabled={id === -1} />
+                        {editing ?
+                            // show textfield for editing if user is editing todo
+                            <TextField autoFocus className={classes.todoEdit} value={body} onChange={handleEdit} onKeyDown={handleEnterEdit}
+                                data-testid="edit-input"
+                                InputProps={{
+                                    className: classes.todoEdit,
+                                }} /> :
+                            // show uneditable todo
+                            <Typography className={status === "completed" ?
+                                classes.bodyLabelCompleted : classes.bodyLabel} aria-label="Task name">{body}</Typography>}
                     </div>
                     {/* Edit and trash icons */}
                     <div className={classes.horizontalFlex}>
-                        <IconButton color="primary" component="span" className={classes.smallIcon} onClick={toggleEditing} 
-                                    aria-label={editing ? "Save task name" : "Edit task name"} disabled={id === -1}>
+                        <IconButton color="primary" component="span" className={classes.smallIcon} onClick={toggleEditing}
+                            aria-label={editing ? "Save task name" : "Edit task name"} disabled={id === -1}>
                             {// show done button if editing, edit button if not
-                            editing ? <Done data-testid="confirm-edit-button"/> : <Edit data-testid="edit-button"/> }
+                                editing ? <Done data-testid="confirm-edit-button" /> : <Edit data-testid="edit-button" />}
                         </IconButton>
-                        <IconButton color="primary" component="span" className={classes.trashIcon} onClick={trashTodo} 
-                                    aria-label="Delete task" data-testid="delete-icon" disabled={id === -1}>
+                        <IconButton color="primary" component="span" className={classes.trashIcon} onClick={trashTodo}
+                            aria-label="Delete task" data-testid="delete-icon" disabled={id === -1}>
                             <DeleteOutlineOutlined />
                         </IconButton>
                     </div>
@@ -214,9 +218,9 @@ function SingleToDo(props) {
                         data-testid="confirm-dialog">
                         <DialogTitle>{"Confirm Delete"}</DialogTitle>
                         <DialogContent>
-                        <DialogContentText>
-                            Are you sure you want to delete this todo? It will no longer show up
-                            as a completed item.
+                            <DialogContentText>
+                                Are you sure you want to delete this todo? It will no longer show up
+                                as a completed item.
                         </DialogContentText>
                         </DialogContent>
                         <DialogActions>

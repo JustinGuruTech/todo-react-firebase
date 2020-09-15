@@ -5,6 +5,7 @@
 
 import * as firebase from "firebase/app";
 import "firebase/firestore";
+import "firebase/auth";
 
 // config information saved in .env file for privacy
 const firebaseConfig = {
@@ -21,6 +22,7 @@ const firebaseConfig = {
 // initialize and get ref to firestore
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const auth = firebase.auth();
 
 // return list of all todos in collection
 export const getAllTodos = async() => {
@@ -94,4 +96,46 @@ export const deleteTodo = async (id) => {
 // gets the current timestamp of the db
 export const getCurrentTimestamp = () => {
     return firebase.firestore.Timestamp.fromDate(new Date());
+}
+
+// creates a user account given a username and password
+export const createUserAccount = async (email, password) => {
+    let taskRef = await auth.createUserWithEmailAndPassword(email, password)
+    .then(() => {
+        console.log("created user");
+    })
+    .catch(error => {
+        console.log("error");
+    })
+    return taskRef;
+}
+
+// sign in a user given a username and password
+export const signInUser = async (email, password) => {
+    let taskRef = await auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+        console.log("signed in user");
+    })
+    .catch(error => {
+        console.log("error");
+    })
+    return taskRef;
+}
+
+// sign out the current user
+export const signOutUser = async () => {
+    let taskRef = await auth.signOut()
+    .then(() => {
+        console.log("signed out");
+    })
+    .catch(error => {
+        console.log("error");
+    })
+    return taskRef;
+}
+
+export const getCurrentUser = () => {
+    if (auth.currentUser !== null) {
+        console.log(auth.currentUser.email);
+    }
 }

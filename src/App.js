@@ -17,7 +17,9 @@ function App(props) {
   return (
     // <Todo />
     <SignUp />
+    // <div>
     // <Login />
+    // </div>
   );
 };
 

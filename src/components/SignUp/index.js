@@ -7,12 +7,10 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-    Paper, Button, Link, CircularProgress, Typography,
-    TextField, Grid, FormControlLabel, Checkbox, Box,
-    Container, CssBaseline, Avatar,
-    withStyles
+    Button, Link, Typography, TextField, Grid, Container,
+    CssBaseline, Avatar, withStyles
 } from '@material-ui/core';
-import { LockOutlined } from '@material-ui/icons'
+import { LockOutlined } from '@material-ui/icons';
 
 import * as Firestore from '../Firestore';
 
@@ -38,6 +36,46 @@ function SignUp(props) {
 
     const { classes } = props;
 
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+    useEffect(() => {
+        Firestore.getCurrentUser();
+    })
+
+    function handleFirstNameChange({ target }) {
+        setFirstName(target.value);
+    }
+
+    function handleLastNameChange({ target }) {
+        setLastName(target.value);
+    }
+
+    // handle
+
+    function handleEmailChange({ target }) {
+        setEmail(target.value);
+    }
+
+    function handlePasswordChange({ target }) {
+        setPassword(target.value);
+    }
+
+    function handleConfirmPasswordChange({ target }) {
+        setConfirmPassword(target.value);
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        if (password === confirmPassword) {
+            Firestore.createUserAccount(email, password);
+        }
+    }
+
+
     return (
         <div>
             <Container component="main" maxWidth="xs">
@@ -51,7 +89,7 @@ function SignUp(props) {
                             Sign up
                         </Typography>
                     </div>
-                    <form className={classes.form} noValidate>
+                    <form className={classes.form} noValidate onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -63,6 +101,7 @@ function SignUp(props) {
                                     id="firstName"
                                     label="First Name"
                                     autoFocus
+                                    onChange={handleFirstNameChange}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -74,6 +113,7 @@ function SignUp(props) {
                                     label="Last Name"
                                     name="lastName"
                                     autoComplete="lname"
+                                    onChange={handleLastNameChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -85,6 +125,7 @@ function SignUp(props) {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    onChange={handleEmailChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -97,6 +138,7 @@ function SignUp(props) {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
+                                    onChange={handlePasswordChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -109,6 +151,7 @@ function SignUp(props) {
                                     type="password"
                                     id="confirmPassword"
                                     autoComplete="current-password"
+                                    onChange={handleConfirmPasswordChange}
                                 />
                             </Grid>
                         </Grid>

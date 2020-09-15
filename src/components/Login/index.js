@@ -5,12 +5,9 @@
  * functions for database connectivity
  */
 
-import React, { useState, useEffect } from 'react';
-import { Paper, Button, Link, CircularProgress, Typography,
-    TextField, Grid, FormControlLabel, Checkbox, Box,
-    Container, CssBaseline, Avatar,
-    withStyles
-} from '@material-ui/core';
+import React, { useState } from 'react';
+import {Button, Link, Typography, TextField, Grid, Container, 
+    CssBaseline, Avatar, withStyles } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons'
 
 import * as Firestore from '../Firestore';
@@ -37,6 +34,23 @@ function Login(props) {
 
     const { classes } = props;
 
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    function handleEmailChange({target}) {
+        setEmail(target.value);
+    }
+
+    function handlePasswordChange({target}) {
+        setPassword(target.value);
+    }
+
+    function handleSubmit() {
+        Firestore.signInUser(email, password).then(() => {
+            console.log("success");
+        });
+    }
+
     return (
         <div>
             <Container component="main" maxWidth="xs">
@@ -50,7 +64,7 @@ function Login(props) {
                             Sign In
                         </Typography>
                     </div>
-                    <form className={classes.form} noValidate>
+                    <form className={classes.form} noValidate onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -61,6 +75,7 @@ function Login(props) {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    onChange={handleEmailChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -73,6 +88,7 @@ function Login(props) {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
+                                    onChange={handlePasswordChange}
                                 />
                             </Grid>
                         </Grid>
