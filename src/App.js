@@ -10,12 +10,14 @@
 import React from 'react';
 import Todo from './components/Todo';
 import SignUp from './components/SignUp';
+import Login from './components/Login';
 
 function App(props) {
 
   return (
     // <Todo />
     <SignUp />
+    // <Login />
   );
 };
 
