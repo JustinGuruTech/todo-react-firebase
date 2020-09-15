@@ -1,7 +1,7 @@
 /* Justin Edwards
  * 08/26/2020
  * Single todo list component, handles events when user clicks on
- * anything within a single todo (check/edit/delete). App.js maps
+ * anything within a single todo (check/edit/delete). Todo/index.js maps
  * items in todo to these components passing in relevant info.
  * Uses Firestore/index.js functions for database connectivity
  */ 

@@ -163,7 +163,6 @@ function Todo(props) {
 
   const { classes } = props;
   // state hooks
-  // const [todoInput, setTodoInput] = useState(""); // stores new todo input
   const [todoList, setTodoList] = useState([]); // stores todo list synced with db
   const [filterSelected, setFilterSelected] = useState("all");  // reflects which filter button is active
   const [editing, setEditing] = useState(false);  // reflects whether one of SingleToDo is being edited

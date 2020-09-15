@@ -9,12 +9,13 @@
 
 import React from 'react';
 import Todo from './components/Todo';
-
+import SignUp from './components/SignUp';
 
 function App(props) {
 
   return (
-    <Todo />
+    // <Todo />
+    <SignUp />
   );
 };
 
