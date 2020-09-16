@@ -152,7 +152,7 @@ function SignUp(props) {
             setSigningUp(true);
             setSignUpError("");
             // attempt to create user in firebase
-            Firestore.createUserAccount(email, password)
+            Firestore.createUserAccount(email, password, firstName, lastName)
                 .then(() => {
                     setSigningUp(false);
                     console.log("successfully registered");

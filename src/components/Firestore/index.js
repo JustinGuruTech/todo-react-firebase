@@ -22,11 +22,22 @@ const firebaseConfig = {
 // initialize and get ref to firestore
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const auth = firebase.auth();
+export const auth = firebase.auth();
+
+const getUserId = () => {
+    // check currentUser exists
+    if (auth.currentUser) {
+        // return users uid to be used in queries 
+        return auth.currentUser.uid;
+    // if no user, return a meaningful rejected promise to catch
+    } else {
+        return Promise.reject("User not found");
+    }
+}
 
 // return list of all todos in collection
 export const getAllTodos = async() => {
-    let collection = await db.collection("todos")
+    let collection = await db.collection("users").doc(getUserId()).collection("todos")
     .get()
     .catch(error => {
         // log error and return reason for rejection
@@ -38,7 +49,7 @@ export const getAllTodos = async() => {
 
 // add new todo to db
 export const addTodo = async (body, timestamp) => {
-    let taskRef = await db.collection("todos").add({
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todos").add({
         body: body,
         // store current time in todo doc
         created: timestamp,
@@ -54,7 +65,7 @@ export const addTodo = async (body, timestamp) => {
 
 // update body of a todo
 export const updateTodoBody = async (id, newBody) => {
-    let taskRef = await db.collection("todos").doc(id)
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todos").doc(id)
     .update({
         body: newBody
     })
@@ -68,7 +79,7 @@ export const updateTodoBody = async (id, newBody) => {
 
 // update status of a todo
 export const updateTodoStatus = async (id, newStatus) => {
-    let taskRef = await db.collection("todos").doc(id)
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todos").doc(id)
     .update({
         status: newStatus
     })
@@ -82,7 +93,7 @@ export const updateTodoStatus = async (id, newStatus) => {
 
 // delete a todo
 export const deleteTodo = async (id) => {
-    let taskRef = await db.collection("todos")
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todos")
     .doc(id)
     .delete()
     .catch(error => {
@@ -99,10 +110,14 @@ export const getCurrentTimestamp = () => {
 }
 
 // creates a user account given a username and password
-export const createUserAccount = async (email, password) => {
+export const createUserAccount = async (email, password, firstName, lastName) => {
     let taskRef = await auth.createUserWithEmailAndPassword(email, password)
-    .then(() => {
-        console.log("created user");
+    .then((response) => {
+        // create a document for the user and store firstName/lastName
+        db.collection("users").doc(response.user.uid).set({
+            firstName: firstName,
+            lastName: lastName,
+        })
     })
     .catch(error => {
         console.log("Sign Up Error: ", error);
@@ -113,10 +128,11 @@ export const createUserAccount = async (email, password) => {
 }
 
 // sign in a user given a username and password
-export const signInUser = async (email, password) => {
+export const signInUser = async (email, password, firstName, lastName) => {
     let taskRef = await auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
-        console.log("signed in user");
+    .then((response) => {
+        // AuthDataProvider.onLogin(response.user);
+        return response.user;
     })
     .catch(error => {
         console.log("Sign In Error: ", error);
@@ -141,7 +157,10 @@ export const signOutUser = async () => {
 }
 
 export const getCurrentUser = () => {
-    if (auth.currentUser !== null) {
-        console.log(auth.currentUser.email);
+    console.log("getCurrentUser: ", auth.currentUser)
+    if (auth.currentUser) {
+        return auth.currentUser;
+    } else {
+        console.log("nope");
     }
 }

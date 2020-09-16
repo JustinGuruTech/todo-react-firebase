@@ -17,6 +17,7 @@ import { Check, SyncProblem } from '@material-ui/icons';
 import AddToDo from '../AddToDo';
 import SingleToDo from '../SingleToDo';
 import * as Firestore from '../Firestore';
+import { useAuthDataContext } from '../AuthDataProvider';
 
 const styles = {
     background: {
@@ -164,6 +165,7 @@ function Todo(props) {
     /* #endregion */
 
     const { classes } = props;
+    const { onLogout } = useAuthDataContext();
     // state hooks
     const [todoList, setTodoList] = useState([]); // stores todo list synced with db
     const [filterSelected, setFilterSelected] = useState("all");  // reflects which filter button is active
@@ -185,6 +187,7 @@ function Todo(props) {
             });
     }, []);
 
+    // reset syncError when synced changes to true
     useEffect(() => {
         if (synced === true) {
             setSyncError("");
@@ -240,6 +243,12 @@ function Todo(props) {
         }));
     }
 
+    // handles signing out both in firestore and auth provider
+    function handleSignOut() {
+        Firestore.signOutUser();
+        onLogout();
+    }
+
     return (
         <Paper elevation={0}
             className={classes.background}>
@@ -247,6 +256,7 @@ function Todo(props) {
             <AppBar color="primary" position="static" style={{ height: 64 }}>
                 <Toolbar className={classes.toolbar}>
                     <Typography color="inherit" variant="h4">To-Do</Typography>
+                    <Button onClick={handleSignOut}>Sign Out</Button>
                 </Toolbar>
             </AppBar>
             <div className={classes.mainTodoContainer}>

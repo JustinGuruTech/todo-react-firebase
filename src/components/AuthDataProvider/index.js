@@ -29,7 +29,10 @@ const AuthDataProvider = props => {
   const onLogout = () => setAuthData(initialAuthData);
 
   // will pass user information into this when user is authenticated
-  const onLogin = newAuthData => setAuthData(newAuthData);
+  const onLogin = newAuthData => { 
+      console.log("newAuthData: ", newAuthData);
+      setAuthData(newAuthData);
+  }
 
   // memoizes the information, honestly no clue what is going on here,
   // need to do some research

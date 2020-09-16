@@ -13,6 +13,7 @@ import { useAuthDataContext } from '../AuthDataProvider';
 // returns Home component if no user in auth data context
 const PrivateRoute = ({ component, ...options }) => {
     const { user } = useAuthDataContext();
+    console.log("User in private route: ", user);
     const returnComponent = user ? component : Home;
     return <Route {...options} component={returnComponent} />;
 };

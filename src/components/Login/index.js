@@ -11,6 +11,7 @@ import {
     CssBaseline, Avatar, withStyles, LinearProgress
 } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons'
+import { useAuthDataContext } from '../AuthDataProvider';
 
 import * as Firestore from '../Firestore';
 
@@ -54,6 +55,7 @@ const styles = {
 function Login(props) {
 
     const { classes } = props;
+    const { onLogin } = useAuthDataContext();
 
     // input hooks
     const [email, setEmail] = useState("");
@@ -111,9 +113,10 @@ function Login(props) {
             setSignInError("");
             // use information to sign in
             Firestore.signInUser(email, password)
-                .then(() => {
-                    console.log("success");
+                .then((user) => {
                     setSigningIn(false);
+                    // set user in auth provider
+                    onLogin({"user": user});
                 })
                 .catch(error => {
                     setSigningIn(false);
