@@ -12,8 +12,8 @@ import {
 } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
 
-import * as Firestore from '../Firestore';
-import { useAuthDataContext } from '../AuthDataProvider';
+import * as Firestore from '../../Firestore';
+import { useAuthDataContext } from '../../AuthDataProvider';
 
 const styles = {
     formHeader: {

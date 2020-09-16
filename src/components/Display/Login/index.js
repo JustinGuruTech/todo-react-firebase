@@ -11,9 +11,9 @@ import {
     CssBaseline, Avatar, withStyles, LinearProgress
 } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons'
-import { useAuthDataContext } from '../AuthDataProvider';
+import { useAuthDataContext } from '../../AuthDataProvider';
 
-import * as Firestore from '../Firestore';
+import * as Firestore from '../../Firestore';
 
 const styles = {
     formHeader: {

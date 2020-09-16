@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 
 import { Button, Paper, TextField, withStyles } from '@material-ui/core';
 
-import * as Firestore from '../Firestore'
+import * as Firestore from '../../Firestore'
 
 const styles = {
     searchFlex: {

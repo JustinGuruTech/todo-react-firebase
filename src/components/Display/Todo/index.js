@@ -16,8 +16,8 @@ import { Check, SyncProblem } from '@material-ui/icons';
 
 import AddToDo from '../AddToDo';
 import SingleToDo from '../SingleToDo';
-import * as Firestore from '../Firestore';
-import { useAuthDataContext } from '../AuthDataProvider';
+import * as Firestore from '../../Firestore';
+import { useAuthDataContext } from '../../AuthDataProvider';
 
 const styles = {
     background: {

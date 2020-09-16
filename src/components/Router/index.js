@@ -6,8 +6,8 @@
 
 import React from 'react';
 import { Route, Switch } from "react-router-dom";
-import Home from '../Home';
-import Todo from '../Todo';
+import Home from '../Display/Home';
+import Todo from '../Display/Todo';
 import { useAuthDataContext } from '../AuthDataProvider';
 
 // returns Home component if no user in auth data context

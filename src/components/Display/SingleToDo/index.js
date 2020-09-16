@@ -18,7 +18,7 @@ import {
     DeleteOutlineOutlined, Edit, Done
 } from '@material-ui/icons';
 
-import * as Firestore from '../Firestore'
+import * as Firestore from '../../Firestore'
 
 const styles = {
     mainContainer: {
