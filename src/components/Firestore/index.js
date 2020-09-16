@@ -118,6 +118,8 @@ export const createUserAccount = async (email, password, firstName, lastName) =>
             firstName: firstName,
             lastName: lastName,
         })
+        console.log("user: ", response.user);
+        return response.user;
     })
     .catch(error => {
         console.log("Sign Up Error: ", error);
@@ -128,7 +130,7 @@ export const createUserAccount = async (email, password, firstName, lastName) =>
 }
 
 // sign in a user given a username and password
-export const signInUser = async (email, password, firstName, lastName) => {
+export const signInUser = async (email, password) => {
     let taskRef = await auth.signInWithEmailAndPassword(email, password)
     .then((response) => {
         // AuthDataProvider.onLogin(response.user);

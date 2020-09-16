@@ -7,6 +7,7 @@
  */
 
 import React, { createContext, useState, useEffect, useMemo, useContext } from "react";
+import * as Firestore from '../Firestore';
 
 export const AuthDataContext = createContext(null);
 
@@ -19,20 +20,21 @@ const AuthDataProvider = props => {
    * somewhere.
    */
   useEffect(() => {
-    // this is where the call will be 
-    const currentAuthData = null;
-    if (currentAuthData) {
-      setAuthData(currentAuthData);
-    }
+
+    // check if user currently signed in
+    Firestore.auth.onAuthStateChanged((user) =>{
+        // if so, set state
+        if (user) {
+            setAuthData({"user": user})
+        }
+    });
+
   }, []);
 
   const onLogout = () => setAuthData(initialAuthData);
 
   // will pass user information into this when user is authenticated
-  const onLogin = newAuthData => { 
-      console.log("newAuthData: ", newAuthData);
-      setAuthData(newAuthData);
-  }
+  const onLogin = newAuthData => { setAuthData(newAuthData); }
 
   // memoizes the information, honestly no clue what is going on here,
   // need to do some research

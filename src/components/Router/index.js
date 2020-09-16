@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Home from '../Home';
 import Todo from '../Todo';
 import { useAuthDataContext } from '../AuthDataProvider';
@@ -21,9 +21,9 @@ const PrivateRoute = ({ component, ...options }) => {
 // controls routing
 const Router = () => (
     <Switch>
-        <Redirect exact from="/" to="/home" />
-        <PrivateRoute path="/home" component={Home} />
-        <PrivateRoute path="/todo" component={Todo} />
+        {/* <Redirect from="/" to="/" /> */}
+        {/* <PrivateRoute path="/home" component={Home} /> */}
+        <PrivateRoute path="/" component={Todo} />
     </Switch>
 );
 

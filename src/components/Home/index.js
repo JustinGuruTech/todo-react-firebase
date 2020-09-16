@@ -77,7 +77,7 @@ function Home(props) {
                     <Button className={classes.buttons} variant="outlined" color="primary" onMouseDown={handleSignUpOpen}>
                         Sign Up
                     </Button>
-                    <Dialog open={signUpOpen} onClose={handleSignUpClose} aria-labelledby="form-dialog-title">
+                    <Dialog open={signUpOpen} aria-labelledby="form-dialog-title">
                         <DialogContent>
                             <SignUp setSignInModalOpen={handleSignInOpen}/>
                         </DialogContent>
@@ -92,7 +92,7 @@ function Home(props) {
                     <Button className={classes.buttons} variant="outlined" color="primary" onClick={handleSignInOpen}>
                         Sign In
                     </Button>
-                    <Dialog open={signInOpen} onClose={handleSignInClose} aria-labelledby="form-dialog-title">
+                    <Dialog open={signInOpen} aria-labelledby="form-dialog-title">
                         <DialogContent>
                             <Login setSignUpModalOpen={handleSignUpOpen}/>
                         </DialogContent>

@@ -13,6 +13,7 @@ import {
 import { LockOutlined } from '@material-ui/icons';
 
 import * as Firestore from '../Firestore';
+import { useAuthDataContext } from '../AuthDataProvider';
 
 const styles = {
     formHeader: {
@@ -55,6 +56,7 @@ const styles = {
 function SignUp(props) {
 
     const { classes } = props;
+    const { onLogin } = useAuthDataContext();
 
     // input hooks
     const [firstName, setFirstName] = useState("");
@@ -153,9 +155,9 @@ function SignUp(props) {
             setSignUpError("");
             // attempt to create user in firebase
             Firestore.createUserAccount(email, password, firstName, lastName)
-                .then(() => {
+                .then(user => {
                     setSigningUp(false);
-                    console.log("successfully registered");
+                    onLogin({"user": user});
                 })
                 .catch(error => {
                     setSigningUp(false);
