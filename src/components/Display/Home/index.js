@@ -7,13 +7,12 @@
 
 import React, { useState } from 'react';
 import {
-    Button, Typography,
-    AppBar, Toolbar, Paper, Dialog, DialogContent, DialogActions,
-    withStyles
-} from '@material-ui/core';
+    Button, Typography, Paper, Dialog, DialogContent, 
+    DialogActions, withStyles } from '@material-ui/core';
 
 import SignUp from '../SignUp';
 import Login from '../Login';
+import NavBar from '../NavBar';
 
 const styles = {
     mainContainer: {
@@ -64,11 +63,7 @@ function Home(props) {
         <Paper elevation={0}
             className={classes.background}>
             {/* AppBar - Main Header */}
-            <AppBar color="primary" position="static" style={{ height: 64 }}>
-                <Toolbar className={classes.toolbar}>
-                    <Typography color="inherit" variant="h4">To-Do</Typography>
-                </Toolbar>
-            </AppBar>
+            <NavBar />
             <Paper elevation={1} className={classes.mainContainer}>
                 <Typography variant="h4" component="h4" className={classes.tagline}>
                     To-Do or not To-Do? That is the question.

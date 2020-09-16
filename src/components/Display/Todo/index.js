@@ -9,15 +9,14 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-    Paper, Button, AppBar, Toolbar, Link,
-    CircularProgress, Typography, withStyles
-} from '@material-ui/core';
+    Paper, Button, Link, CircularProgress, Typography, 
+    withStyles } from '@material-ui/core';
 import { Check, SyncProblem } from '@material-ui/icons';
 
 import AddToDo from '../AddToDo';
 import SingleToDo from '../SingleToDo';
+import NavBar from '../NavBar';
 import * as Firestore from '../../Firestore';
-import { useAuthDataContext } from '../../AuthDataProvider';
 
 const styles = {
     background: {
@@ -165,7 +164,6 @@ function Todo(props) {
     /* #endregion */
 
     const { classes } = props;
-    const { onLogout } = useAuthDataContext();
     // state hooks
     const [todoList, setTodoList] = useState([]); // stores todo list synced with db
     const [filterSelected, setFilterSelected] = useState("all");  // reflects which filter button is active
@@ -243,22 +241,11 @@ function Todo(props) {
         }));
     }
 
-    // handles signing out both in firestore and auth provider
-    function handleSignOut() {
-        Firestore.signOutUser();
-        onLogout();
-    }
-
     return (
         <Paper elevation={0}
             className={classes.background}>
             {/* AppBar - Main Header */}
-            <AppBar color="primary" position="static" style={{ height: 64 }}>
-                <Toolbar className={classes.toolbar}>
-                    <Typography color="inherit" variant="h4">To-Do</Typography>
-                    <Button onClick={handleSignOut}>Sign Out</Button>
-                </Toolbar>
-            </AppBar>
+            <NavBar />
             <div className={classes.mainTodoContainer}>
                 <Paper elevation={3} className={classes.todoContainer}>
                     {/* Sync Information Display */}
