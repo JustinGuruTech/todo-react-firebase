@@ -174,8 +174,7 @@ function Login(props) {
                             fullWidth
                             variant="contained"
                             color="primary"
-                            className={classes.submit}
-                        >
+                            className={classes.submit}>
                             {signingIn ?
                                 <div>
                                     <LinearProgress className={classes.linearProgress} />
