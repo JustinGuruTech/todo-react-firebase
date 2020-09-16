@@ -68,7 +68,7 @@ function SignUp(props) {
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
-    const [signUpError, setSignUpError] = useState("This is an error");
+    const [signUpError, setSignUpError] = useState("");
     const [signingUp, setSigningUp] = useState(false);
 
     // INPUT HANDLERS //
@@ -273,7 +273,7 @@ function SignUp(props) {
                         </Button>
                         <Grid container className={classes.grid}>
                             <Grid item>
-                                <Link onClick={props.setSignInModalOpen} variant="body2"
+                                <Link onMouseDown={props.setSignInModalOpen} variant="body2"
                                 className={classes.signUpLink}>
                                     Already have an account? Sign in!
                                 </Link>

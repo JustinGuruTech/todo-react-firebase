@@ -6,8 +6,10 @@
  */
 
 import React, { useState } from 'react';
-import {Button, Link, Typography, TextField, Grid, Container, 
-    CssBaseline, Avatar, withStyles, LinearProgress } from '@material-ui/core';
+import {
+    Button, Link, Typography, TextField, Grid, Container,
+    CssBaseline, Avatar, withStyles, LinearProgress
+} from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons'
 
 import * as Firestore from '../Firestore';
@@ -63,10 +65,10 @@ function Login(props) {
     const [signingIn, setSigningIn] = useState(false);
 
     // INPUT HANDLERS //
-    function handleEmailChange({target}) {
+    function handleEmailChange({ target }) {
         setEmail(target.value);
     }
-    function handlePasswordChange({target}) {
+    function handlePasswordChange({ target }) {
         setPassword(target.value);
     }
 
@@ -76,7 +78,7 @@ function Login(props) {
         if (email === "") {
             setEmailError("Email Required");
             return false;
-        // basic regex test for any@any.any - NOT exhaustive
+            // basic regex test for any@any.any - NOT exhaustive
         } else if (!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))) {
             setEmailError("Enter a valid email");
             return false;
@@ -90,7 +92,7 @@ function Login(props) {
         if (password === "") {
             setPasswordError("Password Required");
             return false;
-        // short password
+            // short password
         } else if (password.length < 6) {
             setPasswordError("Password Too Short");
             return false;
@@ -109,14 +111,14 @@ function Login(props) {
             setSignInError("");
             // use information to sign in
             Firestore.signInUser(email, password)
-            .then(() => {
-                console.log("success");
-                setSigningIn(false);
-            })
-            .catch(error => {
-                setSigningIn(false);
-                setSignInError(error);
-            });
+                .then(() => {
+                    console.log("success");
+                    setSigningIn(false);
+                })
+                .catch(error => {
+                    setSigningIn(false);
+                    setSignInError(error);
+                });
         }
     }
 
@@ -174,15 +176,15 @@ function Login(props) {
                             color="primary"
                             className={classes.submit}
                         >
-                            {signingIn ? 
+                            {signingIn ?
                                 <div>
                                     <LinearProgress className={classes.linearProgress} />
                                 </div> : <div>Sign In</div>}
                         </Button>
                         <Grid container justify="center" className={classes.grid}>
                             <Grid item>
-                                <Link onClick={props.setSignUpModalOpen} variant="body2"
-                                className={classes.signUpLink}>
+                                <Link onMouseDown={props.setSignUpModalOpen} variant="body2"
+                                    className={classes.signUpLink}>
                                     Don't have an account? Sign Up!
                                 </Link>
                             </Grid>

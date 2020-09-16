@@ -74,7 +74,7 @@ function Home(props) {
                     To-Do or not To-Do? That is the question.
                 </Typography>
                 <div className={classes.dialogDiv}>
-                    <Button className={classes.buttons} variant="outlined" color="primary" onClick={handleSignUpOpen}>
+                    <Button className={classes.buttons} variant="outlined" color="primary" onMouseDown={handleSignUpOpen}>
                         Sign Up
                     </Button>
                     <Dialog open={signUpOpen} onClose={handleSignUpClose} aria-labelledby="form-dialog-title">
@@ -82,7 +82,7 @@ function Home(props) {
                             <SignUp setSignInModalOpen={handleSignInOpen}/>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleSignUpClose} color="primary">
+                            <Button onMouseDown={handleSignUpClose} color="primary">
                                 Cancel
                             </Button>
                         </DialogActions>
@@ -97,7 +97,7 @@ function Home(props) {
                             <Login setSignUpModalOpen={handleSignUpOpen}/>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleSignInClose} color="primary">
+                            <Button onMouseDown={handleSignInClose} color="primary">
                                 Cancel
                             </Button>
                         </DialogActions>
