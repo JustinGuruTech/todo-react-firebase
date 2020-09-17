@@ -1,7 +1,9 @@
 // Justin Edwards
 // 08/26/2020
 // This file contains the connection to the firestore database
-// on firebase and queries used to perform CRUD operations
+// on firebase and queries used to perform CRUD operations.
+// Also contains authentication functions for user accounts
+// and fetching user information
 
 import * as firebase from "firebase/app";
 import "firebase/firestore";

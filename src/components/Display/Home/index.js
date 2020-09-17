@@ -107,7 +107,7 @@ function Home(props) {
                         That is the question.
                     </Typography>
                     <div className={classes.buttonsDiv}>
-                        <Button className={classes.buttons} variant="outlined" onMouseDown={handleSignUpOpen}>
+                        <Button className={classes.buttons} variant="outlined" onClick={handleSignUpOpen}>
                             Sign Up
                         </Button>
                         <Button className={classes.buttons} variant="outlined" onClick={handleSignInOpen}>
