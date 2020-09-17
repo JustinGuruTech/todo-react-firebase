@@ -16,20 +16,28 @@ import { useAuthDataContext } from '../../AuthDataProvider';
 import * as Firestore from '../../Firestore';
 
 const styles = {
+    // mainContainer: {
+    //     border: "2px solid black"
+    // },
     formHeader: {
         marginTop: 15,
         marginBottom: 15,
     },
     avatar: {
-        backgroundColor: "#45bd6a",
+        backgroundColor: "#080808",
         margin: "auto",
     },
     iconText: {
         textAlign: "center"
     },
     submit: {
-        backgroundColor: "#45bd6a",
-        marginTop: 15
+        backgroundColor: "#080808",
+        marginTop: 15,
+        color: "white",
+        '&:hover': {
+            color: "#080808",
+            backgroundColor: "#ececec"
+        }
     },
     linearProgress: {
         height: 5,
@@ -39,7 +47,7 @@ const styles = {
     signInError: {
         color: "#de2020",
         height: 25,
-        paddingTop: 5
+        paddingTop: 5,
     },
     grid: {
         display: "flex",
@@ -49,6 +57,8 @@ const styles = {
     },
     signUpLink: {
         cursor: "pointer",
+        color: "#504949",
+        minHeight: 25,
     }
 }
 
@@ -99,7 +109,7 @@ function Login(props) {
             setPasswordError("Password Too Short");
             return false;
         } else {
-            setEmailError("");
+            setPasswordError("");
             return true;
         }
     }
@@ -126,7 +136,7 @@ function Login(props) {
     }
 
     return (
-        <div>
+        <div className={classes.mainContainer}>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <div className={classes.paper}>
@@ -176,21 +186,20 @@ function Login(props) {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            color="primary"
                             className={classes.submit}>
                             {signingIn ?
                                 <div>
                                     <LinearProgress className={classes.linearProgress} />
                                 </div> : <div>Sign In</div>}
                         </Button>
-                        <Grid container justify="center" className={classes.grid}>
+                        <Grid container justify="center">
                             <Grid item>
                                 <Link onMouseDown={props.setSignUpModalOpen} variant="body2"
                                     className={classes.signUpLink}>
                                     Don't have an account? Sign Up!
                                 </Link>
                             </Grid>
-                            <Grid item className={classes.signInError}>
+                            <Grid item className={classes.signInError} variant="body2">
                                 {signInError}
                             </Grid>
                         </Grid>

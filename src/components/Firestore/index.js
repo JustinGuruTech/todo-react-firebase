@@ -158,14 +158,15 @@ export const signOutUser = async () => {
     return taskRef;
 }
 
-export const getCurrentUser = () => {
-    console.log("getCurrentUser: ", auth.currentUser)
-    if (auth.currentUser) {
-        return auth.currentUser;
-    } else {
-        console.log("nope");
-    }
-}
+// // get current user if exists
+// export const getCurrentUser = () => {
+//     console.log("getCurrentUser: ", auth.currentUser)
+//     if (auth.currentUser) {
+//         return auth.currentUser;
+//     } else {
+//         console.log("nope");
+//     }
+// }
 
 export const getCurrentUserFirstLastName = async () => {
     if (auth.currentUser) {

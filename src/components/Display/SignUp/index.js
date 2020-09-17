@@ -21,16 +21,21 @@ const styles = {
         marginBottom: 15,
     },
     icon: {
-        backgroundColor: "#3f51b5",
+        backgroundColor: "#080808",
         margin: "auto",
     },
     iconText: {
         textAlign: "center"
     },
     submit: {
-        backgroundColor: "#3f51b5",
+        backgroundColor: "#080808",
         marginTop: 15,
-        height: 36
+        height: 36,
+        color: 'white',
+        '&:hover': {
+            backgroundColor: "ececec",
+            color: "#080808"
+        }
     },
     linearProgress: {
         height: 5,
@@ -48,8 +53,10 @@ const styles = {
         justifyContent: "center",
         textAlign: "center"
     },
-    signUpLink: {
-        cursor: "pointer"
+    signInLink: {
+        cursor: "pointer",
+        color: "#504949",
+        minHeight: 25,
     }
 }
 
@@ -157,6 +164,7 @@ function SignUp(props) {
             Firestore.createUserAccount(email, password, firstName, lastName)
                 .then(user => {
                     setSigningUp(false);
+                    console.log("signup: ", user);
                     onLogin(user);
                 })
                 .catch(error => {
@@ -264,7 +272,6 @@ function SignUp(props) {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            color="primary"
                             className={classes.submit}
                         >
                             {signingUp ?
@@ -276,7 +283,7 @@ function SignUp(props) {
                         <Grid container className={classes.grid}>
                             <Grid item>
                                 <Link onMouseDown={props.setSignInModalOpen} variant="body2"
-                                className={classes.signUpLink}>
+                                className={classes.signInLink}>
                                     Already have an account? Sign in!
                                 </Link>
                             </Grid>
