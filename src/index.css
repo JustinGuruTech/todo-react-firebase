@@ -2,6 +2,11 @@ body, html, #root {
   height: 100%
 }
 
+@font-face {
+  font-family: "Inter";
+  src: local('Inter'), url(./fonts/Inter-VF.ttf) format('truetype');
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
