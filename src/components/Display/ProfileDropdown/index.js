@@ -22,7 +22,8 @@ const styles = {
         position: "absolute",
         top: 64,
         right: 2,
-        textAlign: "center"
+        textAlign: "center",
+        zIndex: 1
     },
     icon: {
         fontSize: 40,

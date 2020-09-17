@@ -60,10 +60,10 @@ function NavBar(props) {
         setAnchorEl(event.currentTarget);
     }
 
-    // will be used later to close profile when clicking outside of it
-    function closeProfile() {
-        setProfileOpen(false);
-    }
+    // // will be used later to close profile when clicking outside of it
+    // function closeProfile() {
+    //     setProfileOpen(false);
+    // }
 
     return (
         <AppBar className={classes.mainBar} position="static">

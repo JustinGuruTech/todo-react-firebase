@@ -15,14 +15,31 @@ import Login from '../Login';
 import NavBar from '../NavBar';
 
 const styles = {
+    background: {
+        height: "100%",
+        padding: 0,
+        margin: 0,
+        backgroundColor: "white"
+    },
+    mainPageContainer: {
+        minHeight: "100%",
+        display: "flex",
+        justifyContent: "center",
+        background: "linear-gradient(135deg, #708090 21px, #d9ecff 22px, #d9ecff 24px, transparent 24px, transparent 67px, #d9ecff 67px, #d9ecff 69px, transparent 69px), linear-gradient(225deg, #708090 21px, #d9ecff 22px, #d9ecff 24px, transparent 24px, transparent 67px, #d9ecff 67px, #d9ecff 69px, transparent 69px)0 64px",
+        backgroundColor: "#708090",
+        backgroundSize: "64px 128px",
+        paddingBottom: 50
+    },
     mainContainer: {
         width: "80%",
         height: 300,
         margin: "auto",
         marginTop: 20,
+        paddingTop: 20
     },
     tagline: {
         textAlign: "center",
+        fontFamily: "Inter"
     },
     buttonsDiv: {
         display: "flex",
@@ -36,7 +53,13 @@ const styles = {
     buttons: {
         width: 150,
         margin: "auto",
-        marginTop: 15
+        marginTop: 15,
+        color: "#080808",
+        borderColor: "#080808",
+        '&:hover': {
+            backgroundColor: "#080808",
+            color: "#ececec"
+        }
     },
     cancelButton: {
         color: "#080808"
@@ -75,43 +98,48 @@ function Home(props) {
             className={classes.background}>
             {/* AppBar - Main Header */}
             <NavBar />
-            <Paper elevation={1} className={classes.mainContainer}>
-                <Typography variant="h4" component="h4" className={classes.tagline}>
-                    To-Do or not To-Do? That is the question.
-                </Typography>
-                <div className={classes.buttonsDiv}>
-                    <Button className={classes.buttons} variant="outlined" color="primary" onMouseDown={handleSignUpOpen}>
-                        Sign Up
-                    </Button>
-                    <Button className={classes.buttons} variant="outlined" color="primary" onClick={handleSignInOpen}>
-                        Sign In
-                    </Button>
-                </div>
-                <Dialog open={signUpOpen} aria-labelledby="form-dialog-title">
-                    <div className={classes.dialogBorder}>
-                        <DialogContent className={classes.overflow}>
-                            <SignUp setSignInModalOpen={handleSignInOpen}/>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onMouseDown={handleSignUpClose} className={classes.cancelButton}>
-                                Cancel
-                            </Button>
-                        </DialogActions>
+            <div className={classes.mainPageContainer}>
+                <Paper elevation={1} className={classes.mainContainer}>
+                    <Typography variant="h4" component="h4" className={classes.tagline}>
+                        To-Do or not To-Do?
+                    </Typography>
+                    <Typography variant="h4" component="h4" className={classes.tagline}>
+                        That is the question.
+                    </Typography>
+                    <div className={classes.buttonsDiv}>
+                        <Button className={classes.buttons} variant="outlined" onMouseDown={handleSignUpOpen}>
+                            Sign Up
+                        </Button>
+                        <Button className={classes.buttons} variant="outlined" onClick={handleSignInOpen}>
+                            Sign In
+                        </Button>
                     </div>
-                </Dialog>
-                <Dialog border={2} open={signInOpen} aria-labelledby="form-dialog-title">
-                    <div className={classes.dialogBorder}>
-                        <DialogContent className={classes.overflow}>
-                            <Login setSignUpModalOpen={handleSignUpOpen}/>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onMouseDown={handleSignInClose} className={classes.cancelButton}>
-                                Cancel
-                            </Button>
-                        </DialogActions>
-                    </div>
-                </Dialog>
-            </Paper>
+                    <Dialog open={signUpOpen} aria-labelledby="form-dialog-title">
+                        <div className={classes.dialogBorder}>
+                            <DialogContent className={classes.overflow}>
+                                <SignUp setSignInModalOpen={handleSignInOpen}/>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onMouseDown={handleSignUpClose} className={classes.cancelButton}>
+                                    Cancel
+                                </Button>
+                            </DialogActions>
+                        </div>
+                    </Dialog>
+                    <Dialog border={2} open={signInOpen} aria-labelledby="form-dialog-title">
+                        <div className={classes.dialogBorder}>
+                            <DialogContent className={classes.overflow}>
+                                <Login setSignUpModalOpen={handleSignUpOpen}/>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onMouseDown={handleSignInClose} className={classes.cancelButton}>
+                                    Cancel
+                                </Button>
+                            </DialogActions>
+                        </div>
+                    </Dialog>
+                </Paper>
+            </div>
         </Paper>
     );
 }
