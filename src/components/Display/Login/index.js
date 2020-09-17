@@ -116,7 +116,7 @@ function Login(props) {
                 .then((user) => {
                     setSigningIn(false);
                     // set user in auth provider
-                    onLogin({"user": user});
+                    onLogin(user);
                 })
                 .catch(error => {
                     setSigningIn(false);

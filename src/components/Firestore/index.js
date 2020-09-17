@@ -166,3 +166,14 @@ export const getCurrentUser = () => {
         console.log("nope");
     }
 }
+
+export const getCurrentUserFirstLastName = async () => {
+    if (auth.currentUser) {
+        let taskRef = await db.collection("users").doc(auth.currentUser.uid).get()
+        .catch((error) => {
+            console.log("Unable to get name");
+            return Promise.reject(error.message)
+        })
+        return taskRef;
+    }
+}

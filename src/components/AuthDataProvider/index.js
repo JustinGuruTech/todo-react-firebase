@@ -14,33 +14,53 @@ export const AuthDataContext = createContext(null);
 const initialAuthData = {};
 
 const AuthDataProvider = props => {
-  const [authData, setAuthData] = useState(initialAuthData);
+    const [authData, setAuthData] = useState(initialAuthData);
 
-  /* On initial render, it will check for auth info 
-   * somewhere.
-   */
-  useEffect(() => {
+    /* On initial render, it will check for auth info 
+     * somewhere.
+     */
+    useEffect(() => {
+        // check if user currently signed in
+        Firestore.auth.onAuthStateChanged((user) => {
+            // if so, set state
+            if (user) {
+                Firestore.getCurrentUserFirstLastName()
+                .then(response => {
+                    let userData = response.data();
+                    let tempUser = {
+                        firstName: userData.firstName,
+                        lastName: userData.lastName,
+                        uid: user.uid}
+                    console.log("tempUser: ", tempUser);
+                    setAuthData({user: tempUser});
+                });
+            }
+        });
 
-    // check if user currently signed in
-    Firestore.auth.onAuthStateChanged((user) =>{
-        // if so, set state
-        if (user) {
-            setAuthData({"user": user})
-        }
-    });
+    }, []);
 
-  }, []);
+    const onLogout = () => setAuthData(initialAuthData);
 
-  const onLogout = () => setAuthData(initialAuthData);
+    // will pass user information into this when user is authenticated
+    const onLogin = newAuthData => {
+        Firestore.getCurrentUserFirstLastName()
+        .then(response => {
+            let userData = response.data();
+            let tempUser = {
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                uid: newAuthData.uid
+            }
+            console.log("tempUser again: ", tempUser);
+            setAuthData({user: tempUser});
+        })
+    }
 
-  // will pass user information into this when user is authenticated
-  const onLogin = newAuthData => { setAuthData(newAuthData); }
-
-  // memoizes the information, honestly no clue what is going on here,
-  // need to do some research
-  const authDataValue = useMemo(() => ({ ...authData, onLogin, onLogout }), [authData]);
-  // see above comment
-  return <AuthDataContext.Provider value={authDataValue} {...props} />;
+    // memoizes the information, honestly no clue what is going on here,
+    // need to do some research
+    const authDataValue = useMemo(() => ({ ...authData, onLogin, onLogout }), [authData]);
+    // see above comment
+    return <AuthDataContext.Provider value={authDataValue} {...props} />;
 };
 export const useAuthDataContext = () => useContext(AuthDataContext);
 export default AuthDataProvider;

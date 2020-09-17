@@ -157,7 +157,7 @@ function SignUp(props) {
             Firestore.createUserAccount(email, password, firstName, lastName)
                 .then(user => {
                     setSigningUp(false);
-                    onLogin({"user": user});
+                    onLogin(user);
                 })
                 .catch(error => {
                     setSigningUp(false);

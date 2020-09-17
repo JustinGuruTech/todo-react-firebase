@@ -17,6 +17,7 @@ import AddToDo from '../AddToDo';
 import SingleToDo from '../SingleToDo';
 import NavBar from '../NavBar';
 import * as Firestore from '../../Firestore';
+// import { useAuthDataContext } from '../../AuthDataProvider';
 
 const styles = {
     background: {
