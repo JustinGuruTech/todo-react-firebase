@@ -3,7 +3,7 @@
 // SideBar Component - Maps list of todo lists into 
 // Sidebar. Shrinks/expands when hamburger clicked.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import { Drawer, List, ListItem, ListItemIcon, Typography,
     ListItemText, Divider, withStyles, Button, useTheme } from '@material-ui/core';
@@ -78,6 +78,7 @@ function SideBar(props) {
     const { classes } = props;
     const [open, setOpen] = useState(false);
     const [todoListList, setTodoListList] = useState([]);
+    const isFirstRun = useRef(true);
 
     // useEffect(() => {
     //   const tempList = [{name: "Primary", color: "#4fc33f", todos: {}}, {name: "Movies", color: "#bb2b2b", todos: {}}]
@@ -98,6 +99,22 @@ function SideBar(props) {
       })
 
   }, [])
+
+  useEffect(() => {
+    // don't run on initial load
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
+    if (props.listToAddLocally.id !== -1) {
+      console.log("true");
+      let tempList = todoListList;
+      tempList.push(props.listToAddLocally);
+      console.log(tempList);
+      props.setListToAddLocally({id: -1});
+      setTodoListList(tempList);
+    }
+  }, [props.listToAddLocally]);
 
     
 

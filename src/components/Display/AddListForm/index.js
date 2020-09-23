@@ -102,6 +102,7 @@ function Login(props) {
                 // show snackbar
                 props.handleSnackbarOpen();
                 props.handleAddListClose();
+                props.setListToAddLocally(newList);
                 console.log(newList);
             })
             .catch(() => {

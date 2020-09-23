@@ -44,10 +44,9 @@ function TodoPage(props) {
     const [addListOpen, setAddListOpen] = useState(false);
     const [addedSnackbarOpen, setAddedSnackbarOpen] = useState(false);
     const [addListError, setAddListError] = useState("");
+    const [listToAddLocally, setListToAddLocally] = useState({id: -1});
     // will be used for loading symbol
     // const [addingList, setAddingList] = useState(false);
-
-    
 
     function handleAddListOpen() {
         setAddListOpen(true);
@@ -98,7 +97,7 @@ function TodoPage(props) {
                 <NavBar />
             </div>
             <div className={classes.sideBar}>
-                <SideBar handleAddListOpen={handleAddListOpen}/>
+                <SideBar handleAddListOpen={handleAddListOpen} listToAddLocally={listToAddLocally} setListToAddLocally={setListToAddLocally}/>
             </div>
             <Todo className={classes.todoMain}/>
             <Dialog border={2} open={addListOpen} aria-labelledby="form-dialog-title"
@@ -106,7 +105,7 @@ function TodoPage(props) {
                 <div className={classes.overflow}>
                     <DialogContent className={classes.overflow}>
                         <AddListForm handleAddListClose={handleAddListClose} handleSnackbarOpen={handleSnackbarOpen} 
-                        handleAddListError={handleAddListError} /*handleAddingList={handleAddingList}*//>
+                        handleAddListError={handleAddListError} setListToAddLocally={setListToAddLocally} /*handleAddingList={handleAddingList}*//>
                     </DialogContent>
                     <DialogActions>
                         <Button onMouseDown={handleAddListClose} className={classes.cancelButton}>
