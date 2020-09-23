@@ -3,15 +3,13 @@
 // SideBar Component - Maps list of todo lists into 
 // Sidebar. Shrinks/expands when hamburger clicked.
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { Drawer, List, ListItem, ListItemIcon, Typography,
     ListItemText, Divider, withStyles, Button } from '@material-ui/core';
 import { Menu as MenuIcon,
         MenuOpen as MenuOpenIcon,
         FiberManualRecord as FiberManualRecordIcon} from '@material-ui/icons';
-
-import * as Firestore from '../../Firestore';
 
 const drawerWidth = 300;
 
@@ -76,45 +74,45 @@ function SideBar(props) {
 
     const { classes } = props;
     const [open, setOpen] = useState(false);
-    const [todoListList, setTodoListList] = useState([]);
-    const isFirstRun = useRef(true);
+    // const [todoListList, setTodoListList] = useState([]);
+    // const isFirstRun = useRef(true);
 
     // useEffect(() => {
     //   const tempList = [{name: "Primary", color: "#4fc33f", todos: {}}, {name: "Movies", color: "#bb2b2b", todos: {}}]
     //   setTodoListList(tempList);
     // }, []);
 
-    // run once on startup
-    useEffect(() => {
-      Firestore.getAllTodoLists().then((allLists) => {
-          let todoLists = [];
-          allLists.forEach(doc => {
-              let list = doc.data();
-              list.id = doc.id;
-              todoLists.push(list);
-          })
-          setTodoListList(todoLists);
-          // console.log(response);
-      })
+  //   // run once on startup
+  //   useEffect(() => {
+  //     Firestore.getAllTodoLists().then((allLists) => {
+  //         let todoLists = [];
+  //         allLists.forEach(doc => {
+  //             let list = doc.data();
+  //             list.id = doc.id;
+  //             todoLists.push(list);
+  //         })
+  //         setTodoListList(todoLists);
+  //         // console.log(response);
+  //     })
 
-  }, [])
+  // }, [])
 
-  useEffect(() => {
-    // don't run on initial load
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      return;
-    }
-    // check if list to add is a real one
-    if (props.listToAddLocally.id !== -1) {
-      // get list of todo lists
-      let tempList = todoListList;
-      tempList.push(props.listToAddLocally); // add new one
-      props.setListToAddLocally({id: -1});  // reset list to add to dummy
-      setTodoListList(tempList);  // set new list of lists
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.listToAddLocally]);
+  // useEffect(() => {
+  //   // don't run on initial load
+  //   if (isFirstRun.current) {
+  //     isFirstRun.current = false;
+  //     return;
+  //   }
+  //   // check if list to add is a real one
+  //   if (props.listToAddLocally.id !== -1) {
+  //     // get list of todo lists
+  //     let tempList = todoListList;
+  //     tempList.push(props.listToAddLocally); // add new one
+  //     props.setListToAddLocally({id: -1});  // reset list to add to dummy
+  //     setTodoListList(tempList);  // set new list of lists
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [props.listToAddLocally]);
 
     const toggleDrawer = () => {
         setOpen(!open);
@@ -143,7 +141,7 @@ function SideBar(props) {
                         </div> : 
                 <MenuIcon className={classes.menuIcons} /> } 
             </ListItem>
-          {todoListList.map((list) => (
+          {props.todoListList.map((list) => (
             <ListItem button key={list.id}>
               <ListItemIcon><FiberManualRecordIcon style={{color: list.color}} /></ListItemIcon>
               {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
@@ -154,7 +152,7 @@ function SideBar(props) {
         <Divider />
         {open ? <Button className={classes.addListButton}
         onClick={props.handleAddListOpen}>
-          Add List
+          + Add List
         </Button> : null }
         {/* <List>
           {['All mail', 'Trash', 'Spam'].map((text, index) => (
