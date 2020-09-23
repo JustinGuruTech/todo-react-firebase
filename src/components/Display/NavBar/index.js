@@ -23,6 +23,11 @@ const styles = {
         display: "flex",
         justifyContent: "space-between",
     },
+    menuIcon: {
+        color: "black",
+        fontSize: 40,
+        position: "relative"
+    },
     iconText: {
         display: "flex"
     },
@@ -44,7 +49,8 @@ const styles = {
     },
     profileDropdown: {
         position: "absolute"
-    }
+    },
+
 }
 
 function NavBar(props) {
@@ -69,6 +75,7 @@ function NavBar(props) {
         <AppBar className={classes.mainBar} position="static">
             <Toolbar className={classes.toolbar}>
                 <div className={classes.iconText}>
+                    {/* <Menu className={classes.menuIcon} /> */}
                     <OfflinePin className={classes.icon}/>
                     <Typography className={classes.headTitle} color="inherit" variant="h4">To-Do</Typography>
                 </div>

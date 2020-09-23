@@ -37,6 +37,33 @@ const getUserId = () => {
     }
 }
 
+// adds new todo list to firestore db
+export const addNewTodoList = async (name, color) => {
+    let collection = await db.collection("users").doc(getUserId()).collection("todoLists")
+    .add({
+        name: name,
+        color: color,
+        created: getCurrentTimestamp()
+    })
+    // .then(docRef => {
+    //     docRef.collection("todos").add({
+    //         body: "test",
+    //         created: "another test",
+    //         status: "pending"
+    //     })
+    //     console.log(docRef);
+    // })
+    return collection;
+
+}
+
+export const getAllTodoLists = async () => {
+    let collection = await db.collection("users").doc(getUserId()).collection("todoLists")
+    .collection("todos");
+}
+
+
+
 // return list of all todos in collection
 export const getAllTodos = async() => {
     let collection = await db.collection("users").doc(getUserId()).collection("todos")
@@ -159,16 +186,6 @@ export const signOutUser = async () => {
     })
     return taskRef;
 }
-
-// // get current user if exists
-// export const getCurrentUser = () => {
-//     console.log("getCurrentUser: ", auth.currentUser)
-//     if (auth.currentUser) {
-//         return auth.currentUser;
-//     } else {
-//         console.log("nope");
-//     }
-// }
 
 export const getCurrentUserFirstLastName = async () => {
     if (auth.currentUser) {

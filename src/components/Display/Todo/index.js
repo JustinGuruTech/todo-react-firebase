@@ -10,17 +10,18 @@
 import React, { useState, useEffect } from 'react';
 import {
     Paper, Button, Link, CircularProgress, Typography, 
-    withStyles } from '@material-ui/core';
+    Divider, withStyles } from '@material-ui/core';
 import { Check, SyncProblem } from '@material-ui/icons';
 
 import AddToDo from '../AddToDo';
 import SingleToDo from '../SingleToDo';
-import NavBar from '../NavBar';
 import * as Firestore from '../../Firestore';
 // import { useAuthDataContext } from '../../AuthDataProvider';
 
-const styles = {
+const styles = theme => ({
     background: {
+        marginTop: 50,
+        width: "100%",
         height: "100%",
         padding: 0,
         margin: 0,
@@ -33,9 +34,18 @@ const styles = {
         backgroundColor: "#4e8fef",
         borderBottom: "2px solid #d9ecff"
     },
+    todoTitleContainer: {
+        marginBottom: 30,
+    },
+    todoTitle: {
+        textAlign: "center",
+        fontSize: 30,
+        fontFamily: "Inter",
+        padding: 5
+    },
     syncSpan: {
         display: "flex",
-        color: "#5ad85a",
+        color: "#048004",
         justifyContent: "center",
         paddingBottom: 10
     },
@@ -47,7 +57,7 @@ const styles = {
     },
     syncSpanError: {
         display: "flex",
-        color: "#e63939",
+        color: "#bb2b2b",
         justifyContent: "center",
         paddingBottom: 10
     },
@@ -93,12 +103,19 @@ const styles = {
     filterButton: {
         backgroundColor: "#d2d2d2",
         height: 55,
-        width: "32%"
+        width: "32%",
+        '&:hover': {
+            backgroundColor: "#b2b2b2"
+        }
     },
     filterButtonSelected: {
-        backgroundColor: "#3bce4d",
+        backgroundColor: "#303030",
+        color: "white",
         height: 55,
-        width: "32%"
+        width: "32%",
+        '&:hover': {
+            backgroundColor: "#606060"
+        }
     },
     filterButtons: {
         display: "flex",
@@ -117,7 +134,7 @@ const styles = {
         position: "relative",
         top: "20px"
     },
-}
+})
 
 function Todo(props) {
 
@@ -167,6 +184,7 @@ function Todo(props) {
     const { classes } = props;
     // state hooks
     const [todoList, setTodoList] = useState([]); // stores todo list synced with db
+    const [todoListTitle, setTodoListTitle] = useState("Primary");  // stores title of todo list
     const [filterSelected, setFilterSelected] = useState("all");  // reflects which filter button is active
     const [editing, setEditing] = useState(false);  // reflects whether one of SingleToDo is being edited
     const [loaded, setLoaded] = useState(false);  // set to true after initial load from db
@@ -242,11 +260,20 @@ function Todo(props) {
         }));
     }
 
+    function handleButtonClick() {
+        Firestore.addNewTodoList("Test", "#efefef")
+    }
+
     return (
         <Paper elevation={0}
             className={classes.background}>
             {/* AppBar - Main Header */}
-            <NavBar />
+            {/* <div className={classes.navBar}>
+                <NavBar className={classes.navBar}/>
+            </div>
+            <div className={classes.sideBar}>
+                <SideBar/>
+            </div> */}
             <div className={classes.mainTodoContainer}>
                 <Paper elevation={3} className={classes.todoContainer}>
                     {/* Sync Information Display */}
@@ -264,6 +291,11 @@ function Todo(props) {
                             <SyncProblem size={10} />
                             <Link onClick={handleResync} className={classes.tryAgainText}>Resync</Link>
                         </span>}
+                    <div className={classes.todoTitleContainer}>
+                        <Divider />
+                        <Typography className={classes.todoTitle}>{todoListTitle}</Typography>
+                        <Divider />
+                    </div>
                     {/* Add Todos */}
                     <AddToDo todoList={todoList} setSynced={setSynced} synced={synced} setSyncError={setSyncError} />
                     {/* Filter Buttons */}
@@ -309,6 +341,7 @@ function Todo(props) {
                                 /* Loading circle for list */
                             })) : <div><CircularProgress data-testid="load-symbol" className={classes.todoLoading} size={80} /></div>}
                         </div>
+                        <Button onClick={handleButtonClick}>Click Me!</Button>
                     </Paper>
                 </Paper>
             </div>

@@ -47,7 +47,10 @@ const styles = {
         textDecoration: "line-through"
     },
     trashIcon: {
-        color: "#e63939"
+        color: "#bb2b2b"
+    },
+    editIcon: {
+        color: "#4949c3"
     },
     todoEdit: {
         margin: "auto",
@@ -199,12 +202,12 @@ function SingleToDo(props) {
                     </div>
                     {/* Edit and trash icons */}
                     <div className={classes.horizontalFlex}>
-                        <IconButton color="primary" component="span" className={classes.smallIcon} onClick={toggleEditing}
+                        <IconButton component="span" className={classes.editIcon} onClick={toggleEditing}
                             aria-label={editing ? "Save task name" : "Edit task name"} disabled={id === -1}>
                             {// show done button if editing, edit button if not
                                 editing ? <Done data-testid="confirm-edit-button" /> : <Edit data-testid="edit-button" />}
                         </IconButton>
-                        <IconButton color="primary" component="span" className={classes.trashIcon} onClick={trashTodo}
+                        <IconButton component="span" className={classes.trashIcon} onClick={trashTodo}
                             aria-label="Delete task" data-testid="delete-icon" disabled={id === -1}>
                             <DeleteOutlineOutlined />
                         </IconButton>

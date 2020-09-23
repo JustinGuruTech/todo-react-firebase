@@ -29,9 +29,12 @@ const styles = {
     addButton: {
         width: "25%",
         height: 55,
-        backgroundColor: "#9dcef7",
+        backgroundColor: "#303030",
         border: "1px solid #929292",
-        color: "252525"
+        color: "white",
+        '&:hover': {
+            backgroundColor: "#606060"
+        }
     },
 
 }
