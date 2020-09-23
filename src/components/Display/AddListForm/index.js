@@ -5,7 +5,6 @@
 // be used for styling
 
 import React, { useState } from 'react';
-import ColorPicker from 'material-ui-color-picker';
 import {
     Button, Link, Typography, TextField, Grid, Container,
     CssBaseline, Avatar, withStyles, LinearProgress
@@ -29,10 +28,10 @@ const styles = {
         paddingRight: 15
     },
     avatar: {
-        backgroundColor: "#080808",
         margin: "auto",
     },
     iconText: {
+        paddingTop: 5,
         textAlign: "center"
     },
     submit: {
@@ -44,44 +43,19 @@ const styles = {
             backgroundColor: "#ececec"
         }
     },
-    linearProgress: {
-        height: 5,
-        width: 200,
-        backgroundColor: "#f9f9f9"
-    },
     signInError: {
         color: "#de2020",
         height: 25,
         paddingTop: 5,
-    },
-    grid: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        textAlign: "center"
-    },
-    signUpLink: {
-        cursor: "pointer",
-        color: "#504949",
-        minHeight: 25,
     },
     horizontalFlex: {
         display: "flex",
         padding: 0,
         marginBottom: 20
     },
-    colorPicker: {
-        marginBottom: 10
-    },
     nameInput: {
         marginBottom: 10
     },
-    colorPickerInput: {
-        '&::after': {
-            cursor: "default"
-        },
-        cursor: "default !important"
-    }
 }
 
 function Login(props) {
@@ -100,8 +74,8 @@ function Login(props) {
         setName(target.value);
     }
     function handleColorChange(color) {
-        console.log(color);
-        setColor(color);
+        console.log(color.hex);
+        setColor(color.hex);
     }
 
     // BASIC VALIDATION //
@@ -115,22 +89,12 @@ function Login(props) {
             return true;
         }
     }
-    function validateColor() {
-        // empty color
-        if (color === "") {
-            setColorError("Color Required");
-            return false;
-        } else {
-            setColorError("");
-            return true;
-        }
-    }
 
     // handle form submission
     function handleSubmit(event) {
         event.preventDefault(); // prevent default post event
         // check for valid email/password first
-        if (validateName() && validateColor()) {
+        if (validateName()) {
             // setSigningIn(false);
             // setSignInError("");
 
@@ -159,8 +123,8 @@ function Login(props) {
                         <form className={classes.form} noValidate onSubmit={handleSubmit}>
                             <div className={classes.horizontalFlex}>
                             <div className={classes.formHeader}>
-                                <Avatar className={classes.avatar} color="primary">
-                                    <OfflinePin />
+                                <Avatar className={classes.avatar} style={{backgroundColor: color}}>
+                                    <OfflinePin style={{color: "white"}} />
                                 </Avatar>
                                 <Typography component="h1" variant="h5" className={classes.iconText}>
                                     Add List
@@ -168,22 +132,10 @@ function Login(props) {
                             </div>
                                 <Grid item xs={12}>
                                     <ChromePicker
-                                        // variant="outlined"
-                                        // required
-                                        // fullWidth
-                                        // defaultValue={color}
-
                                         color={color}
-                                        // value={color}
                                         name="color"
-                                        // label="Color"
                                         id="color"
-                                        // autoComplete="current-password"
                                         onChange={handleColorChange}
-                                        // onBlur={validateColor}
-                                        // error={colorError !== ""}
-                                        // helperText={colorError}
-                                        // className={classes.colorPicker}
                                     />
                                 </Grid>
                             </div>
@@ -193,7 +145,7 @@ function Login(props) {
                                         required
                                         fullWidth
                                         id="name"
-                                        label="Name"
+                                        label="List Name"
                                         name="name"
                                         // autoComplete="email"
                                         onChange={handleNameChange}

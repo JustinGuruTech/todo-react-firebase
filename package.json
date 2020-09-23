@@ -8,7 +8,6 @@
     "clsx": "^1.1.1",
     "cra-template": "1.0.3",
     "firebase": "^7.19.0",
-    "material-ui-color-picker": "^3.5.1",
     "react": "^16.13.1",
     "react-color": "^2.18.1",
     "react-dom": "^16.13.1",
