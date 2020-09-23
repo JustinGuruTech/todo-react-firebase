@@ -1,7 +1,12 @@
+// Justin Edwards
+// 9/21/20
+// SideBar Component - Maps list of todo lists into 
+// Sidebar. Shrinks/expands when hamburger clicked.
+
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { Drawer, List, ListItem, ListItemIcon, Typography,
-    ListItemText, Divider, withStyles, useTheme } from '@material-ui/core';
+    ListItemText, Divider, withStyles, Button, useTheme } from '@material-ui/core';
 import { Inbox as InboxIcon, Mail as MailIcon,
         Menu as MenuIcon,
         MenuOpen as MenuOpenIcon,
@@ -123,14 +128,18 @@ function SideBar(props) {
           ))}
         </List>
         <Divider />
-        <List>
+        {open ? <Button className={classes.addListButton}
+        onClick={props.handleAddListOpen}>
+          Add List
+        </Button> : null }
+        {/* <List>
           {['All mail', 'Trash', 'Spam'].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
           ))}
-        </List>
+        </List> */}
       </Drawer>
     )
 }
