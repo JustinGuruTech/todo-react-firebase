@@ -21,7 +21,6 @@ const styles = {
     },
     mainContainer: {
         padding: 0,
-        // height: 300
     },
     formHeader: {
         paddingTop: 30,
@@ -67,14 +66,13 @@ function Login(props) {
     const [color, setColor] = useState("#4fc33f");
     // error hooks
     const [nameError, setNameError] = useState("");
-    const [colorError, setColorError] = useState("");
+    const [addListError, setAddListError] = useState(false);
 
     // INPUT HANDLERS //
     function handleNameChange({ target }) {
         setName(target.value);
     }
     function handleColorChange(color) {
-        console.log(color.hex);
         setColor(color.hex);
     }
 
@@ -91,26 +89,27 @@ function Login(props) {
     }
 
     // handle form submission
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault(); // prevent default post event
         // check for valid email/password first
         if (validateName()) {
-            // setSigningIn(false);
-            // setSignInError("");
+            // will be used for loading symbol
+            // props.handleAddingList();
 
-            // function to add list to db and locally
-
-            // use information to sign in
-            // Firestore.signInUser(email, password)
-            //     .then((user) => {
-            //         setSigningIn(false);
-            //         // set user in auth provider
-            //         onLogin(user);
-            //     })
-            //     .catch(error => {
-            //         setSigningIn(false);
-            //         setSignInError(error);
-            //     });
+            // waits for addList to return new list
+            await Firestore.addNewTodoList(name, color)
+            .then((newList) => {
+                // show snackbar
+                props.handleSnackbarOpen();
+                props.handleAddListClose();
+                console.log(newList);
+            })
+            .catch(() => {
+                setAddListError(true);
+                props.handleAddListError();
+                props.handleSnackbarOpen();
+            })
+            
         }
     }
 

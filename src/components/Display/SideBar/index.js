@@ -12,6 +12,8 @@ import { Inbox as InboxIcon, Mail as MailIcon,
         MenuOpen as MenuOpenIcon,
         FiberManualRecord as FiberManualRecordIcon} from '@material-ui/icons';
 
+import * as Firestore from '../../Firestore';
+
 const drawerWidth = 300;
 
 const styles = theme => ({
@@ -77,10 +79,25 @@ function SideBar(props) {
     const [open, setOpen] = useState(false);
     const [todoListList, setTodoListList] = useState([]);
 
+    // useEffect(() => {
+    //   const tempList = [{name: "Primary", color: "#4fc33f", todos: {}}, {name: "Movies", color: "#bb2b2b", todos: {}}]
+    //   setTodoListList(tempList);
+    // }, []);
+
+    // run once on startup
     useEffect(() => {
-      const tempList = [{name: "Primary", color: "#4fc33f", todos: {}}, {name: "Movies", color: "#bb2b2b", todos: {}}]
-      setTodoListList(tempList);
-    }, []);
+      Firestore.getAllTodoLists().then((allLists) => {
+          let todoLists = [];
+          allLists.forEach(doc => {
+              let list = doc.data();
+              list.id = doc.id;
+              todoLists.push(list);
+          })
+          setTodoListList(todoLists);
+          // console.log(response);
+      })
+
+  }, [])
 
     
 
@@ -120,7 +137,7 @@ function SideBar(props) {
                 <MenuIcon className={classes.menuIcons} /> } 
             </ListItem>
           {todoListList.map((list) => (
-            <ListItem button key={list.name}>
+            <ListItem button key={list.id}>
               <ListItemIcon><FiberManualRecordIcon style={{color: list.color}} /></ListItemIcon>
               {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
               <ListItemText primary={list.name} />

@@ -39,30 +39,35 @@ const getUserId = () => {
 
 // adds new todo list to firestore db
 export const addNewTodoList = async (name, color) => {
-    let collection = await db.collection("users").doc(getUserId()).collection("todoLists")
+    let timestamp = getCurrentTimestamp();
+    const docRef = await db.collection("users").doc(getUserId()).collection("todoLists")
     .add({
         name: name,
         color: color,
-        created: getCurrentTimestamp()
+        created: timestamp
+    }).then(test => {
+        const tempList = {id: test.id, name: name, color: color, created: timestamp};
+        return tempList;
     })
-    // .then(docRef => {
-    //     docRef.collection("todos").add({
-    //         body: "test",
-    //         created: "another test",
-    //         status: "pending"
-    //     })
-    //     console.log(docRef);
-    // })
-    return collection;
+    return docRef;
 
 }
 
 export const getAllTodoLists = async () => {
-    let collection = await db.collection("users").doc(getUserId()).collection("todoLists")
-    .collection("todos");
+    let collection = await db.collection("users").doc(getUserId()).collection("todoLists").get()
+    .catch(error => {
+        console.log("Error getting lists");
+    })
+
+    return collection;
 }
 
+export const getAllTodosFromListById = async (id) => {
+    let collection = await db.collection("users").doc(getUserId())
+    .collection("todoLists").collection("todo").get()
 
+    return collection;
+}
 
 // return list of all todos in collection
 export const getAllTodos = async() => {

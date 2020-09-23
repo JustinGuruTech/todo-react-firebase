@@ -260,10 +260,6 @@ function Todo(props) {
         }));
     }
 
-    function handleButtonClick() {
-        Firestore.addNewTodoList("Test", "#efefef")
-    }
-
     return (
         <Paper elevation={0}
             className={classes.background}>
@@ -341,7 +337,6 @@ function Todo(props) {
                                 /* Loading circle for list */
                             })) : <div><CircularProgress data-testid="load-symbol" className={classes.todoLoading} size={80} /></div>}
                         </div>
-                        <Button onClick={handleButtonClick}>Click Me!</Button>
                     </Paper>
                 </Paper>
             </div>

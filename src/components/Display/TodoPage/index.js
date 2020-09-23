@@ -3,9 +3,12 @@
 // TodoPage Component - Contains NavBar, SideBar, and Todo 
 // components
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogActions, 
-    Button, withStyles } from '@material-ui/core';
+    Button, Snackbar, withStyles, IconButton } from '@material-ui/core';
+import {Close as CloseIcon} from '@material-ui/icons';
+
+import * as Firestore from '../../Firestore';
 
 
 import Todo from '../Todo';
@@ -31,7 +34,7 @@ const styles = theme => ({
     },
     dialogPaper: {
         overflow: "visible"
-    }
+    },
 })
 
 function TodoPage(props) {
@@ -39,6 +42,12 @@ function TodoPage(props) {
     const { classes } = props;
     // const [todoLists, setTodoLists] = useState({})
     const [addListOpen, setAddListOpen] = useState(false);
+    const [addedSnackbarOpen, setAddedSnackbarOpen] = useState(false);
+    const [addListError, setAddListError] = useState("");
+    // will be used for loading symbol
+    // const [addingList, setAddingList] = useState(false);
+
+    
 
     function handleAddListOpen() {
         setAddListOpen(true);
@@ -48,8 +57,43 @@ function TodoPage(props) {
         setAddListOpen(false);
     }
 
+    function handleSnackbarOpen() {
+        setAddedSnackbarOpen(true)
+    }
+    function handleSnackbarClose() {
+        setAddedSnackbarOpen(false);
+    }
+
+    function handleAddListError() { 
+        setAddListError("Error Adding List");
+    }
+
+    // function handleAddingList() {
+    //     setAddingList(true);
+    // }
+
     return (
         <div className={classes.todoPageContainer}>
+            <div>
+                {/* List Added Confirmation/Error Snackbar */}
+                <Snackbar
+                    anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                    }}
+                    open={addedSnackbarOpen}
+                    autoHideDuration={4000}
+                    onClose={handleSnackbarClose}
+                    message={addListError != "" ? addListError : "List Added!"}
+                    action={
+                    <React.Fragment>
+                        <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackbarClose}>
+                        <CloseIcon fontSize="small" />
+                        </IconButton>
+                    </React.Fragment>
+                    }
+                />
+            </div>
             <div className={classes.navBar}>
                 <NavBar />
             </div>
@@ -61,7 +105,8 @@ function TodoPage(props) {
                 PaperProps={{className: classes.dialogPaper}}>
                 <div className={classes.overflow}>
                     <DialogContent className={classes.overflow}>
-                        <AddListForm closeAddList={handleAddListClose}/>
+                        <AddListForm handleAddListClose={handleAddListClose} handleSnackbarOpen={handleSnackbarOpen} 
+                        handleAddListError={handleAddListError} /*handleAddingList={handleAddingList}*//>
                     </DialogContent>
                     <DialogActions>
                         <Button onMouseDown={handleAddListClose} className={classes.cancelButton}>
