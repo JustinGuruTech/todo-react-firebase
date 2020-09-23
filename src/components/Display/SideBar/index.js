@@ -6,9 +6,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import { Drawer, List, ListItem, ListItemIcon, Typography,
-    ListItemText, Divider, withStyles, Button, useTheme } from '@material-ui/core';
-import { Inbox as InboxIcon, Mail as MailIcon,
-        Menu as MenuIcon,
+    ListItemText, Divider, withStyles, Button } from '@material-ui/core';
+import { Menu as MenuIcon,
         MenuOpen as MenuOpenIcon,
         FiberManualRecord as FiberManualRecordIcon} from '@material-ui/icons';
 
@@ -106,25 +105,16 @@ function SideBar(props) {
       isFirstRun.current = false;
       return;
     }
+    // check if list to add is a real one
     if (props.listToAddLocally.id !== -1) {
-      console.log("true");
+      // get list of todo lists
       let tempList = todoListList;
-      tempList.push(props.listToAddLocally);
-      console.log(tempList);
-      props.setListToAddLocally({id: -1});
-      setTodoListList(tempList);
+      tempList.push(props.listToAddLocally); // add new one
+      props.setListToAddLocally({id: -1});  // reset list to add to dummy
+      setTodoListList(tempList);  // set new list of lists
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.listToAddLocally]);
-
-    
-
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-
-    const handleDrawerClose = () => {
-        setOpen(false);
-    }
 
     const toggleDrawer = () => {
         setOpen(!open);

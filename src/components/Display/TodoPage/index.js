@@ -3,13 +3,10 @@
 // TodoPage Component - Contains NavBar, SideBar, and Todo 
 // components
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogActions, 
     Button, Snackbar, withStyles, IconButton } from '@material-ui/core';
 import {Close as CloseIcon} from '@material-ui/icons';
-
-import * as Firestore from '../../Firestore';
-
 
 import Todo from '../Todo';
 import NavBar from '../NavBar';
@@ -83,7 +80,7 @@ function TodoPage(props) {
                     open={addedSnackbarOpen}
                     autoHideDuration={4000}
                     onClose={handleSnackbarClose}
-                    message={addListError != "" ? addListError : "List Added!"}
+                    message={addListError !== "" ? addListError : "List Added!"}
                     action={
                     <React.Fragment>
                         <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackbarClose}>

@@ -6,11 +6,10 @@
 
 import React, { useState } from 'react';
 import {
-    Button, Link, Typography, TextField, Grid, Container,
-    CssBaseline, Avatar, withStyles, LinearProgress
+    Button, Typography, TextField, Grid, Container,
+    CssBaseline, Avatar, withStyles
 } from '@material-ui/core';
 import { OfflinePin } from '@material-ui/icons'
-import { useAuthDataContext } from '../../AuthDataProvider';
 import { ChromePicker } from 'react-color';
 
 import * as Firestore from '../../Firestore';
