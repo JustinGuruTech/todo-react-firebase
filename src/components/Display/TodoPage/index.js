@@ -42,6 +42,7 @@ function TodoPage(props) {
     // const [todoLists, setTodoLists] = useState({})
     const isFirstRun = useRef(true);
     const [todoListList, setTodoListList] = useState([]);
+    const [todoListTitle, setTodoListTitle] = useState("");  // stores title of todo list
     const [addListOpen, setAddListOpen] = useState(false);
     const [addedSnackbarOpen, setAddedSnackbarOpen] = useState(false);
     const [addListError, setAddListError] = useState("");
@@ -64,6 +65,13 @@ function TodoPage(props) {
         })
   
     }, [])
+
+    useEffect(() => {
+        if (todoListList.length > 0) {
+            setTodoListTitle(todoListList[0].name);
+        }
+        
+    }, [todoListList]);
 
     useEffect(() => {
         // don't run on initial load
@@ -134,7 +142,7 @@ function TodoPage(props) {
                 <SideBar todoListList={todoListList} handleAddListOpen={handleAddListOpen} 
                 listToAddLocally={listToAddLocally} setListToAddLocally={setListToAddLocally}/>
             </div>
-            <Todo className={classes.todoMain}/>
+            <Todo className={classes.todoMain} todoListTitle={todoListTitle}/>
             <Dialog border={2} open={addListOpen} aria-labelledby="form-dialog-title"
                 PaperProps={{className: classes.dialogPaper}}>
                 <div className={classes.overflow}>

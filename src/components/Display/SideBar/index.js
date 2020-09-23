@@ -74,45 +74,6 @@ function SideBar(props) {
 
     const { classes } = props;
     const [open, setOpen] = useState(false);
-    // const [todoListList, setTodoListList] = useState([]);
-    // const isFirstRun = useRef(true);
-
-    // useEffect(() => {
-    //   const tempList = [{name: "Primary", color: "#4fc33f", todos: {}}, {name: "Movies", color: "#bb2b2b", todos: {}}]
-    //   setTodoListList(tempList);
-    // }, []);
-
-  //   // run once on startup
-  //   useEffect(() => {
-  //     Firestore.getAllTodoLists().then((allLists) => {
-  //         let todoLists = [];
-  //         allLists.forEach(doc => {
-  //             let list = doc.data();
-  //             list.id = doc.id;
-  //             todoLists.push(list);
-  //         })
-  //         setTodoListList(todoLists);
-  //         // console.log(response);
-  //     })
-
-  // }, [])
-
-  // useEffect(() => {
-  //   // don't run on initial load
-  //   if (isFirstRun.current) {
-  //     isFirstRun.current = false;
-  //     return;
-  //   }
-  //   // check if list to add is a real one
-  //   if (props.listToAddLocally.id !== -1) {
-  //     // get list of todo lists
-  //     let tempList = todoListList;
-  //     tempList.push(props.listToAddLocally); // add new one
-  //     props.setListToAddLocally({id: -1});  // reset list to add to dummy
-  //     setTodoListList(tempList);  // set new list of lists
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [props.listToAddLocally]);
 
     const toggleDrawer = () => {
         setOpen(!open);
