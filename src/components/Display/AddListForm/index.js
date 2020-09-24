@@ -101,6 +101,7 @@ function Login(props) {
                 // show snackbar
                 props.handleSnackbarOpen();
                 props.handleAddListClose();
+                newList.todos = [{id: -1}];
                 props.setListToAddLocally(newList);
             })
             .catch(() => {

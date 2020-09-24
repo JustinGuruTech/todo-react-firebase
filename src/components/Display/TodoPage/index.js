@@ -43,7 +43,7 @@ function TodoPage(props) {
     const { classes } = props;
     const isFirstRun = useRef(true);
     const [todoListList, setTodoListList] = useState([]);
-    const [activeTodoList, setActiveTodoList] = useState({ id: -1 });
+    const [activeTodoList, setActiveTodoList] = useState({ id: -1 , todos: []});
     const [todoListIndex, setTodoListIndex] = useState(0);
     const [addListOpen, setAddListOpen] = useState(false);
     const [addedSnackbarOpen, setAddedSnackbarOpen] = useState(false);
