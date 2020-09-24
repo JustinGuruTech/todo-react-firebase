@@ -54,6 +54,10 @@ export const createUserAccount = async (email, password, firstName, lastName) =>
             firstName: firstName,
             lastName: lastName,
         })
+        // create initial list called primary
+        .then(() => {
+            addNewTodoList("Primary", "#46c55c");
+        })
         return response.user;
     })
     .catch(error => {
@@ -83,7 +87,7 @@ export const signInUser = async (email, password) => {
 export const signOutUser = async () => {
     let taskRef = await auth.signOut()
     .then(() => {
-        console.log("signed out");
+        console.log("Signed out.");
     })
     .catch(error => {
         console.log("Error Signing Out: ", error);
