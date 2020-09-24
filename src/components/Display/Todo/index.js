@@ -7,10 +7,11 @@
  * Firestore/index.js functions for database connectivity
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-    Paper, Button, Link, CircularProgress, Typography, 
-    Divider, withStyles } from '@material-ui/core';
+    Paper, Button, Link, CircularProgress, Typography,
+    Divider, withStyles
+} from '@material-ui/core';
 import { Check, SyncProblem } from '@material-ui/icons';
 
 import AddToDo from '../AddToDo';
@@ -183,13 +184,12 @@ function Todo(props) {
 
     const { classes } = props;
     // state hooks
-    const [todoList, setTodoList] = useState({id: -1}); // stores todo list synced with db
+    const [todoList, setTodoList] = useState({ id: -1 }); // stores todo list synced with db
     const [filterSelected, setFilterSelected] = useState("all");  // reflects which filter button is active
     const [editing, setEditing] = useState(false);  // reflects whether one of SingleToDo is being edited
     const [loaded, setLoaded] = useState(false);  // set to true after initial load from db
     const [synced, setSynced] = useState(false); // set to false in between pressing add and updating db
     const [syncError, setSyncError] = useState("");  // for when sync fails
-    const isFirstRun = useRef(true);
 
     // reset syncError when synced changes to true
     useEffect(() => {
@@ -202,38 +202,41 @@ function Todo(props) {
     useEffect(() => {
         // add todos to state
         addTodosToState();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.activeTodoList])
 
+    // when todoList updates
     useEffect(() => {
-        // console.log("todoList useEffect: ", todoList);
+        // check if actual todoList with valid id
         if (todoList.id !== -1) {
-            console.log("Successfully setLoaded/synced")
+            // console.log("Successfully setLoaded/synced")
             setLoaded(true);
             setSynced(true);
         }
     }, [todoList])
 
+    // add todos to state from activeTodoList in TodoPage
     function addTodosToState() {
         // check if active todo list is actual list (check id)
         if (props.activeTodoList.id !== -1) {
             // set todo list to active todo list
             // setTodoList(props.activeTodoList);
             Firestore.getAllTodosFromListById(props.activeTodoList.id)
-            .then(allTodos => {
-                // map todos into array of objects
-                let todos = [];
-                allTodos.forEach(doc => {
-                    console.log("data: ", doc.data());
-                    let todo = doc.data();
-                    todo.id = doc.id;
-                    todos.push(todo);
+                .then(allTodos => {
+                    // map todos into array of objects
+                    let todos = [];
+                    allTodos.forEach(doc => {
+                        console.log("data: ", doc.data());
+                        let todo = doc.data();
+                        todo.id = doc.id;
+                        todos.push(todo);
+                    })
+                    // sort by timestamp
+                    todos.sort((a, b) => (a.created > b.created) ? 1 : -1);
+                    let tempList = props.activeTodoList;    // store tempList from state
+                    tempList.todos = todos; // add todos to tempList
+                    setTodoList(tempList);  // set todos in state
                 })
-                // sort by timestamp
-                todos.sort((a, b) => (a.created > b.created) ? 1 : -1);
-                let tempList = props.activeTodoList;    // store tempList from state
-                tempList.todos = todos; // add todos to tempList
-                setTodoList(tempList);  // set todos in state
-            })
         }
     }
 
@@ -244,22 +247,27 @@ function Todo(props) {
 
     // function to remove a todo item based on it's id
     function removeTodoById(id) {
-        // TODO: do some neat animation
-        setTodoList(todoList.todos.filter(todo => {
+        let tempTodoList = todoList;
+        // find todo with id that needs to be deleted and remove it
+        tempTodoList.todos = tempTodoList.todos.filter(todo => {
             return todo.id !== id;
-        }))
+        })
+        setTodoList(tempTodoList);
     }
 
     // finds the todo in the todoList hook and updates it's values
     function updateLocalTodo(newTodo) {
-        // setTodoList(todoList.todos.filter(todo => {
-        //     if (todo.id === newTodo.id) {
-        //         todo.body = newTodo.body;
-        //         todo.status = newTodo.status;
-        //         return newTodo;
-        //     }
-        //     return todo;
-        // }));
+        let tempTodoList = todoList;
+        // find todo with id that needs to be updated and update it
+        tempTodoList.todos = tempTodoList.todos.filter(todo => {
+            if (todo.id === newTodo.id) {
+                todo.body = newTodo.body;
+                todo.status = newTodo.status;
+                return newTodo;
+            }
+            return todo;
+        })
+        setTodoList(tempTodoList);
     }
 
     return (
@@ -267,7 +275,7 @@ function Todo(props) {
             className={classes.background}>
             <div className={classes.mainTodoContainer}>
                 <Paper elevation={3} className={classes.todoContainer}>
-                    {/* Sync Information Display */}
+                    {/* SYNC INFO DISPLAY */}
                     {syncError === "" ? (synced ?
                         <span className={classes.syncSpan} data-testid="synced-icon">
                             <Typography className={classes.syncText}>Synced</Typography>
@@ -287,9 +295,9 @@ function Todo(props) {
                         <Typography className={classes.todoTitle}>{todoList.name}</Typography>
                         <Divider />
                     </div>
-                    {/* Add Todos */}
+                    {/* ADD TODO COMPONENT */}
                     <AddToDo todoList={todoList} setSynced={setSynced} synced={synced} setSyncError={setSyncError} />
-                    {/* Filter Buttons */}
+                    {/* FILTER BUTTONS */}
                     <Paper elevation={0} className={classes.filterButtons}>
                         <Button className={filterSelected === "all" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}
                             onClick={e => setFilterSelected("all")} aria-label="Show all tasks"
@@ -301,20 +309,20 @@ function Todo(props) {
                             onClick={e => setFilterSelected("completed")} aria-label="Show completed tasks"
                         >Completed</Button>
                     </Paper>
-                    {/* Actual todo list */}
+                    {/* LIST OF TODOS*/}
                     <Paper elevation={1} className={classes.todoList} aria-label="Task Container">
                         <div data-testid="todo-list">
                             {loaded ? (todoList.todos.length === 0 ? <Typography className={classes.noTasks}>No tasks yet</Typography> : todoList.todos.map(todo => {
                                 // map all if filter set to all
                                 if (filterSelected === "all") {
-                                    return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id}
+                                    return <SingleToDo key={todo.id} listId={todoList.id} body={todo.body} status={todo.status} id={todo.id}
                                         refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing}
                                         todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}
                                         updateLocalTodo={updateLocalTodo}></SingleToDo>
                                     // map only those with status pending
                                 } else if (filterSelected === "pending") {
                                     if (todo.status === "pending") {
-                                        return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id}
+                                        return <SingleToDo key={todo.id} listId={todoList.id} body={todo.body} status={todo.status} id={todo.id}
                                             refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing}
                                             todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}
                                             updateLocalTodo={updateLocalTodo}></SingleToDo>
@@ -322,7 +330,7 @@ function Todo(props) {
                                     // map only those with status completed
                                 } else if (filterSelected === "completed") {
                                     if (todo.status === "completed") {
-                                        return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id}
+                                        return <SingleToDo key={todo.id} listId={todoList.id} body={todo.body} status={todo.status} id={todo.id}
                                             refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing}
                                             todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}
                                             updateLocalTodo={updateLocalTodo}></SingleToDo>

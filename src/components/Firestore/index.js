@@ -26,6 +26,14 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 export const auth = firebase.auth();
 
+// gets the current timestamp of the db
+export const getCurrentTimestamp = () => {
+    return firebase.firestore.Timestamp.fromDate(new Date());
+}
+
+/* USER FUNCTIONS */
+
+// gets id of signed in user
 const getUserId = () => {
     // check currentUser exists
     if (auth.currentUser) {
@@ -35,136 +43,6 @@ const getUserId = () => {
     } else {
         return Promise.reject("User not found");
     }
-}
-
-// adds new todo list to firestore db
-export const addNewTodoList = async (name, color) => {
-    let timestamp = getCurrentTimestamp();
-    const docRef = await db.collection("users").doc(getUserId()).collection("todoLists")
-    .add({
-        name: name,
-        color: color,
-        created: timestamp
-    }).then(test => {
-        const tempList = {id: test.id, name: name, color: color, created: timestamp};
-        return tempList;
-    })
-    return docRef;
-
-}
-
-export const addTodoToListById = async (id, body) => {
-    let timestamp = getCurrentTimestamp();
-    let taskRef = await db.collection("users").doc(getUserId()).
-    collection("todoLists").doc(id).collection("todos").add({
-        body: body,
-        created: timestamp,
-        status: "pending"
-    })
-    .catch(error => {
-        console.log("error adding todo: ", error);
-    })
-    return taskRef;
-}
-
-export const getAllTodoLists = async () => {
-    let collection = await db.collection("users").doc(getUserId()).collection("todoLists").get()
-    // .then(todoLists => {
-    //     todoLists.forEach(doc => {
-    //         addTodoToListById(doc.id, "test");
-            
-    //     })
-    //     addTodoToListById()
-    // })
-    .catch(error => {
-        console.log("Error getting lists");
-    })
-
-    return collection;
-}
-
-export const getAllTodosFromListById = async (id) => {
-    console.log("getting todos...")
-    let collection = await db.collection("users").doc(getUserId())
-    .collection("todoLists").doc(id).collection("todos").get()
-    .catch(error => {
-        console.log("error getting todos: ", error);
-    })
-    return collection;
-}
-
-// return list of all todos in collection
-export const getAllTodos = async() => {
-    let collection = await db.collection("users").doc(getUserId()).collection("todos")
-    .get()
-    .catch(error => {
-        // log error and return reason for rejection
-        console.log("Error getting documents: ", error);
-        return Promise.reject("Error loading list");
-    });
-    return collection;
-}
-
-// add new todo to db
-export const addTodo = async (body, timestamp) => {
-    let taskRef = await db.collection("users").doc(getUserId()).collection("todos").add({
-        body: body,
-        // store current time in todo doc
-        created: timestamp,
-        status: "pending"   // automatic set to pending
-    })
-    .catch(error => {
-        // log error and return reason for rejection
-        console.log("Error adding todo: ", error);
-        return Promise.reject("Error adding item");
-    })
-    return taskRef;
-}
-
-// update body of a todo
-export const updateTodoBody = async (id, newBody) => {
-    let taskRef = await db.collection("users").doc(getUserId()).collection("todos").doc(id)
-    .update({
-        body: newBody
-    })
-    .catch(error => {
-        // log error and return reason for rejection
-        console.log("Error updating body: ", error);
-        return Promise.reject("Error updating body");
-    })
-    return taskRef;
-}
-
-// update status of a todo
-export const updateTodoStatus = async (id, newStatus) => {
-    let taskRef = await db.collection("users").doc(getUserId()).collection("todos").doc(id)
-    .update({
-        status: newStatus
-    })
-    .catch(error => {
-        // log error and return reason for rejection
-        console.log("Error updating status: ", error);
-        return Promise.reject("Error updating status");
-    })
-    return taskRef;
-}
-
-// delete a todo
-export const deleteTodo = async (id) => {
-    let taskRef = await db.collection("users").doc(getUserId()).collection("todos")
-    .doc(id)
-    .delete()
-    .catch(error => {
-        // log error and return reason for rejection
-        console.log("Error deleting todo: ", error);
-        return Promise.reject("Error deleting item");
-    })
-    return taskRef;
-}
-
-// gets the current timestamp of the db
-export const getCurrentTimestamp = () => {
-    return firebase.firestore.Timestamp.fromDate(new Date());
 }
 
 // creates a user account given a username and password
@@ -225,4 +103,173 @@ export const getCurrentUserFirstLastName = async () => {
         })
         return taskRef;
     }
+}
+
+/* TODOLIST QUERY FUNCTIONS */
+
+// get all todolists for user
+export const getAllTodoLists = async () => {
+    let collection = await db.collection("users").doc(getUserId()).collection("todoLists").get()
+    .catch(error => {
+        console.log("Error getting lists: ", error);
+        return Promise.reject("Error getting lists");
+    })
+    return collection;
+}
+
+// adds new todo list to firestore db
+export const addNewTodoList = async (name, color) => {
+    let timestamp = getCurrentTimestamp();
+    const docRef = await db.collection("users").doc(getUserId()).collection("todoLists")
+    .add({
+        name: name,
+        color: color,
+        created: timestamp
+    }).then(response => {
+        const tempList = {id: response.id, name: name, color: color, created: timestamp};
+        return tempList;
+    })
+    .catch(error => {
+        console.log("Error adding list: ", error);
+        return Promise.reject("Error adding list");
+    })
+    return docRef;
+}
+
+// gets all todos from a list by listId
+export const getAllTodosFromListById = async (listId) => {
+    console.log("getting todos...")
+    let collection = await db.collection("users").doc(getUserId())
+    .collection("todoLists").doc(listId).collection("todos").get()
+    .catch(error => {
+        console.log("Error getting todos: ", error);
+        return Promise.reject("Error getting todos");
+    })
+    return collection;
+}
+
+// add new todo to list specified by listId
+export const addTodoToListById = async (listId, body, timestamp) => {
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos").add({
+        body: body,
+        created: timestamp,
+        status: "pending"
+    })
+    .catch(error => {
+        console.log("Error adding todo: ", error);
+        return Promise.reject("Error adding todo");
+    })
+    return taskRef;
+}
+
+// update body of a todo in list specified by listId
+export const updateTodoBodyByListId = async (listId, id, newBody) => {
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
+    .doc(id).update({
+        body: newBody
+    })
+    .catch(error => {
+        // log error and return reason for rejection
+        console.log("Error updating body: ", error);
+        return Promise.reject("Error updating body");
+    })
+    return taskRef;
+}
+
+// update status of a todo in list specified by listId
+export const updateTodoStatusByListId = async (listId, id, newStatus) => {
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
+    .doc(id).update({
+        status: newStatus
+    })
+    .catch(error => {
+        // log error and return reason for rejection
+        console.log("Error updating status: ", error);
+        return Promise.reject("Error updating status");
+    })
+    return taskRef;
+}
+
+// delete a todo from list specified by listId
+export const deleteTodoByListId = async (listId, id) => {
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
+    .doc(id)
+    .delete()
+    .catch(error => {
+        // log error and return reason for rejection
+        console.log("Error deleting todo: ", error);
+        return Promise.reject("Error deleting item");
+    })
+    return taskRef;
+}
+
+/* OLD FUNCTIONS USED TO FETCH TODOS FROM A SINGLE LIST */
+
+// return list of all todos in collection
+export const getAllTodos = async() => {
+    let collection = await db.collection("users").doc(getUserId()).collection("todos")
+    .get()
+    .catch(error => {
+        // log error and return reason for rejection
+        console.log("Error getting documents: ", error);
+        return Promise.reject("Error loading list");
+    });
+    return collection;
+}
+
+// add new todo to db
+export const addTodo = async (body, timestamp) => {
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todos").add({
+        body: body,
+        // store current time in todo doc
+        created: timestamp,
+        status: "pending"   // automatic set to pending
+    })
+    .catch(error => {
+        // log error and return reason for rejection
+        console.log("Error adding todo: ", error);
+        return Promise.reject("Error adding item");
+    })
+    return taskRef;
+}
+
+// update body of a todo
+export const updateTodoBody = async (id, newBody) => {
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todos")
+    .doc(id).update({
+        body: newBody
+    })
+    .catch(error => {
+        // log error and return reason for rejection
+        console.log("Error updating body: ", error);
+        return Promise.reject("Error updating body");
+    })
+    return taskRef;
+}
+
+// update status of a todo
+export const updateTodoStatus = async (id, newStatus) => {
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todos")
+    .doc(id).update({
+        status: newStatus
+    })
+    .catch(error => {
+        // log error and return reason for rejection
+        console.log("Error updating status: ", error);
+        return Promise.reject("Error updating status");
+    })
+    return taskRef;
+}
+
+// delete a todo
+export const deleteTodo = async (id) => {
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todos")
+    .doc(id)
+    .delete()
+    .catch(error => {
+        // log error and return reason for rejection
+        console.log("Error deleting todo: ", error);
+        return Promise.reject("Error deleting item");
+    })
+    return taskRef;
 }

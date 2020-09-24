@@ -65,7 +65,7 @@ function Login(props) {
     const [color, setColor] = useState("#4fc33f");
     // error hooks
     const [nameError, setNameError] = useState("");
-    const [addListError, setAddListError] = useState(false);
+    // const [addListError, setAddListError] = useState(false);
 
     // INPUT HANDLERS //
     function handleNameChange({ target }) {
@@ -105,7 +105,7 @@ function Login(props) {
                 console.log(newList);
             })
             .catch(() => {
-                setAddListError(true);
+                // setAddListError(true);
                 props.handleAddListError();
                 props.handleSnackbarOpen();
             })
