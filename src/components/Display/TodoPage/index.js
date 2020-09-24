@@ -42,13 +42,13 @@ function TodoPage(props) {
     // const [todoLists, setTodoLists] = useState({})
     const isFirstRun = useRef(true);
     const [todoListList, setTodoListList] = useState([]);
+    const [activeTodoList, setActiveTodoList] = useState({id: -1});
     const [todoListIndex, setTodoListIndex] = useState(0);
-    const [todoListTitle, setTodoListTitle] = useState("");  // stores title of todo list
+    // const [todoListTitle, setTodoListTitle] = useState("");  // stores title of todo list
     const [addListOpen, setAddListOpen] = useState(false);
     const [addedSnackbarOpen, setAddedSnackbarOpen] = useState(false);
     const [addListError, setAddListError] = useState("");
     const [listToAddLocally, setListToAddLocally] = useState({id: -1});
-    const [selectedTodoListId, setSelectedTodoListId] = useState(-1)
     // will be used for loading symbol
     // const [addingList, setAddingList] = useState(false);
 
@@ -59,7 +59,9 @@ function TodoPage(props) {
             allLists.forEach(doc => {
                 let list = doc.data();
                 list.id = doc.id;
+                list.todos = [];    // set empty list for todos
                 todoLists.push(list);
+                console.log("list: ", list);
             })
             setTodoListList(todoLists);
             // console.log(response);
@@ -67,24 +69,29 @@ function TodoPage(props) {
   
     }, [])
 
+    // runs when todo list list (confusing) is set
     useEffect(() => {
+        // console.log(todoListList);
+        // check if array contains todo lists
         if (todoListList.length > 0) {
-            setTodoListTitle(todoListList[0].name);
+            setActiveTodoList(todoListList[todoListIndex]);
+            // setTodoListTitle(todoListList[0].name); // set title
         }
         
-    }, [todoListList]);
+    }, [todoListList, todoListIndex]);
 
+    // updates index of selected todo list
     function updateTodoListIndex(index) {
         // console.log("test");
         setTodoListIndex(index);
     }
 
-    useEffect(() => {
-        if (todoListList.length > 0) {
-            setTodoListTitle(todoListList[todoListIndex].name);
-        }
+    // useEffect(() => {
+    //     if (todoListList.length > 0) {
+    //         setActiveTodoList(todoListList[todoListIndex]);
+    //     }
         
-    }, [todoListIndex])
+    // }, [todoListIndex])
 
     useEffect(() => {
         // don't run on initial load
@@ -156,7 +163,7 @@ function TodoPage(props) {
                 listToAddLocally={listToAddLocally} setListToAddLocally={setListToAddLocally}
                 updateTodoListIndex={updateTodoListIndex}/>
             </div>
-            <Todo className={classes.todoMain} todoListTitle={todoListTitle}/>
+            <Todo className={classes.todoMain} activeTodoList={activeTodoList}/>
             <Dialog border={2} open={addListOpen} aria-labelledby="form-dialog-title"
                 PaperProps={{className: classes.dialogPaper}}>
                 <div className={classes.overflow}>

@@ -15,6 +15,7 @@ import ProfileDropdown from '../ProfileDropdown';
 
 const styles = {
     mainBar: {
+        position: "fixed",
         backgroundColor: "white",
         height: 64,
         borderBottom: "2px solid #3e3b3b"

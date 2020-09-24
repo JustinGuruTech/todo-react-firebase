@@ -7,7 +7,7 @@
  * Firestore/index.js functions for database connectivity
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     Paper, Button, Link, CircularProgress, Typography, 
     Divider, withStyles } from '@material-ui/core';
@@ -183,25 +183,13 @@ function Todo(props) {
 
     const { classes } = props;
     // state hooks
-    const [todoList, setTodoList] = useState([]); // stores todo list synced with db
+    const [todoList, setTodoList] = useState({id: -1}); // stores todo list synced with db
     const [filterSelected, setFilterSelected] = useState("all");  // reflects which filter button is active
     const [editing, setEditing] = useState(false);  // reflects whether one of SingleToDo is being edited
     const [loaded, setLoaded] = useState(false);  // set to true after initial load from db
     const [synced, setSynced] = useState(false); // set to false in between pressing add and updating db
     const [syncError, setSyncError] = useState("");  // for when sync fails
-
-    // run once on startup
-    useEffect(() => {
-        // load todo list from db then setLoaded to hide loading circle
-        addTodosToState().then(() => {
-            setLoaded(true);  // initial load complete
-            setSynced(true);  // done syncing
-        })
-            // set sync error if loading todos from db fails
-            .catch((error) => {
-                setSyncError(error);
-            });
-    }, []);
+    const isFirstRun = useRef(true);
 
     // reset syncError when synced changes to true
     useEffect(() => {
@@ -210,53 +198,68 @@ function Todo(props) {
         }
     }, [synced])
 
-    // get all todos from db and store in todoList hook
-    async function addTodosToState() {
-        let setRef = await Firestore.getAllTodos().then(allTodos => {
-            let todos = []; // stores parsed todos
-            // for each doc, get data and push to todos
-            allTodos.forEach(doc => {
-                let todo = doc.data();
-                todo.id = doc.id;
-                todos.push(todo);
+    // update when active todo list in TodoPage changes
+    useEffect(() => {
+        // add todos to state
+        addTodosToState();
+    }, [props.activeTodoList])
+
+    useEffect(() => {
+        // console.log("todoList useEffect: ", todoList);
+        if (todoList.id !== -1) {
+            console.log("Successfully setLoaded/synced")
+            setLoaded(true);
+            setSynced(true);
+        }
+    }, [todoList])
+
+    function addTodosToState() {
+        // check if active todo list is actual list (check id)
+        if (props.activeTodoList.id !== -1) {
+            // set todo list to active todo list
+            // setTodoList(props.activeTodoList);
+            Firestore.getAllTodosFromListById(props.activeTodoList.id)
+            .then(allTodos => {
+                // map todos into array of objects
+                let todos = [];
+                allTodos.forEach(doc => {
+                    console.log("data: ", doc.data());
+                    let todo = doc.data();
+                    todo.id = doc.id;
+                    todos.push(todo);
+                })
+                // sort by timestamp
+                todos.sort((a, b) => (a.created > b.created) ? 1 : -1);
+                let tempList = props.activeTodoList;    // store tempList from state
+                tempList.todos = todos; // add todos to tempList
+                setTodoList(tempList);  // set todos in state
             })
-            // sort list by timestamp
-            todos.sort((a, b) => (a.created > b.created) ? 1 : -1)
-            setTodoList(todos); // add todos to hook
-        })
-        return setRef;
+        }
     }
 
     // function for when user tries to resync after sync error
     function handleResync() {
-        // refetch todo items
-        addTodosToState().then(() => {
-            setSynced(true);
-        })
-            // set sync error if loading todos from db fails
-            .catch((error) => {
-                setSyncError(error);
-            });
+        addTodosToState();
     }
 
     // function to remove a todo item based on it's id
     function removeTodoById(id) {
         // TODO: do some neat animation
-        setTodoList(todoList.filter(todo => {
+        setTodoList(todoList.todos.filter(todo => {
             return todo.id !== id;
         }))
     }
 
     // finds the todo in the todoList hook and updates it's values
     function updateLocalTodo(newTodo) {
-        setTodoList(todoList.filter(todo => {
-            if (todo.id === newTodo.id) {
-                todo.body = newTodo.body;
-                todo.status = newTodo.status;
-                return newTodo;
-            }
-            return todo;
-        }));
+        // setTodoList(todoList.todos.filter(todo => {
+        //     if (todo.id === newTodo.id) {
+        //         todo.body = newTodo.body;
+        //         todo.status = newTodo.status;
+        //         return newTodo;
+        //     }
+        //     return todo;
+        // }));
     }
 
     return (
@@ -281,7 +284,7 @@ function Todo(props) {
                         </span>}
                     <div className={classes.todoTitleContainer}>
                         <Divider />
-                        <Typography className={classes.todoTitle}>{props.todoListTitle}</Typography>
+                        <Typography className={classes.todoTitle}>{todoList.name}</Typography>
                         <Divider />
                     </div>
                     {/* Add Todos */}
@@ -301,7 +304,7 @@ function Todo(props) {
                     {/* Actual todo list */}
                     <Paper elevation={1} className={classes.todoList} aria-label="Task Container">
                         <div data-testid="todo-list">
-                            {loaded ? (todoList.length === 0 ? <Typography className={classes.noTasks}>No tasks yet</Typography> : todoList.map(todo => {
+                            {loaded ? (todoList.todos.length === 0 ? <Typography className={classes.noTasks}>No tasks yet</Typography> : todoList.todos.map(todo => {
                                 // map all if filter set to all
                                 if (filterSelected === "all") {
                                     return <SingleToDo key={todo.id} body={todo.body} status={todo.status} id={todo.id}

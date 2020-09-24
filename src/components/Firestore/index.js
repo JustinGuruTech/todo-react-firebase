@@ -53,8 +53,29 @@ export const addNewTodoList = async (name, color) => {
 
 }
 
+export const addTodoToListById = async (id, body) => {
+    let timestamp = getCurrentTimestamp();
+    let taskRef = await db.collection("users").doc(getUserId()).
+    collection("todoLists").doc(id).collection("todos").add({
+        body: body,
+        created: timestamp,
+        status: "pending"
+    })
+    .catch(error => {
+        console.log("error adding todo: ", error);
+    })
+    return taskRef;
+}
+
 export const getAllTodoLists = async () => {
     let collection = await db.collection("users").doc(getUserId()).collection("todoLists").get()
+    // .then(todoLists => {
+    //     todoLists.forEach(doc => {
+    //         addTodoToListById(doc.id, "test");
+            
+    //     })
+    //     addTodoToListById()
+    // })
     .catch(error => {
         console.log("Error getting lists");
     })
@@ -63,9 +84,12 @@ export const getAllTodoLists = async () => {
 }
 
 export const getAllTodosFromListById = async (id) => {
+    console.log("getting todos...")
     let collection = await db.collection("users").doc(getUserId())
-    .collection("todoLists").collection("todo").get()
-
+    .collection("todoLists").doc(id).collection("todos").get()
+    .catch(error => {
+        console.log("error getting todos: ", error);
+    })
     return collection;
 }
 
@@ -152,7 +176,7 @@ export const createUserAccount = async (email, password, firstName, lastName) =>
             firstName: firstName,
             lastName: lastName,
         })
-        console.log("user: ", response.user);
+        // console.log("user: ", response.user);
         return response.user;
     })
     .catch(error => {
