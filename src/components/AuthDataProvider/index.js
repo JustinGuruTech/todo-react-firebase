@@ -22,7 +22,6 @@ const AuthDataProvider = props => {
     useEffect(() => {
         // check if user currently signed in
         Firestore.auth.onAuthStateChanged((user) => {
-            console.log(user)
             // if so, set state
             if (user) {
                 Firestore.getCurrentUserFirstLastName()
@@ -33,7 +32,6 @@ const AuthDataProvider = props => {
                         lastName: userData.lastName,
                         uid: user.uid,
                         email: user.email}
-                    console.log("tempUser: ", tempUser);
                     setAuthData({user: tempUser});
                 });
             }
@@ -54,7 +52,6 @@ const AuthDataProvider = props => {
                 uid: newAuthData.uid,
                 email: newAuthData.email
             }
-            console.log("tempUser again: ", tempUser);
             setAuthData({user: tempUser});
         })
     }

@@ -29,9 +29,12 @@ const styles = {
     addButton: {
         width: "25%",
         height: 55,
-        backgroundColor: "#9dcef7",
+        backgroundColor: "#303030",
         border: "1px solid #929292",
-        color: "252525"
+        color: "white",
+        '&:hover': {
+            backgroundColor: "#606060"
+        }
     },
 
 }
@@ -57,9 +60,9 @@ function AddToDo(props) {
                 created: Firestore.getCurrentTimestamp(), // get firestore db timestamp
                 id: -1  // temporarily set id to -1
             }
-            todoList.push(todo);
+            todoList.todos.push(todo);
             // add todo to db then update todo list from db
-            Firestore.addTodo(todoInput, todo.created).then(docRef => {
+            Firestore.addTodoToListById(todoList.id, todoInput, todo.created).then(docRef => {
                 todo.id = docRef.id;  // set correct id of todo
                 setTodoInput(""); // reset todo input
                 setSynced(true);  // now synced
@@ -80,7 +83,7 @@ function AddToDo(props) {
 
     return (
         <Paper elevation={0} className={classes.searchFlex}>
-            {/* Text input */}
+            {/* TEXT INPUT */}
             <TextField variant="outlined" className={classes.addText} placeholder="Add a todo..."
                 onChange={handleTextInput} value={todoInput} aria-label="Type Todo" disabled={!synced}
                 onKeyDown={handleEnterAdd} data-testid="todo-input"
@@ -88,7 +91,7 @@ function AddToDo(props) {
                     className: classes.addTextBG
                 }}>
             </TextField>
-            {/* Add button */}
+            {/* ADD BUTTON */}
             <Button className={classes.addButton} data-testid="add-button"
                 onClick={handleAddItem} aria-label="Add Typed Todo">Add</Button>
         </Paper>

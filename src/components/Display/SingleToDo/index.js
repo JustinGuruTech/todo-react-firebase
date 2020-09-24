@@ -47,7 +47,10 @@ const styles = {
         textDecoration: "line-through"
     },
     trashIcon: {
-        color: "#e63939"
+        color: "#bb2b2b"
+    },
+    editIcon: {
+        color: "#4949c3"
     },
     todoEdit: {
         margin: "auto",
@@ -57,7 +60,7 @@ const styles = {
 
 function SingleToDo(props) {
 
-    const { classes, id } = props;
+    const { classes, id, listId } = props;
     // state hooks
     const [body, setBody] = useState(props.body);
     const [status, setStatus] = useState(props.status);
@@ -96,7 +99,7 @@ function SingleToDo(props) {
         // send updated todo to parent to reflect status change
         sendUpdatedTodoToParent();
         // update status in db then refresh todo list on frontend
-        Firestore.updateTodoStatus(id, status).then(() => {
+        Firestore.updateTodoStatusByListId(listId, id, status).then(() => {
             props.setSynced(true);  // set to synced
         })
             // catch error from Firestore function and set syncError
@@ -118,7 +121,7 @@ function SingleToDo(props) {
             if (editing) {
                 setEditing(false);
                 props.setSynced(false); // set to syncing;
-                Firestore.updateTodoBody(id, body).then(() => {
+                Firestore.updateTodoBodyByListId(listId, id, body).then(() => {
                     props.setSynced(true);  // set to synced
                 })
                     // catch error from Firestore function and set syncError
@@ -168,7 +171,7 @@ function SingleToDo(props) {
         setConfirmTrashOpen(false);
         setEditing(false);
         // delete todo in db then refresh todo list on frontend
-        Firestore.deleteTodo(id).then(() => {
+        Firestore.deleteTodoByListId(listId, id).then(() => {
             props.setSynced(true);  // set to synced
         })
             // catch error from Firestore function and set syncError
@@ -199,12 +202,12 @@ function SingleToDo(props) {
                     </div>
                     {/* Edit and trash icons */}
                     <div className={classes.horizontalFlex}>
-                        <IconButton color="primary" component="span" className={classes.smallIcon} onClick={toggleEditing}
+                        <IconButton component="span" className={classes.editIcon} onClick={toggleEditing}
                             aria-label={editing ? "Save task name" : "Edit task name"} disabled={id === -1}>
                             {// show done button if editing, edit button if not
                                 editing ? <Done data-testid="confirm-edit-button" /> : <Edit data-testid="edit-button" />}
                         </IconButton>
-                        <IconButton color="primary" component="span" className={classes.trashIcon} onClick={trashTodo}
+                        <IconButton component="span" className={classes.trashIcon} onClick={trashTodo}
                             aria-label="Delete task" data-testid="delete-icon" disabled={id === -1}>
                             <DeleteOutlineOutlined />
                         </IconButton>

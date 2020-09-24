@@ -34,7 +34,7 @@ const styles = {
         width: "80%",
         height: 300,
         margin: "auto",
-        marginTop: 20,
+        marginTop: 120,
         paddingTop: 20
     },
     tagline: {
