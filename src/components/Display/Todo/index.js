@@ -218,9 +218,13 @@ function Todo(props) {
     function addTodosToState() {
         // check if active todo list is actual list (check id)
         if (props.activeTodoList.id !== -1) {
-            // set todo list to active todo list
-            // setTodoList(props.activeTodoList);
-            Firestore.getAllTodosFromListById(props.activeTodoList.id)
+
+            // this checks if the todos have already been fetched from the db. If they haven't,
+            // the todos length will be 1 (dummy todo) and that "todo" will have an id of -1
+            if (props.activeTodoList.todos.length !== 0 && props.activeTodoList.todos[0].id === -1) {
+                // set todo list to active todo list
+                // setTodoList(props.activeTodoList);
+                Firestore.getAllTodosFromListById(props.activeTodoList.id)
                 .then(allTodos => {
                     // map todos into array of objects
                     let todos = [];
@@ -235,6 +239,11 @@ function Todo(props) {
                     tempList.todos = todos; // add todos to tempList
                     setTodoList(tempList);  // set todos in state
                 })
+            // if todo list has already been set, use the one in TodoPage
+            } else {
+                console.log("test");
+                setTodoList(props.activeTodoList);
+            }
         }
     }
 

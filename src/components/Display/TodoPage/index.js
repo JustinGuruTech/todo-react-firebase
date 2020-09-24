@@ -61,7 +61,7 @@ function TodoPage(props) {
             allLists.forEach(doc => {
                 let list = doc.data();
                 list.id = doc.id;
-                list.todos = [];    // set empty list for todos
+                list.todos = [{id: -1}];    // set empty list for todos
                 todoLists.push(list);
             })
             setTodoListList(todoLists); // set list of todo lists
