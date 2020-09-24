@@ -62,12 +62,6 @@ const styles = theme => ({
           fontWeight: "bold",
           fontFamily: "Inter"
       }
-    // drawer: {
-    //     width: drawerWidth
-    // },
-    // drawerPaper: {
-    //     width: drawerWidth
-    // }
 })
 
 function SideBar(props) {
@@ -102,8 +96,8 @@ function SideBar(props) {
                         </div> : 
                 <MenuIcon className={classes.menuIcons} /> } 
             </ListItem>
-          {props.todoListList.map((list) => (
-            <ListItem button key={list.id}>
+          {props.todoListList.map((list, index) => (
+            <ListItem button key={index} onClick={() => {props.updateTodoListIndex(index)}}>
               <ListItemIcon><FiberManualRecordIcon style={{color: list.color}} /></ListItemIcon>
               {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
               <ListItemText primary={list.name} />

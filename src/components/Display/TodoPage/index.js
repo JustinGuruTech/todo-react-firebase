@@ -42,6 +42,7 @@ function TodoPage(props) {
     // const [todoLists, setTodoLists] = useState({})
     const isFirstRun = useRef(true);
     const [todoListList, setTodoListList] = useState([]);
+    const [todoListIndex, setTodoListIndex] = useState(0);
     const [todoListTitle, setTodoListTitle] = useState("");  // stores title of todo list
     const [addListOpen, setAddListOpen] = useState(false);
     const [addedSnackbarOpen, setAddedSnackbarOpen] = useState(false);
@@ -72,6 +73,18 @@ function TodoPage(props) {
         }
         
     }, [todoListList]);
+
+    function updateTodoListIndex(index) {
+        // console.log("test");
+        setTodoListIndex(index);
+    }
+
+    useEffect(() => {
+        if (todoListList.length > 0) {
+            setTodoListTitle(todoListList[todoListIndex].name);
+        }
+        
+    }, [todoListIndex])
 
     useEffect(() => {
         // don't run on initial load
@@ -140,7 +153,8 @@ function TodoPage(props) {
             </div>
             <div className={classes.sideBar}>
                 <SideBar todoListList={todoListList} handleAddListOpen={handleAddListOpen} 
-                listToAddLocally={listToAddLocally} setListToAddLocally={setListToAddLocally}/>
+                listToAddLocally={listToAddLocally} setListToAddLocally={setListToAddLocally}
+                updateTodoListIndex={updateTodoListIndex}/>
             </div>
             <Todo className={classes.todoMain} todoListTitle={todoListTitle}/>
             <Dialog border={2} open={addListOpen} aria-labelledby="form-dialog-title"

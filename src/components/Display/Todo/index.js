@@ -184,7 +184,6 @@ function Todo(props) {
     const { classes } = props;
     // state hooks
     const [todoList, setTodoList] = useState([]); // stores todo list synced with db
-    // const [todoListTitle, setTodoListTitle] = useState("Primary");  // stores title of todo list
     const [filterSelected, setFilterSelected] = useState("all");  // reflects which filter button is active
     const [editing, setEditing] = useState(false);  // reflects whether one of SingleToDo is being edited
     const [loaded, setLoaded] = useState(false);  // set to true after initial load from db
@@ -263,13 +262,6 @@ function Todo(props) {
     return (
         <Paper elevation={0}
             className={classes.background}>
-            {/* AppBar - Main Header */}
-            {/* <div className={classes.navBar}>
-                <NavBar className={classes.navBar}/>
-            </div>
-            <div className={classes.sideBar}>
-                <SideBar/>
-            </div> */}
             <div className={classes.mainTodoContainer}>
                 <Paper elevation={3} className={classes.todoContainer}>
                     {/* Sync Information Display */}
