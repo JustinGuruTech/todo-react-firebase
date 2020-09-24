@@ -102,7 +102,6 @@ function Login(props) {
                 props.handleSnackbarOpen();
                 props.handleAddListClose();
                 props.setListToAddLocally(newList);
-                console.log(newList);
             })
             .catch(() => {
                 // setAddListError(true);

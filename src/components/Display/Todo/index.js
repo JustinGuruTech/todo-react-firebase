@@ -209,7 +209,6 @@ function Todo(props) {
     useEffect(() => {
         // check if actual todoList with valid id
         if (todoList.id !== -1) {
-            // console.log("Successfully setLoaded/synced")
             setLoaded(true);
             setSynced(true);
         }
@@ -226,7 +225,6 @@ function Todo(props) {
                     // map todos into array of objects
                     let todos = [];
                     allTodos.forEach(doc => {
-                        console.log("data: ", doc.data());
                         let todo = doc.data();
                         todo.id = doc.id;
                         todos.push(todo);

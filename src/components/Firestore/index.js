@@ -54,7 +54,6 @@ export const createUserAccount = async (email, password, firstName, lastName) =>
             firstName: firstName,
             lastName: lastName,
         })
-        // console.log("user: ", response.user);
         return response.user;
     })
     .catch(error => {
@@ -138,7 +137,6 @@ export const addNewTodoList = async (name, color) => {
 
 // gets all todos from a list by listId
 export const getAllTodosFromListById = async (listId) => {
-    console.log("getting todos...")
     let collection = await db.collection("users").doc(getUserId())
     .collection("todoLists").doc(listId).collection("todos").get()
     .catch(error => {

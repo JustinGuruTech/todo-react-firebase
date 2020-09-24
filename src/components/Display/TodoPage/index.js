@@ -63,10 +63,8 @@ function TodoPage(props) {
                 list.id = doc.id;
                 list.todos = [];    // set empty list for todos
                 todoLists.push(list);
-                console.log("list: ", list);
             })
             setTodoListList(todoLists); // set list of todo lists
-            // console.log(response);
         })
 
     }, [])
