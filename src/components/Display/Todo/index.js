@@ -230,6 +230,12 @@ function Todo(props) {
                     let todos = [];
                     allTodos.forEach(doc => {
                         let todo = doc.data();
+                        if (todo.dueDate !== undefined) {
+                            todo.dueDate = dateToString(todo.dueDate.toDate());
+                            console.log(todo.dueDate);
+                        } else {
+                            todo.dueDate = "none";
+                        }
                         todo.id = doc.id;
                         todos.push(todo);
                     })
@@ -245,6 +251,20 @@ function Todo(props) {
                 setTodoList(props.activeTodoList);
             }
         }
+    }
+
+    // converts a date object to a string to display
+    function dateToString(date) {
+        // convert to 12 hour AM/PM time
+        let suffix = "AM";
+        let hours = date.getHours();
+        if (hours > 12) {
+            hours -= 12;
+            suffix = "PM";
+        }
+        // put togeether string
+        let strDate = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + hours + ":" + date.getMinutes() + suffix;
+        return strDate;
     }
 
     // function for when user tries to resync after sync error
@@ -324,14 +344,14 @@ function Todo(props) {
                                 if (filterSelected === "all") {
                                     return <SingleToDo key={todo.id} listId={todoList.id} body={todo.body} status={todo.status} id={todo.id}
                                         refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing}
-                                        todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}
+                                        todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError} dueDate={todo.dueDate}
                                         updateLocalTodo={updateLocalTodo}></SingleToDo>
                                     // map only those with status pending
                                 } else if (filterSelected === "pending") {
                                     if (todo.status === "pending") {
                                         return <SingleToDo key={todo.id} listId={todoList.id} body={todo.body} status={todo.status} id={todo.id}
                                             refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing}
-                                            todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}
+                                            todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError} dueDate={todo.dueDate}
                                             updateLocalTodo={updateLocalTodo}></SingleToDo>
                                     }
                                     // map only those with status completed
@@ -339,7 +359,7 @@ function Todo(props) {
                                     if (todo.status === "completed") {
                                         return <SingleToDo key={todo.id} listId={todoList.id} body={todo.body} status={todo.status} id={todo.id}
                                             refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing}
-                                            todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError}
+                                            todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError} dueDate={todo.dueDate}
                                             updateLocalTodo={updateLocalTodo}></SingleToDo>
                                     }
                                 }

@@ -127,7 +127,7 @@ export const addNewTodoList = async (name, color) => {
     .add({
         name: name,
         color: color,
-        created: timestamp
+        created: timestamp,
     }).then(response => {
         const tempList = {id: response.id, name: name, color: color, created: timestamp};
         return tempList;

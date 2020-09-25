@@ -23,7 +23,7 @@ import * as Firestore from '../../Firestore'
 const styles = {
     mainContainer: {
         width: "100%",
-        minHeight: 40,
+        minHeight: 50,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center"
@@ -34,17 +34,31 @@ const styles = {
     },
     leftFlex: {
         display: "flex",
-        justifyContent: "space-between",
+        // justifyContent: "space-between",
         flex: 1
+    },
+    centeredDiv: {
+        margin: "auto"
+    },
+    todoDateFlex: {
+        display: "flex",
+        flexDirection: "column"
+    },
+    dueDate: {
+        fontSize: ".7rem",
+        fontFamily: "Inter"
     },
     bodyLabel: {
         lineHeight: "20px",
-        margin: "auto auto auto 0"
+        margin: "auto auto auto 0",
+        margin: 0,
+        fontFamily: "Inter"
     },
     bodyLabelCompleted: {
         lineHeight: "20px",
-        margin: "auto auto auto 0",
-        textDecoration: "line-through"
+        margin: 0,
+        textDecoration: "line-through",
+        fontFamily: "Inter"
     },
     trashIcon: {
         color: "#bb2b2b"
@@ -64,6 +78,7 @@ function SingleToDo(props) {
     // state hooks
     const [body, setBody] = useState(props.body);
     const [status, setStatus] = useState(props.status);
+    const [dueDate, setDueDate] = useState(props.dueDate);
     const [editing, setEditing] = useState(false);
     const [confirmTrashOpen, setConfirmTrashOpen] = useState(false);
     const isFirstRun = useRef(true);
@@ -134,6 +149,21 @@ function SingleToDo(props) {
         setEditing(true);
     }
 
+    // converts a date object to a string to display
+    function dateToString(date) {
+        // convert to 12 hour AM/PM time
+        let suffix = "AM";
+        let hours = date.getHours();
+        if (hours > 12) {
+            hours -= 12;
+            suffix = "PM";
+        }
+        // put togeether string
+        let strDate = date.getMonth() + "/" + date.getDay() + "/" + date.getFullYear() + " " + hours + ":" + date.getMinutes() + suffix;
+        console.log(strDate);
+        return strDate;
+    }
+
     // whenever editing is changed in SingleToDo, editing in App.js changes to reflect it
     useEffect(() => {
         props.setEditing(editing);
@@ -185,22 +215,30 @@ function SingleToDo(props) {
             <Paper elevation={0} className={classes.mainContainer}>
                 <Paper elevation={0} className={classes.horizontalFlex}>
                     <div className={classes.leftFlex}>
-                        {/* Todo item checkbox */}
+                        {/* TODO CHECKBOX */}
                         <Checkbox className={classes.checkbox} icon={<RadioButtonUnchecked />} checkedIcon={<RadioButtonChecked />}
                             checked={status === "completed"} name="gilad" onChange={handleIconChange} aria-label="Completion checkbox"
                             disabled={id === -1} />
-                        {editing ?
-                            // show textfield for editing if user is editing todo
+                        <div className={classes.todoDateFlex}>
+                            <div className={classes.centeredDiv}>
+                            {editing ?
+                            // EDITING TEXTFIELD
                             <TextField autoFocus className={classes.todoEdit} value={body} onChange={handleEdit} onKeyDown={handleEnterEdit}
                                 data-testid="edit-input"
                                 InputProps={{
                                     className: classes.todoEdit,
                                 }} /> :
-                            // show uneditable todo
+                            // REGULAR TEXTFIELD
                             <Typography className={status === "completed" ?
-                                classes.bodyLabelCompleted : classes.bodyLabel} aria-label="Task name">{body}</Typography>}
+                                classes.bodyLabelCompleted : classes.bodyLabel} aria-label="Task name">{body}</Typography>
+                            }
+                            <div className={classes.dueDate}>
+                                <Typography className={classes.dueDate}>{dueDate}</Typography>
+                            </div>
+                            </div>
+                        </div>
                     </div>
-                    {/* Edit and trash icons */}
+                    {/* EDIT/TRASH ICONS */}
                     <div className={classes.horizontalFlex}>
                         <IconButton component="span" className={classes.editIcon} onClick={toggleEditing}
                             aria-label={editing ? "Save task name" : "Edit task name"} disabled={id === -1}>
