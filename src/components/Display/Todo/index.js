@@ -36,7 +36,7 @@ const styles = theme => ({
         borderBottom: "2px solid #d9ecff"
     },
     todoTitleContainer: {
-        marginBottom: 30,
+        marginBottom: 20,
     },
     todoTitle: {
         textAlign: "center",
@@ -103,7 +103,7 @@ const styles = theme => ({
     },
     filterButton: {
         backgroundColor: "#d2d2d2",
-        height: 55,
+        height: 42,
         width: "32%",
         '&:hover': {
             backgroundColor: "#b2b2b2"
@@ -112,7 +112,7 @@ const styles = theme => ({
     filterButtonSelected: {
         backgroundColor: "#303030",
         color: "white",
-        height: 55,
+        height: 42,
         width: "32%",
         '&:hover': {
             backgroundColor: "#606060"
@@ -122,7 +122,7 @@ const styles = theme => ({
         display: "flex",
         backgroundColor: "#ffffff00",
         justifyContent: "space-between",
-        marginTop: 20
+        marginTop: 10
     },
     noTasks: {
         fontSize: 24,

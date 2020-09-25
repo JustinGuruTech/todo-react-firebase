@@ -24,11 +24,14 @@ const styles = {
         color: "white"
     },
     addTextBG: {
-        backgroundColor: "white"
+        backgroundColor: "white",
+    },
+    addTextInput: {
+        padding: "12px 10px"
     },
     addButton: {
         width: "25%",
-        height: 55,
+        height: 42,
         backgroundColor: "#303030",
         border: "1px solid #929292",
         color: "white",
@@ -89,6 +92,9 @@ function AddToDo(props) {
                 onKeyDown={handleEnterAdd} data-testid="todo-input"
                 InputProps={{
                     className: classes.addTextBG
+                }}
+                inputProps={{
+                    className: classes.addTextInput
                 }}>
             </TextField>
             {/* ADD BUTTON */}

@@ -50,7 +50,6 @@ const styles = {
     },
     bodyLabel: {
         lineHeight: "20px",
-        margin: "auto auto auto 0",
         margin: 0,
         fontFamily: "Inter"
     },
@@ -147,21 +146,6 @@ function SingleToDo(props) {
             return;
         }
         setEditing(true);
-    }
-
-    // converts a date object to a string to display
-    function dateToString(date) {
-        // convert to 12 hour AM/PM time
-        let suffix = "AM";
-        let hours = date.getHours();
-        if (hours > 12) {
-            hours -= 12;
-            suffix = "PM";
-        }
-        // put togeether string
-        let strDate = date.getMonth() + "/" + date.getDay() + "/" + date.getFullYear() + " " + hours + ":" + date.getMinutes() + suffix;
-        console.log(strDate);
-        return strDate;
     }
 
     // whenever editing is changed in SingleToDo, editing in App.js changes to reflect it
