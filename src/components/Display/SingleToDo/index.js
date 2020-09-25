@@ -42,7 +42,9 @@ const styles = {
     },
     todoDateFlex: {
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        marginTop: 4,
+        marginBottom: 4
     },
     dueDate: {
         fontSize: ".7rem",
@@ -216,9 +218,11 @@ function SingleToDo(props) {
                             <Typography className={status === "completed" ?
                                 classes.bodyLabelCompleted : classes.bodyLabel} aria-label="Task name">{body}</Typography>
                             }
+                            {dueDate !== "none" ? 
                             <div className={classes.dueDate}>
-                                <Typography className={classes.dueDate}>{dueDate}</Typography>
-                            </div>
+                                <Typography className={classes.dueDate}>Due: {dueDate}</Typography>
+                            </div> : null
+                            }
                             </div>
                         </div>
                     </div>

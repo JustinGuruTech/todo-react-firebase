@@ -14,6 +14,7 @@ import Todo from '../Todo';
 import NavBar from '../NavBar';
 import SideBar from '../SideBar';
 import AddListForm from '../AddListForm';
+import DetailedAddToDo from '../DetailedAddToDo';
 
 import * as Firestore from '../../Firestore';
 
@@ -31,26 +32,42 @@ const styles = theme => ({
         overflow: "visible"
     },
     overflow: {
-        overflow: "visible"
+        overflow: "visible",
     },
     dialogPaper: {
-        overflow: "visible"
+        overflow: "visible",
     },
+    todoDialogPaper: {
+        width: 600,
+        margin: 10
+    }
 })
 
 function TodoPage(props) {
 
     const { classes } = props;
     const isFirstRun = useRef(true);
+    // data hooks
     const [todoListList, setTodoListList] = useState([]);
     const [activeTodoList, setActiveTodoList] = useState({ id: -1 });
     const [todoListIndex, setTodoListIndex] = useState(0);
+    const [listToAddLocally, setListToAddLocally] = useState({ id: -1 });
+    const [addListError, setAddListError] = useState("");
+    // modal/popup open status hooks
     const [addListOpen, setAddListOpen] = useState(false);
     const [addedSnackbarOpen, setAddedSnackbarOpen] = useState(false);
-    const [addListError, setAddListError] = useState("");
-    const [listToAddLocally, setListToAddLocally] = useState({ id: -1 });
+    const [detailedAddOpen, setDetailedAddOpen] = useState(false);
     // will be used for loading symbol
     // const [addingList, setAddingList] = useState(false);
+
+    function handleDetailedAddButton() {
+        console.log("test");
+        setDetailedAddOpen(true);
+    }
+
+    function handleDetailedAddClose() {
+        setDetailedAddOpen(false);
+    }
 
     // run once on startup
     useEffect(() => {
@@ -161,8 +178,9 @@ function TodoPage(props) {
                     updateTodoListIndex={updateTodoListIndex} />
             </div>
             {/* TODO LIST */}
-            <Todo className={classes.todoMain} activeTodoList={activeTodoList} />
-            {/*ADD TODO LIST FORM POPUP */}
+            <Todo className={classes.todoMain} activeTodoList={activeTodoList} 
+            handleDetailedAddButton={handleDetailedAddButton}/>
+            {/* ADD TODO LIST FORM POPUP */}
             <Dialog border={2} open={addListOpen} aria-labelledby="form-dialog-title"
                 PaperProps={{ className: classes.dialogPaper }}>
                 <div className={classes.overflow}>
@@ -172,6 +190,22 @@ function TodoPage(props) {
                     </DialogContent>
                     <DialogActions>
                         <Button onMouseDown={handleAddListClose} className={classes.cancelButton}>
+                            Cancel
+                        </Button>
+                    </DialogActions>
+                </div>
+            </Dialog>
+            {/* ADD DETAILED TODO FORM POPUP */}
+            <Dialog border={2} open={detailedAddOpen} aria-labelledby="form-dialog-title"
+                PaperProps={{ className: classes.todoDialogPaper }}>
+                <div className={classes.overflow}>
+                    <DialogContent className={classes.overflow}>
+                        <DetailedAddToDo handleDetailedAddButton={handleDetailedAddButton} handleSnackbarOpen={handleSnackbarOpen}
+                            handleAddListError={handleAddListError} setListToAddLocally={setListToAddLocally} /*handleAddingList={handleAddingList}*/ 
+                            color={activeTodoList.color}/>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onMouseDown={handleDetailedAddClose} className={classes.cancelButton}>
                             Cancel
                         </Button>
                     </DialogActions>

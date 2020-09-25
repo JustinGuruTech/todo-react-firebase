@@ -56,7 +56,7 @@ const styles = {
     },
 }
 
-function Login(props) {
+function AddListForm(props) {
 
     const { classes } = props;
 
@@ -171,4 +171,4 @@ function Login(props) {
     );
 };
 
-export default withStyles(styles)(Login);
+export default withStyles(styles)(AddListForm);

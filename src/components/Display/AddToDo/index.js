@@ -8,11 +8,24 @@
 
 import React, { useState } from 'react';
 
-import { Button, Paper, TextField, withStyles } from '@material-ui/core';
+import {
+    Button, Paper, TextField, IconButton,
+    Tooltip, withStyles
+} from '@material-ui/core';
+import { PlaylistAdd as PlaylistAddIcon } from '@material-ui/icons';
 
 import * as Firestore from '../../Firestore'
 
 const styles = {
+    inputDateFlex: {
+        display: "flex",
+        flexDirection: "column",
+        fontFamily: "Inter"
+    },
+    textInput: {
+        fontFamily: "Inter",
+        width: "73%"
+    },
     searchFlex: {
         backgroundColor: "#ffffff00",
         display: "flex",
@@ -21,7 +34,8 @@ const styles = {
     addText: {
         width: "72%",
         height: 55,
-        color: "white"
+        color: "white",
+        fontFamily: "Inter"
     },
     addTextBG: {
         backgroundColor: "white",
@@ -29,9 +43,18 @@ const styles = {
     addTextInput: {
         padding: "12px 10px"
     },
+    addIconButton: {
+        padding: 5,
+        color: "#303030"
+    },
+    addIcon: {
+        fontSize: 30
+    },
+    endAdornment: {
+        paddingRight: 0
+    },
     addButton: {
         width: "25%",
-        height: 42,
         backgroundColor: "#303030",
         border: "1px solid #929292",
         color: "white",
@@ -44,11 +67,15 @@ const styles = {
 
 function AddToDo(props) {
 
-    const { setSynced, todoList, synced, classes } = props
+    // prop functions
+    const { setSynced, setSyncError, handleDetailedAddButton } = props;
+    // prop attributes
+    const { todoList, synced, classes } = props
     const [todoInput, setTodoInput] = useState(""); // stores new todo input
+    const [todoDueDate, setTodoDueDate] = useState("none");
 
     // set react hook val on text change
-    function handleTextInput(e) {
+    function handleTodoInput(e) {
         setTodoInput(e.target.value);
     }
 
@@ -60,20 +87,37 @@ function AddToDo(props) {
             let todo = {
                 body: todoInput,
                 status: "pending",
+                dueDate: todoDueDate,
                 created: Firestore.getCurrentTimestamp(), // get firestore db timestamp
                 id: -1  // temporarily set id to -1
             }
             todoList.todos.push(todo);
-            // add todo to db then update todo list from db
-            Firestore.addTodoToListById(todoList.id, todoInput, todo.created).then(docRef => {
-                todo.id = docRef.id;  // set correct id of todo
-                setTodoInput(""); // reset todo input
-                setSynced(true);  // now synced
-            })
-                // catch error from Firestore function and set syncError
-                .catch((error) => {
-                    props.setSyncError(error);
+            // If user has set due date
+            if (todo.dueDate !== "none") {
+                // add todo to db WITH date
+                Firestore.addTodoWithDateToListById(todoList.id, todoInput, todo.created, todo.dueDate).then(docRef => {
+                    todo.id = docRef.id;  // set correct id of todo
+                    setTodoInput(""); // reset todo input
+                    setSynced(true);  // now synced
                 })
+                    // catch error from Firestore function and set syncError
+                    .catch((error) => {
+                        setSyncError(error);
+                    })
+                // if user hasn't set due date
+            } else {
+                // add todo to db WITHOUT date
+                Firestore.addTodoToListById(todoList.id, todoInput, todo.created).then(docRef => {
+                    todo.id = docRef.id;  // set correct id of todo
+                    setTodoInput(""); // reset todo input
+                    setSynced(true);  // now synced
+                })
+                    // catch error from Firestore function and set syncError
+                    .catch((error) => {
+                        setSyncError(error);
+                    })
+            }
+
         }
     }
 
@@ -86,17 +130,30 @@ function AddToDo(props) {
 
     return (
         <Paper elevation={0} className={classes.searchFlex}>
+            {/* <div className={classes.inputDateFlex}> */}
             {/* TEXT INPUT */}
             <TextField variant="outlined" className={classes.addText} placeholder="Add a todo..."
-                onChange={handleTextInput} value={todoInput} aria-label="Type Todo" disabled={!synced}
-                onKeyDown={handleEnterAdd} data-testid="todo-input"
+                onChange={handleTodoInput} value={todoInput} aria-label="Type Todo" disabled={!synced}
+                onKeyDown={handleEnterAdd} data-testid="todo-input" className={classes.textInput}
                 InputProps={{
-                    className: classes.addTextBG
+                    className: classes.addTextBG,
+                    endAdornment: (<Tooltip title="More Options">
+                                        <IconButton className={classes.addIconButton}
+                                        onClick={handleDetailedAddButton}>
+                                            <PlaylistAddIcon className={classes.addIcon} />
+                                        </IconButton>
+                                    </Tooltip>),
+                    classes: {
+                        adornedEnd: classes.endAdornment
+                    }
                 }}
                 inputProps={{
                     className: classes.addTextInput
                 }}>
             </TextField>
+            {/* DATE INPUT */}
+
+            {/* </div> */}
             {/* ADD BUTTON */}
             <Button className={classes.addButton} data-testid="add-button"
                 onClick={handleAddItem} aria-label="Add Typed Todo">Add</Button>

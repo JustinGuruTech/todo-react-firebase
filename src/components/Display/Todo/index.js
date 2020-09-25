@@ -36,13 +36,12 @@ const styles = theme => ({
         borderBottom: "2px solid #d9ecff"
     },
     todoTitleContainer: {
-        marginBottom: 20,
+        marginBottom: 15,
     },
     todoTitle: {
         textAlign: "center",
         fontSize: 30,
-        fontFamily: "Inter",
-        padding: 5
+        fontFamily: "Inter"
     },
     syncSpan: {
         display: "flex",
@@ -75,7 +74,7 @@ const styles = theme => ({
         marginTop: 3
     },
     todoList: {
-        marginTop: 20,
+        marginTop: 12,
         minHeight: 600
     },
     mainTodoContainer: {
@@ -182,7 +181,8 @@ function Todo(props) {
     // })
     /* #endregion */
 
-    const { classes } = props;
+    const { handleDetailedAddButton } = props;
+    const { activeTodoList, classes } = props;
     // state hooks
     const [todoList, setTodoList] = useState({ id: -1 }); // stores todo list synced with db
     const [filterSelected, setFilterSelected] = useState("all");  // reflects which filter button is active
@@ -203,7 +203,7 @@ function Todo(props) {
         // add todos to state
         addTodosToState();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.activeTodoList])
+    }, [activeTodoList])
 
     // when todoList updates
     useEffect(() => {
@@ -217,14 +217,13 @@ function Todo(props) {
     // add todos to state from activeTodoList in TodoPage
     function addTodosToState() {
         // check if active todo list is actual list (check id)
-        if (props.activeTodoList.id !== -1) {
+        if (activeTodoList.id !== -1) {
 
             // this checks if the todos have already been fetched from the db. If they haven't,
             // the todos length will be 1 (dummy todo) and that "todo" will have an id of -1
-            if (props.activeTodoList.todos.length !== 0 && props.activeTodoList.todos[0].id === -1) {
+            if (activeTodoList.todos.length !== 0 && activeTodoList.todos[0].id === -1) {
                 // set todo list to active todo list
-                // setTodoList(props.activeTodoList);
-                Firestore.getAllTodosFromListById(props.activeTodoList.id)
+                Firestore.getAllTodosFromListById(activeTodoList.id)
                 .then(allTodos => {
                     // map todos into array of objects
                     let todos = [];
@@ -241,14 +240,14 @@ function Todo(props) {
                     })
                     // sort by timestamp
                     todos.sort((a, b) => (a.created > b.created) ? 1 : -1);
-                    let tempList = props.activeTodoList;    // store tempList from state
+                    let tempList = activeTodoList;    // store tempList from state
                     tempList.todos = todos; // add todos to tempList
                     setTodoList(tempList);  // set todos in state
                 })
             // if todo list has already been set, use the one in TodoPage
             } else {
                 console.log("test");
-                setTodoList(props.activeTodoList);
+                setTodoList(activeTodoList);
             }
         }
     }
@@ -323,7 +322,8 @@ function Todo(props) {
                         <Divider />
                     </div>
                     {/* ADD TODO COMPONENT */}
-                    <AddToDo todoList={todoList} setSynced={setSynced} synced={synced} setSyncError={setSyncError} />
+                    <AddToDo todoList={todoList} setSynced={setSynced} synced={synced} setSyncError={setSyncError} 
+                    handleDetailedAddButton={handleDetailedAddButton}/>
                     {/* FILTER BUTTONS */}
                     <Paper elevation={0} className={classes.filterButtons}>
                         <Button className={filterSelected === "all" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}

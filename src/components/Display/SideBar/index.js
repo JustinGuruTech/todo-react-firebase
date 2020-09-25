@@ -70,7 +70,10 @@ const styles = theme => ({
 
 function SideBar(props) {
 
-  const { classes } = props;
+  // prop functions
+  const { updateTodoListIndex, handleAddListOpen } = props
+  // prop attributes
+  const { classes, todoListList } = props;
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = () => {
@@ -101,8 +104,8 @@ function SideBar(props) {
           </div> :
             <MenuIcon className={classes.menuIcons} />}
         </ListItem>
-        {props.todoListList.map((list, index) => (
-          <ListItem button key={index} onClick={() => { props.updateTodoListIndex(index) }}>
+        {todoListList.map((list, index) => (
+          <ListItem button key={index} onClick={() => { updateTodoListIndex(index) }}>
             <ListItemIcon><FiberManualRecordIcon style={{ color: list.color }} /></ListItemIcon>
             {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
             <ListItemText primary={list.name} />
@@ -112,7 +115,7 @@ function SideBar(props) {
       <Divider />
       {/* NEW LIST BUTTON */}
       {open ? <Button className={classes.addListButton}
-        onClick={props.handleAddListOpen}>
+        onClick={handleAddListOpen}>
         + Add List
         </Button> : null}
       {/* <List>
