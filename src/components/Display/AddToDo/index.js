@@ -9,10 +9,13 @@
 import React, { useState } from 'react';
 
 import {
+    Dialog, DialogContent, DialogActions,
     Button, Paper, TextField, IconButton,
     Tooltip, withStyles
 } from '@material-ui/core';
 import { PlaylistAdd as PlaylistAddIcon } from '@material-ui/icons';
+
+import DetailedAddToDo from '../DetailedAddToDo';
 
 import * as Firestore from '../../Firestore'
 
@@ -68,11 +71,21 @@ const styles = {
 function AddToDo(props) {
 
     // prop functions
-    const { setSynced, setSyncError, handleDetailedAddButton } = props;
+    const { setSynced, setSyncError } = props;
     // prop attributes
     const { todoList, synced, classes } = props
     const [todoInput, setTodoInput] = useState(""); // stores new todo input
     const [todoDueDate, setTodoDueDate] = useState("none");
+    const [detailedAddOpen, setDetailedAddOpen] = useState(false);
+
+    function handleDetailedAddButton() {
+        console.log("test");
+        setDetailedAddOpen(true);
+    }
+
+    function handleDetailedAddClose() {
+        setDetailedAddOpen(false);
+    }
 
     // set react hook val on text change
     function handleTodoInput(e) {
@@ -129,35 +142,52 @@ function AddToDo(props) {
     }
 
     return (
-        <Paper elevation={0} className={classes.searchFlex}>
-            {/* <div className={classes.inputDateFlex}> */}
-            {/* TEXT INPUT */}
-            <TextField variant="outlined" className={classes.addText} placeholder="Add a todo..."
-                onChange={handleTodoInput} value={todoInput} aria-label="Type Todo" disabled={!synced}
-                onKeyDown={handleEnterAdd} data-testid="todo-input" className={classes.textInput}
-                InputProps={{
-                    className: classes.addTextBG,
-                    endAdornment: (<Tooltip title="More Options">
-                                        <IconButton className={classes.addIconButton}
-                                        onClick={handleDetailedAddButton}>
-                                            <PlaylistAddIcon className={classes.addIcon} />
-                                        </IconButton>
-                                    </Tooltip>),
-                    classes: {
-                        adornedEnd: classes.endAdornment
-                    }
-                }}
-                inputProps={{
-                    className: classes.addTextInput
-                }}>
-            </TextField>
-            {/* DATE INPUT */}
+        <div>
+            <Paper elevation={0} className={classes.searchFlex}>
+                {/* <div className={classes.inputDateFlex}> */}
+                {/* TEXT INPUT */}
+                <TextField variant="outlined" className={classes.addText} placeholder="Add a todo..."
+                    onChange={handleTodoInput} value={todoInput} aria-label="Type Todo" disabled={!synced}
+                    onKeyDown={handleEnterAdd} data-testid="todo-input" className={classes.textInput}
+                    InputProps={{
+                        className: classes.addTextBG,
+                        endAdornment: (<Tooltip title="More Options">
+                                            <IconButton className={classes.addIconButton}
+                                            onClick={handleDetailedAddButton}>
+                                                <PlaylistAddIcon className={classes.addIcon} />
+                                            </IconButton>
+                                        </Tooltip>),
+                        classes: {
+                            adornedEnd: classes.endAdornment
+                        }
+                    }}
+                    inputProps={{
+                        className: classes.addTextInput
+                    }}>
+                </TextField>
+                {/* DATE INPUT */}
 
-            {/* </div> */}
-            {/* ADD BUTTON */}
-            <Button className={classes.addButton} data-testid="add-button"
-                onClick={handleAddItem} aria-label="Add Typed Todo">Add</Button>
-        </Paper>
+                {/* </div> */}
+                {/* ADD BUTTON */}
+                <Button className={classes.addButton} data-testid="add-button"
+                    onClick={handleAddItem} aria-label="Add Typed Todo">Add</Button>
+            </Paper>
+            {/* ADD DETAILED TODO FORM POPUP */}
+            <Dialog border={2} open={detailedAddOpen} aria-labelledby="form-dialog-title"
+            PaperProps={{ className: classes.todoDialogPaper }}>
+                <div className={classes.overflow}>
+                    <DialogContent className={classes.overflow}>
+                        <DetailedAddToDo handleDetailedAddButton={handleDetailedAddButton} 
+                            color={props.activeTodoList.color}/>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onMouseDown={handleDetailedAddClose} className={classes.cancelButton}>
+                            Cancel
+                        </Button>
+                    </DialogActions>
+                </div>
+            </Dialog>
+        </div>
     );
 }
 

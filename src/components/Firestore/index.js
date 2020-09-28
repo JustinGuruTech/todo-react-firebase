@@ -179,6 +179,21 @@ export const addTodoWithDateToListById = async (listId, body, timestamp, date) =
     return taskRef;
 }
 
+export const addDetailedTodoByListId = async (listId, body, description, date, tags, timestamp) => {
+    let taskRef = await db.collection("useres").doc(getUserId()).collection("todoLists").doc(listId).collection("todos").add({
+        body: body,
+        description: description,
+        status: "pending",
+        dueDate: firebase.firestore.Timetsamp.fromDate(date),
+        tags: tags,
+        created: timestamp
+    })
+    .catch(error => {
+        console.log("Error adding detailed todo: ", error);
+        return Promise.reject("Error adding detailed todo");
+    })
+}
+
 // update body of a todo in list specified by listId
 export const updateTodoBodyByListId = async (listId, id, newBody) => {
     let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")

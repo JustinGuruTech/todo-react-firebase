@@ -1,16 +1,15 @@
 // Justin Edwards
 // 9/25/20
-// AddDetailedToDo Component - Opens when user presses add new
+// DetailedAddToDo Component - Opens when user presses add new
 // detailed todo. Allows creation of new todo with name, long 
 // description, tags (eventually), and a due date
 
 import React, { useState } from 'react';
 import {
     Button, Typography, TextField, Grid, Container,
-    CssBaseline, Avatar, withStyles, TextareaAutosize
+    CssBaseline, Avatar, withStyles
 } from '@material-ui/core';
 import { OfflinePin } from '@material-ui/icons'
-import { ChromePicker } from 'react-color';
 
 import * as Firestore from '../../Firestore';
 
@@ -66,8 +65,8 @@ const styles = {
 
 function DetailedAddToDo(props) {
 
-    const { handleDetailedAddButton } = props;
-    const { classes, color } = props;
+    const { handleDetailedAddButton, setSynced } = props;
+    const { classes, color, todoList } = props;
 
     // input hooks
     const [body, setBody] = useState("");
@@ -104,6 +103,25 @@ function DetailedAddToDo(props) {
 
     // handle form submission
     async function handleSubmit(event) {
+
+
+        if (body !== "") {
+            // TODO: set synced to false using props func
+            setSynced(false);
+
+            let todo = {
+                body: body,
+                description: description,
+                status: "pending",
+                dueDate: dueDate,
+                tags: tags
+            }
+            // todoList.todos.push(todo);
+            
+        }
+        
+
+        
         // event.preventDefault(); // prevent default post event
         // // check for valid email/password first
         // if (validateBody()) {
@@ -127,6 +145,7 @@ function DetailedAddToDo(props) {
         //     })
             
         // }
+
     }
 
     return (

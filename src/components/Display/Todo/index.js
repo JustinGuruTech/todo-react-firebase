@@ -138,49 +138,6 @@ const styles = theme => ({
 
 function Todo(props) {
 
-    /* #region firestore query testing */
-    // // testing addTodo query and async await
-    // Firestore.addTodo("test adding todo").then(() => {
-    //   // testing getAllTodos query
-    //   Firestore.getAllTodos().then(allTodos => {
-    //     allTodos.forEach(doc => {
-    //       let todo = doc.data();
-    //       console.log(todo.body);
-    //     })
-    //   })
-    // })
-
-    // // testing updateTodoBody and async await
-    // Firestore.updateTodoBody("Gql2YEfpeRa8tJ8Orgsw", "testing update new body").then(() => {
-    //   Firestore.getAllTodos().then(allTodos => {
-    //     allTodos.forEach(doc => {
-    //       let todo = doc.data();
-    //       console.log(todo.body);
-    //     })
-    //   })
-    // })
-
-    // // testing updateTodoStatus and async await
-    // Firestore.updateTodoStatus("Gql2YEfpeRa8tJ8Orgsw", "completed").then(() => {
-    //   Firestore.getAllTodos().then(allTodos => {
-    //     allTodos.forEach(doc => {
-    //       let todo = doc.data();
-    //       console.log(todo.status);
-    //     })
-    //   })
-    // })
-
-    // // testing deleteTodo and async await
-    // Firestore.deleteTodo("Gql2YEfpeRa8tJ8Orgsw").then(() => {
-    //   Firestore.getAllTodos().then(allTodos => {
-    //     allTodos.forEach(doc => {
-    //       let todo = doc.data();
-    //       console.log(todo.status);
-    //     })
-    //   })
-    // })
-    /* #endregion */
-
     const { handleDetailedAddButton } = props;
     const { activeTodoList, classes } = props;
     // state hooks
@@ -323,7 +280,7 @@ function Todo(props) {
                     </div>
                     {/* ADD TODO COMPONENT */}
                     <AddToDo todoList={todoList} setSynced={setSynced} synced={synced} setSyncError={setSyncError} 
-                    handleDetailedAddButton={handleDetailedAddButton}/>
+                    handleDetailedAddButton={handleDetailedAddButton} activeTodoList={activeTodoList}/>
                     {/* FILTER BUTTONS */}
                     <Paper elevation={0} className={classes.filterButtons}>
                         <Button className={filterSelected === "all" ? (classes.filterButton, classes.filterButtonSelected) : classes.filterButton}
