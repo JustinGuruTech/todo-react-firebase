@@ -14,7 +14,6 @@ import Todo from '../Todo';
 import NavBar from '../NavBar';
 import SideBar from '../SideBar';
 import AddListForm from '../AddListForm';
-import DetailedAddToDo from '../DetailedAddToDo';
 
 import * as Firestore from '../../Firestore';
 

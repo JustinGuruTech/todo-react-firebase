@@ -196,6 +196,26 @@ function SingleToDo(props) {
             })
     }
 
+    // converts a date object to a string to display
+    function dateToString(date) {
+        // convert to 12 hour AM/PM time
+        let suffix = "AM";
+        let hours = date.getHours();
+        if (hours > 12) {
+            hours -= 12;
+            suffix = "PM";
+        }
+        // set minutes appropriately
+        let minutes = date.getMinutes();
+        if (minutes < 10) {
+            minutes = "0" + minutes;
+        }
+
+        // put together string
+        let strDate = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + hours + ":" + minutes + suffix;
+        return strDate;
+    }
+
     return (
         <div aria-label="Single Task">
             <Paper elevation={0} className={classes.mainContainer}>
@@ -220,7 +240,7 @@ function SingleToDo(props) {
                             }
                             {dueDate !== "none" ? 
                             <div className={classes.dueDate}>
-                                <Typography className={classes.dueDate}>Due: {dueDate}</Typography>
+                                <Typography className={classes.dueDate}>Due: {dateToString(dueDate)}</Typography>
                             </div> : null
                             }
                             </div>

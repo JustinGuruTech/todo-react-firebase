@@ -99,6 +99,7 @@ const styles = theme => ({
         width: 500,
         minWidth: "40%",
         maxWidth: 500,
+        boxSizing: 'initial'
     },
     filterButton: {
         backgroundColor: "#d2d2d2",
@@ -187,7 +188,7 @@ function Todo(props) {
                     allTodos.forEach(doc => {
                         let todo = doc.data();
                         if (todo.dueDate !== undefined) {
-                            todo.dueDate = dateToString(todo.dueDate.toDate());
+                            todo.dueDate = todo.dueDate.toDate();
                             console.log(todo.dueDate);
                         } else {
                             todo.dueDate = "none";
@@ -207,20 +208,6 @@ function Todo(props) {
                 setTodoList(activeTodoList);
             }
         }
-    }
-
-    // converts a date object to a string to display
-    function dateToString(date) {
-        // convert to 12 hour AM/PM time
-        let suffix = "AM";
-        let hours = date.getHours();
-        if (hours > 12) {
-            hours -= 12;
-            suffix = "PM";
-        }
-        // put togeether string
-        let strDate = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + hours + ":" + date.getMinutes() + suffix;
-        return strDate;
     }
 
     // function for when user tries to resync after sync error

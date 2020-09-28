@@ -4,14 +4,12 @@
 // detailed todo. Allows creation of new todo with name, long 
 // description, tags (eventually), and a due date
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Button, Typography, TextField, Grid, Container,
     CssBaseline, Avatar, withStyles
 } from '@material-ui/core';
 import { OfflinePin } from '@material-ui/icons'
-
-import * as Firestore from '../../Firestore';
 
 const styles = {
     addListFormContainer: {
@@ -65,86 +63,17 @@ const styles = {
 
 function DetailedAddToDo(props) {
 
-    const { handleDetailedAddButton, setSynced } = props;
-    const { classes, color, todoList } = props;
-
-    // input hooks
-    const [body, setBody] = useState("");
-    const [bodyError, setBodyError] = useState("");
-    const [description, setDescription] = useState("");
-    const [dueDate, setDueDate] = useState("none");
-    const [tags, setTags] = useState([]);
-
-    // INPUT HANDLERS //
-    function handleBodyChange({ target }) {
-        setBody(target.value);
-    }
-    function handleDescriptionChange({ target }) {
-        setDescription(target.value);
-    }
-    function handleTagChange({ target }) {
-        setDueDate(target.value);
-    }
-    function handleDateChange({ target }) {
-        setDueDate(target.value);
-    }
-
-    // BASIC VALIDATION //
-    function validateBody() {
-        // empty name
-        if (body === "") {
-            setBodyError("Name Required");
-            return false;
-        } else {
-            setBodyError("");
-            return true;
-        }
-    }
+    // functions from props
+    const { handleTodoInput, handleDescriptionInput, 
+        handleDateInput, handleAddItem } = props;
+    // attributes from props
+    const { classes, color, todoInput } = props;
 
     // handle form submission
     async function handleSubmit(event) {
-
-
-        if (body !== "") {
-            // TODO: set synced to false using props func
-            setSynced(false);
-
-            let todo = {
-                body: body,
-                description: description,
-                status: "pending",
-                dueDate: dueDate,
-                tags: tags
-            }
-            // todoList.todos.push(todo);
-            
-        }
         
-
-        
-        // event.preventDefault(); // prevent default post event
-        // // check for valid email/password first
-        // if (validateBody()) {
-        //     // will be used for loading symbol
-        //     // props.handleAddingList();
-
-        //     // waits for addList to return new list
-        //     await Firestore.addNewTodoList(name, color)
-        //     .then((newList) => {
-        //         // show snackbar
-        //         props.handleSnackbarOpen();
-        //         props.handleAddListClose();
-        //         // add list of todos with dummy flag
-        //         newList.todos = [{id: -1}];
-        //         props.setListToAddLocally(newList);
-        //     })
-        //     .catch(() => {
-        //         // setAddListError(true);
-        //         props.handleAddListError();
-        //         props.handleSnackbarOpen();
-        //     })
-            
-        // }
+        event.preventDefault(); // prevent default post event
+        handleAddItem();    // call handleAddItem in AddToDo component
 
     }
 
@@ -172,8 +101,9 @@ function DetailedAddToDo(props) {
                                         // label="Todo Name"
                                         placeholder="Todo Name"
                                         name="body"
+                                        value={todoInput}
                                         // autoComplete="email"
-                                        onChange={handleBodyChange}
+                                        onChange={handleTodoInput}
                                         // onBlur={validateName}
                                         // error={nameError !== ""}
                                         // helperText={nameError}
@@ -194,7 +124,7 @@ function DetailedAddToDo(props) {
                                         placeholder="Long Description"
                                         name="description"
                                         // autoComplete="email"
-                                        onChange={handleDescriptionChange}
+                                        onChange={handleDescriptionInput}
                                         // onBlur={validateName}
                                         // error={nameError !== ""}
                                         // helperText={nameError}
@@ -213,7 +143,7 @@ function DetailedAddToDo(props) {
                                         placeholder="Tags"
                                         name="tags"
                                         // autoComplete="email"
-                                        onChange={handleTagChange}
+                                        // onChange={handleTagChange}
                                         // onBlur={validateName}
                                         // error={nameError !== ""}
                                         // helperText={nameError}
@@ -231,7 +161,7 @@ function DetailedAddToDo(props) {
                                         id="datetime-local"
                                         label="Due Date"
                                         type="datetime-local"
-                                        onChange={handleDateChange}
+                                        onChange={handleDateInput}
                                         className={classes.dateInput}
                                         InputLabelProps={{
                                         shrink: true,

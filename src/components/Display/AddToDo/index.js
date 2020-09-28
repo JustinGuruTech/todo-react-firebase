@@ -11,9 +11,10 @@ import React, { useState } from 'react';
 import {
     Dialog, DialogContent, DialogActions,
     Button, Paper, TextField, IconButton,
-    Tooltip, withStyles
+    Tooltip, Snackbar, withStyles
 } from '@material-ui/core';
-import { PlaylistAdd as PlaylistAddIcon } from '@material-ui/icons';
+import { PlaylistAdd as PlaylistAddIcon,
+        Close as CloseIcon } from '@material-ui/icons';
 
 import DetailedAddToDo from '../DetailedAddToDo';
 
@@ -75,11 +76,21 @@ function AddToDo(props) {
     // prop attributes
     const { todoList, synced, classes } = props
     const [todoInput, setTodoInput] = useState(""); // stores new todo input
-    const [todoDueDate, setTodoDueDate] = useState("none");
+
+    // DetailedAddTodo hooks
     const [detailedAddOpen, setDetailedAddOpen] = useState(false);
+    const [description, setDescription] = useState("");
+    const [todoDueDate, setTodoDueDate] = useState("none");
+    const [tags, setTags] = useState([]);
+
+    const [addedSnackbarOpen, setAddedSnackbarOpen] = useState(false);
+
+    function handleSnackbarClose() {
+        setAddedSnackbarOpen(false);
+    }
 
     function handleDetailedAddButton() {
-        console.log("test");
+        // console.log("test");
         setDetailedAddOpen(true);
     }
 
@@ -91,8 +102,29 @@ function AddToDo(props) {
     function handleTodoInput(e) {
         setTodoInput(e.target.value);
     }
+    // DETAILED ADD TODO INPUT HANDLERS
+    // for long description of todo
+    function handleDescriptionInput(e) {
+        setDescription(e.target.value);
+    }
+    // for date of todo
+    function handleDateInput({ target }) {
+        // take date string and turn it into date object
+        setTodoDueDate(new Date(target.value));
+    }
+    // for adding a tag (when tags are implemented)
+    function handleTagsAdded() {
+        console.log("tag totally added");
+    }
 
-    function handleAddItem() {
+    function clearInputs() {
+        setTodoInput("");
+        setDescription("");
+        setTodoDueDate("none");
+        setTags([]);
+    }
+
+    async function handleAddItem() {
         // make sure input isn't empty
         if (todoInput !== "") {
             setSynced(false);  // show syncing symbol
@@ -100,37 +132,64 @@ function AddToDo(props) {
             let todo = {
                 body: todoInput,
                 status: "pending",
+                description: description,
                 dueDate: todoDueDate,
+                tags: tags,
                 created: Firestore.getCurrentTimestamp(), // get firestore db timestamp
                 id: -1  // temporarily set id to -1
             }
             todoList.todos.push(todo);
-            // If user has set due date
-            if (todo.dueDate !== "none") {
-                // add todo to db WITH date
-                Firestore.addTodoWithDateToListById(todoList.id, todoInput, todo.created, todo.dueDate).then(docRef => {
-                    todo.id = docRef.id;  // set correct id of todo
-                    setTodoInput(""); // reset todo input
-                    setSynced(true);  // now synced
-                })
-                    // catch error from Firestore function and set syncError
-                    .catch((error) => {
-                        setSyncError(error);
-                    })
-                // if user hasn't set due date
-            } else {
-                // add todo to db WITHOUT date
-                Firestore.addTodoToListById(todoList.id, todoInput, todo.created).then(docRef => {
-                    todo.id = docRef.id;  // set correct id of todo
-                    setTodoInput(""); // reset todo input
-                    setSynced(true);  // now synced
-                })
-                    // catch error from Firestore function and set syncError
-                    .catch((error) => {
-                        setSyncError(error);
-                    })
-            }
 
+            // clear inputs
+            clearInputs();
+            // open snackbar
+            // TODO
+            // close detailed todo form
+            setDetailedAddOpen(false);
+            setAddedSnackbarOpen(true);
+
+            // add basic todo to db with required fields
+            Firestore.addTodoToListById(todoList.id, todoInput, todo.created).then(docRef => {
+                todo.id = docRef.id;  // set correct id of todo
+                setTodoInput(""); // reset todo input
+                setSynced(true);  // now synced
+            })
+            // after adding basic fields, check if need to add extra fields
+            .then(() => {
+                // wait for all 3 to resolve 
+                Promise.all(
+                    [todo.description !== "" ? Firestore.setTodoDescriptionByListId(todoList.id, todo.id, todo.description): '',
+                    todo.tags.length > 0 ? Firestore.setTodoTagsByListId(todoList.id, todo.id, todo.tags) : ''],
+                    todo.dueDate !== "none" ? Firestore.setTodoDateByListId(todoList.id, todo.id, todo.dueDate) : '')
+                    .catch(error => {
+                        console.log("error: ", error);
+                    })
+                // // if description, write to db
+                // if (todo.description !== "") {
+                //     Firestore.setTodoDescriptionByListId(todoList.id, todo.id, todo.description)
+                //     .catch(error => {
+                //         console.log(error);
+                //     })
+                // }
+                // // if tags, write to db
+                // if (todo.tags.length > 0) {
+                //     Firestore.setTodoTagsByListId(todoList.id, todo.id, todo.tags)
+                //     .catch(error => {
+                //         console.log(error);
+                //     })
+                // }
+                // // if dueDate, write to db
+                // if (todo.dueDate !== "none") {
+                //     Firestore.setTodoDateByListId(todoList.id, todo.id, todo.dueDate)
+                //     .catch(error => {
+                //         console.log(error);
+                //     })
+                // }
+            })
+            // catch error from Firestore function and set syncError
+            .catch((error) => {
+                setSyncError(error);
+            })
         }
     }
 
@@ -143,10 +202,30 @@ function AddToDo(props) {
 
     return (
         <div>
+            <div>
+                {/* LIST ADDED NOTIFICATION/SNACKBAR */}
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={addedSnackbarOpen}
+                    autoHideDuration={4000}
+                    onClose={handleSnackbarClose}
+                    message={"Todo Added!"}
+                    action={
+                        <React.Fragment>
+                            <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackbarClose}>
+                                <CloseIcon fontSize="small" />
+                            </IconButton>
+                        </React.Fragment>
+                    }
+                />
+            </div>
             <Paper elevation={0} className={classes.searchFlex}>
                 {/* <div className={classes.inputDateFlex}> */}
                 {/* TEXT INPUT */}
-                <TextField variant="outlined" className={classes.addText} placeholder="Add a todo..."
+                <TextField variant="outlined" placeholder="Add a todo..."
                     onChange={handleTodoInput} value={todoInput} aria-label="Type Todo" disabled={!synced}
                     onKeyDown={handleEnterAdd} data-testid="todo-input" className={classes.textInput}
                     InputProps={{
@@ -178,7 +257,9 @@ function AddToDo(props) {
                 <div className={classes.overflow}>
                     <DialogContent className={classes.overflow}>
                         <DetailedAddToDo handleDetailedAddButton={handleDetailedAddButton} 
-                            color={props.activeTodoList.color}/>
+                            color={props.activeTodoList.color} handleTodoInput={handleTodoInput}
+                            todoInput={todoInput} handleDescriptionInput={handleDescriptionInput} 
+                            handleDateInput={handleDateInput} handleAddItem={handleAddItem}/>
                     </DialogContent>
                     <DialogActions>
                         <Button onMouseDown={handleDetailedAddClose} className={classes.cancelButton}>

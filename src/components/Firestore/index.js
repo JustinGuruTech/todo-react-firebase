@@ -164,35 +164,36 @@ export const addTodoToListById = async (listId, body, timestamp) => {
     return taskRef;
 }
 
-// add new todo to list specified by listId
-export const addTodoWithDateToListById = async (listId, body, timestamp, date) => {
-    let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos").add({
-        body: body,
-        created: timestamp,
-        status: "pending",
-        dueDate: firebase.firestore.Timestamp.fromDate(date)
-    })
-    .catch(error => {
-        console.log("Error adding todo: ", error);
-        return Promise.reject("Error adding todo");
-    })
-    return taskRef;
-}
+// // add new todo to list specified by listId
+// export const addTodoWithDateToListById = async (listId, body, timestamp, date) => {
+//     let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos").add({
+//         body: body,
+//         created: timestamp,
+//         status: "pending",
+//         dueDate: firebase.firestore.Timestamp.fromDate(date)
+//     })
+//     .catch(error => {
+//         console.log("Error adding todo: ", error);
+//         return Promise.reject("Error adding todo");
+//     })
+//     return taskRef;
+// }
 
-export const addDetailedTodoByListId = async (listId, body, description, date, tags, timestamp) => {
-    let taskRef = await db.collection("useres").doc(getUserId()).collection("todoLists").doc(listId).collection("todos").add({
-        body: body,
-        description: description,
-        status: "pending",
-        dueDate: firebase.firestore.Timetsamp.fromDate(date),
-        tags: tags,
-        created: timestamp
-    })
-    .catch(error => {
-        console.log("Error adding detailed todo: ", error);
-        return Promise.reject("Error adding detailed todo");
-    })
-}
+// export const addDetailedTodoByListId = async (listId, body, description, date, tags, timestamp) => {
+//     let taskRef = await db.collection("useres").doc(getUserId()).collection("todoLists").doc(listId).collection("todos").add({
+//         body: body,
+//         description: description,
+//         status: "pending",
+//         dueDate: firebase.firestore.Timetsamp.fromDate(date),
+//         tags: tags,
+//         created: timestamp
+//     })
+//     .catch(error => {
+//         console.log("Error adding detailed todo: ", error);
+//         return Promise.reject("Error adding detailed todo");
+//     })
+//     return taskRef;
+// }
 
 // update body of a todo in list specified by listId
 export const updateTodoBodyByListId = async (listId, id, newBody) => {
@@ -231,6 +232,45 @@ export const deleteTodoByListId = async (listId, id) => {
         // log error and return reason for rejection
         console.log("Error deleting todo: ", error);
         return Promise.reject("Error deleting item");
+    })
+    return taskRef;
+}
+
+// add/edit date for existing todo
+export const setTodoDateByListId = async (listId, id, date) => {
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
+    .doc(id).update({
+        dueDate: date
+    })
+    .catch(error => {
+        console.log("Error adding date: ", error);
+        return Promise.reject("Error adding date");
+    })
+    return taskRef;
+}
+
+// just sets an array for now, gotta figure out tag system later
+export const setTodoTagsByListId = async (listId, id, tags) => {
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
+    .doc(id).update({
+        tags: tags
+    })
+    .catch(error => {
+        console.log("Error adding tags: ", error);
+        return Promise.reject("Error adding tags");
+    })
+    return taskRef;
+}
+
+// just sets an array for now, gotta figure out tag system later
+export const setTodoDescriptionByListId = async (listId, id, description) => {
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
+    .doc(id).update({
+        description: description
+    })
+    .catch(error => {
+        console.log("Error adding description: ", error);
+        return Promise.reject("Error adding description");
     })
     return taskRef;
 }
