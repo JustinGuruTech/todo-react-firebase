@@ -64,16 +64,17 @@ const styles = {
 function DetailedAddToDo(props) {
 
     // functions from props
-    const { handleTodoInput, handleDescriptionInput,
-        handleDateInput, handleAddItem } = props;
+    const { handleBodyInput, handleDescriptionInput,
+        handleDateInput, handleSaveItem } = props;
     // attributes from props
-    const { classes, color, todoInput } = props;
+    const { classes, color, todoInput, description,
+    todoDueDate, tags } = props;
 
     // handle form submission
     async function handleSubmit(event) {
 
         event.preventDefault(); // prevent default post event
-        handleAddItem();    // call handleAddItem in AddToDo component
+        handleSaveItem();    // call handleAddItem in AddToDo component
 
     }
 
@@ -104,7 +105,7 @@ function DetailedAddToDo(props) {
                                 name="body"
                                 value={todoInput}
                                 // autoComplete="email"
-                                onChange={handleTodoInput}
+                                onChange={handleBodyInput}
                                 // onBlur={validateName}
                                 // error={nameError !== ""}
                                 // helperText={nameError}

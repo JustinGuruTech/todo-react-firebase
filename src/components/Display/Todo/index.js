@@ -187,11 +187,21 @@ function Todo(props) {
                     let todos = [];
                     allTodos.forEach(doc => {
                         let todo = doc.data();
+                        // add date from db if exists
                         if (todo.dueDate !== undefined) {
                             todo.dueDate = todo.dueDate.toDate();
-                            console.log(todo.dueDate);
                         } else {
                             todo.dueDate = "none";
+                        }
+                        // add empty description if doesn't exist
+                        if (todo.description === undefined) {
+                            console.log("no desc");
+                            todo.description = "";
+                        }
+                        // add empty tags if no tags
+                        if (todo.tags === undefined) {
+                            console.log("no tags")
+                            todo.tags = [];
                         }
                         todo.id = doc.id;
                         todos.push(todo);
@@ -204,7 +214,7 @@ function Todo(props) {
                 })
             // if todo list has already been set, use the one in TodoPage
             } else {
-                console.log("test");
+                console.log("Local list used.");
                 setTodoList(activeTodoList);
             }
         }
@@ -286,14 +296,14 @@ function Todo(props) {
                             {loaded ? (todoList.todos.length === 0 ? <Typography className={classes.noTasks}>No tasks yet</Typography> : todoList.todos.map(todo => {
                                 // map all if filter set to all
                                 if (filterSelected === "all") {
-                                    return <SingleToDo key={todo.id} listId={todoList.id} body={todo.body} status={todo.status} id={todo.id}
+                                    return <SingleToDo key={todo.id} listId={todoList.id} body={todo.body} status={todo.status} id={todo.id} description={todo.description}
                                         refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing}
                                         todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError} dueDate={todo.dueDate}
                                         updateLocalTodo={updateLocalTodo}></SingleToDo>
                                     // map only those with status pending
                                 } else if (filterSelected === "pending") {
                                     if (todo.status === "pending") {
-                                        return <SingleToDo key={todo.id} listId={todoList.id} body={todo.body} status={todo.status} id={todo.id}
+                                        return <SingleToDo key={todo.id} listId={todoList.id} body={todo.body} status={todo.status} id={todo.id} description={todo.description}
                                             refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing}
                                             todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError} dueDate={todo.dueDate}
                                             updateLocalTodo={updateLocalTodo}></SingleToDo>
@@ -301,7 +311,7 @@ function Todo(props) {
                                     // map only those with status completed
                                 } else if (filterSelected === "completed") {
                                     if (todo.status === "completed") {
-                                        return <SingleToDo key={todo.id} listId={todoList.id} body={todo.body} status={todo.status} id={todo.id}
+                                        return <SingleToDo key={todo.id} listId={todoList.id} body={todo.body} status={todo.status} id={todo.id} description={todo.description}
                                             refresh={addTodosToState} removeTodoById={removeTodoById} setEditing={setEditing}
                                             todoEditing={editing} setSynced={setSynced} setSyncError={setSyncError} dueDate={todo.dueDate}
                                             updateLocalTodo={updateLocalTodo}></SingleToDo>

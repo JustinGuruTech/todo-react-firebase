@@ -20,6 +20,8 @@ import {
 
 import * as Firestore from '../../Firestore'
 
+import DetailedAddToDo from '../DetailedAddToDo';
+
 const styles = {
     mainContainer: {
         width: "100%",
@@ -81,11 +83,15 @@ const styles = {
 
 function SingleToDo(props) {
 
-    const { classes, id, listId } = props;
+    const { detailedAddOpen, handleDetailedAddButton, handleTodoInput, 
+    handleDescriptionInput, handleDateInput, handleAddItem, handleDetailedAddClose} = props;
+
+    const { classes, id, listId, todoInput } = props;
     // state hooks
     const [body, setBody] = useState(props.body);
     const [status, setStatus] = useState(props.status);
     const [dueDate, setDueDate] = useState(props.dueDate);
+    const [description, setDescription] = useState(props.description);
     const [editing, setEditing] = useState(false);
     const [confirmTrashOpen, setConfirmTrashOpen] = useState(false);
     const isFirstRun = useRef(true);
@@ -272,10 +278,13 @@ function SingleToDo(props) {
                             }
                             {dueDate !== "none" ? 
                             <div className={classes.dueDate}>
-                                <Typography className={classes.dueDate} 
+                                <Typography className={classes.dueDate}>
+                                    {description}
+                                </Typography>
+                                {/* <Typography className={classes.dueDate} 
                                 style={dueDate < new Date() ? {"color": "#bb2b2b"} : {}}>
                                     {dueDate < new Date() ? "Overdue: " : "Due: " } {dateToString(dueDate)} <QueryBuilder className={classes.timeRemaining}/> {timeRemainingString(dueDate)}
-                                </Typography>
+                                </Typography> */}
                             </div> : null
                             }
                             </div>
@@ -315,6 +324,22 @@ function SingleToDo(props) {
                                 Delete
                             </Button>
                         </DialogActions>
+                    </Dialog>
+                    <Dialog border={2} open={detailedAddOpen} aria-labelledby="form-dialog-title"
+                        PaperProps={{ className: classes.todoDialogPaper }}>
+                        <div className={classes.overflow}>
+                            <DialogContent className={classes.overflow}>
+                                <DetailedAddToDo handleDetailedAddButton={handleDetailedAddButton}
+                                     handleTodoInput={handleTodoInput}
+                                    todoInput={todoInput} handleDescriptionInput={handleDescriptionInput}
+                                    handleDateInput={handleDateInput} handleAddItem={handleAddItem} />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onMouseDown={handleDetailedAddClose} className={classes.cancelButton}>
+                                    Cancel
+                                </Button>
+                            </DialogActions>
+                        </div>
                     </Dialog>
                 </Paper>
             </Paper>

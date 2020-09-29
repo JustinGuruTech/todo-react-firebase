@@ -263,9 +263,9 @@ function AddToDo(props) {
                 <div className={classes.overflow}>
                     <DialogContent className={classes.overflow}>
                         <DetailedAddToDo handleDetailedAddButton={handleDetailedAddButton}
-                            color={props.activeTodoList.color} handleTodoInput={handleTodoInput}
+                            color={props.activeTodoList.color} handleBodyInput={handleTodoInput}
                             todoInput={todoInput} handleDescriptionInput={handleDescriptionInput}
-                            handleDateInput={handleDateInput} handleAddItem={handleAddItem} />
+                            handleDateInput={handleDateInput} handleSaveItem={handleAddItem} />
                     </DialogContent>
                     <DialogActions>
                         <Button onMouseDown={handleDetailedAddClose} className={classes.cancelButton}>
