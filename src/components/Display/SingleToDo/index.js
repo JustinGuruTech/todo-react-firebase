@@ -40,11 +40,20 @@ const styles = {
         flex: 1
     },
     centeredDiv: {
-        margin: "auto"
+        margin: "auto",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: "100%"
+    },
+    textWrap: {
+        display: "flex"
     },
     todoDateFlex: {
         display: "flex",
         flexDirection: "column",
+        width: "100%",
+        justifyContent: "space-between",
         marginTop: 4,
         marginBottom: 4
     },
@@ -270,14 +279,15 @@ function SingleToDo(props) {
 
     // returns string displaying time til todo is due
     function timeRemainingString(date) {
-        let diff = new Date() - date;
+        let diff = date - new Date();
+        console.log(diff);
         if (Math.abs(diff / 86400000) > 1) {
-            return (Math.abs(Math.floor(diff / 86400000)) + "d");
+            return (Math.floor(diff / 86400000) + "d");
         } else if (Math.abs(diff / 3600000) > 1) {
-            return (Math.abs(Math.floor(diff / 3600000)) + "h");
+            return (Math.floor(diff / 3600000) + "h");
         } else if (Math.abs(diff / 60000) > 1) {
-            return (Math.abs(Math.floor(diff / 60000)) + "m");
-        } 
+            return (Math.floor(diff / 60000) + "m");
+        }
         return "1m";
     }
 
@@ -285,9 +295,9 @@ function SingleToDo(props) {
     const isToday = (someDate) => {
         const today = new Date()
         return someDate.getDate() === today.getDate() &&
-          someDate.getMonth() === today.getMonth() &&
-          someDate.getFullYear() === today.getFullYear()
-      }
+            someDate.getMonth() === today.getMonth() &&
+            someDate.getFullYear() === today.getFullYear()
+    }
 
     return (
         <div aria-label="Single Task">
@@ -300,28 +310,21 @@ function SingleToDo(props) {
                             disabled={id === -1} />
                         <div className={classes.todoDateFlex}>
                             <div className={classes.centeredDiv}>
-                            {editing ?
-                            // EDITING TEXTFIELD
-                            <TextField autoFocus className={classes.todoEdit} value={body} onChange={handleEdit} onKeyDown={handleEnterEdit}
-                                data-testid="edit-input"
-                                InputProps={{
-                                    className: classes.todoEdit,
-                                }} /> :
-                            // REGULAR TEXTFIELD
-                            <Typography className={status === "completed" ?
-                                classes.bodyLabelCompleted : classes.bodyLabel} aria-label="Task name">{body}</Typography>
-                            }
-                            {dueDate !== "none" ? 
+                                <div className={classes.textWrap}>
+                                    <Typography className={status === "completed" ?
+                                        classes.bodyLabelCompleted : classes.bodyLabel} aria-label="Task name">{body}
+                                    </Typography>
+                                </div>
+                                {dueDate !== "none" ?
+                                <Typography className={classes.dueDate}
+                                    style={dueDate < new Date() ? { "color": "#bb2b2b" } : {}}>
+                                    {/*{dueDate < new Date() ? "Overdue: " : "Due: "} {dateToString(dueDate)} */} <QueryBuilder className={classes.timeRemaining} /> {timeRemainingString(dueDate)}
+                                </Typography> : null}
+                            </div>
                             <div className={classes.dueDate}>
                                 <Typography className={classes.dueDate}>
                                     {description}
                                 </Typography>
-                                {/* <Typography className={classes.dueDate} 
-                                style={dueDate < new Date() ? {"color": "#bb2b2b"} : {}}>
-                                    {dueDate < new Date() ? "Overdue: " : "Due: " } {dateToString(dueDate)} <QueryBuilder className={classes.timeRemaining}/> {timeRemainingString(dueDate)}
-                                </Typography> */}
-                            </div> : null
-                            }
                             </div>
                         </div>
                     </div>
@@ -364,7 +367,7 @@ function SingleToDo(props) {
                         PaperProps={{ className: classes.todoDialogPaper }}>
                         <div className={classes.overflow}>
                             <DialogContent className={classes.overflow}>
-                            {/* color={props.activeTodoList.color} */}
+                                {/* color={props.activeTodoList.color} */}
                                 <DetailedAddToDo handleBodyInput={handleBodyInput}
                                     body={body} handleDescriptionInput={handleDescriptionInput}
                                     handleDateInput={handleDateInput} handleSaveItem={handleSaveChanges} />

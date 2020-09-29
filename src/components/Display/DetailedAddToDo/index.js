@@ -67,8 +67,8 @@ function DetailedAddToDo(props) {
     const { handleBodyInput, handleDescriptionInput,
         handleDateInput, handleSaveItem } = props;
     // attributes from props
-    const { classes, color, todoInput, description,
-    todoDueDate, tags } = props;
+    const { classes, color, body, description,
+        todoDueDate, tags } = props;
 
     // handle form submission
     async function handleSubmit(event) {
@@ -90,7 +90,7 @@ function DetailedAddToDo(props) {
                             </Avatar>
                             <Typography component="h1" variant="h5" className={classes.iconText}>
                                 Add New Todo
-                                    </Typography>
+                            </Typography>
                         </div>
                         <Grid item xs={12}>
                             <TextField
@@ -103,7 +103,7 @@ function DetailedAddToDo(props) {
                                 // placeholder="Todo Name"
                                 label="Add a todo..."
                                 name="body"
-                                value={todoInput}
+                                value={body}
                                 // autoComplete="email"
                                 onChange={handleBodyInput}
                                 // onBlur={validateName}
