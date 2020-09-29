@@ -43,5 +43,12 @@
     "firebase-functions-test": "^0.2.2",
     "mutationobserver-shim": "^0.3.7",
     "ts-jest": "^26.3.0"
+  },
+  "bit": {
+    "env": {
+      "compiler": "bit.envs/compilers/react@1.0.20"
+    },
+    "componentsDefaultDirectory": "components/{name}",
+    "packageManager": "npm"
   }
 }

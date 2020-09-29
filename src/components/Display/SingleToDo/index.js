@@ -83,8 +83,8 @@ const styles = {
 
 function SingleToDo(props) {
 
-    const { detailedAddOpen, handleDetailedAddButton, handleTodoInput, 
-    handleDescriptionInput, handleDateInput, handleAddItem, handleDetailedAddClose} = props;
+    // const { detailedAddOpen, handleDetailedAddButton, handleTodoInput, 
+    // handleDescriptionInput, handleDateInput, handleAddItem, handleDetailedAddClose} = props;
 
     const { classes, id, listId, todoInput } = props;
     // state hooks
@@ -138,37 +138,41 @@ function SingleToDo(props) {
     }, [id, status])
 
 
-    // toggle editing on a todo
-    function toggleEditing() {
-        // this checks the value passed in from App.js (editing hook) to
-        // see if a todo is already being edited. If so, nothing happens,
-        // otherwise the todo edit pressed toggles editing
-        if (props.todoEditing) {
-            // this checks if the todo pressed is the one already being 
-            // edited. If so it leaves edit mode, otherwise it returns
-            if (editing) {
-                setEditing(false);
-                props.setSynced(false); // set to syncing;
-                Firestore.updateTodoBodyByListId(listId, id, body).then(() => {
-                    props.setSynced(true);  // set to synced
-                })
-                    // catch error from Firestore function and set syncError
-                    .catch((error) => {
-                        props.setSyncError(error);
-                    });
-            }
-            return;
-        }
+    // // toggle editing on a todo
+    // function toggleEditing() {
+    //     // this checks the value passed in from App.js (editing hook) to
+    //     // see if a todo is already being edited. If so, nothing happens,
+    //     // otherwise the todo edit pressed toggles editing
+    //     if (props.todoEditing) {
+    //         // this checks if the todo pressed is the one already being 
+    //         // edited. If so it leaves edit mode, otherwise it returns
+    //         if (editing) {
+    //             setEditing(false);
+    //             props.setSynced(false); // set to syncing;
+    //             Firestore.updateTodoBodyByListId(listId, id, body).then(() => {
+    //                 props.setSynced(true);  // set to synced
+    //             })
+    //                 // catch error from Firestore function and set syncError
+    //                 .catch((error) => {
+    //                     props.setSyncError(error);
+    //                 });
+    //         }
+    //         return;
+    //     }
+    //     setEditing(true);
+    // }
+
+    // // whenever editing is changed in SingleToDo, editing in App.js changes to reflect it
+    // useEffect(() => {
+    //     props.setEditing(editing);
+    //     // send updated todo to parent when edited todo is confirmed
+    //     sendUpdatedTodoToParent();
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [editing])
+
+    function handleEditButtonPressed() {
         setEditing(true);
     }
-
-    // whenever editing is changed in SingleToDo, editing in App.js changes to reflect it
-    useEffect(() => {
-        props.setEditing(editing);
-        // send updated todo to parent when edited todo is confirmed
-        sendUpdatedTodoToParent();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [editing])
 
     // handles user saving change to todo
     function handleEdit(e) {
@@ -178,7 +182,8 @@ function SingleToDo(props) {
     // enter key functionality to finish editing
     function handleEnterEdit(e) {
         if (e.keyCode === 13) {
-            toggleEditing();
+            handleEditButtonPressed();
+            // toggleEditing();
         }
     }
 
@@ -190,6 +195,36 @@ function SingleToDo(props) {
     // closes delete confirm dialogue
     function handleTrashClose() {
         setConfirmTrashOpen(false);
+    }
+
+    function handleSaveChanges() {
+        setEditing(false);
+    }
+
+    // set react hook val on text change
+    function handleBodyInput(e) {
+        setBody(e.target.value);
+    }
+    // DETAILED ADD TODO INPUT HANDLERS
+    // for long description of todo
+    function handleDescriptionInput(e) {
+        setDescription(e.target.value);
+    }
+    // for date of todo
+    function handleDateInput({ target }) {
+        // take date string and turn it into date object
+        setDueDate(new Date(target.value));
+    }
+    // for adding a tag (when tags are implemented)
+    function handleTagsAdded() {
+        console.log("tag totally added");
+    }
+
+    function clearInputs() {
+        setBody("");
+        setDescription("");
+        setDueDate("none");
+        // setTags([]);
     }
 
     // deletes from db and closes confirm dialogue
@@ -292,7 +327,7 @@ function SingleToDo(props) {
                     </div>
                     {/* EDIT/TRASH ICONS */}
                     <div className={classes.horizontalFlex}>
-                        <IconButton component="span" className={classes.editIcon} onClick={toggleEditing}
+                        <IconButton component="span" className={classes.editIcon} onClick={handleEditButtonPressed}
                             aria-label={editing ? "Save task name" : "Edit task name"} disabled={id === -1}>
                             {// show done button if editing, edit button if not
                                 editing ? <Done data-testid="confirm-edit-button" /> : <Edit data-testid="edit-button" />}
@@ -325,17 +360,17 @@ function SingleToDo(props) {
                             </Button>
                         </DialogActions>
                     </Dialog>
-                    <Dialog border={2} open={detailedAddOpen} aria-labelledby="form-dialog-title"
+                    <Dialog border={2} open={editing} aria-labelledby="form-dialog-title"
                         PaperProps={{ className: classes.todoDialogPaper }}>
                         <div className={classes.overflow}>
                             <DialogContent className={classes.overflow}>
-                                <DetailedAddToDo handleDetailedAddButton={handleDetailedAddButton}
-                                     handleTodoInput={handleTodoInput}
-                                    todoInput={todoInput} handleDescriptionInput={handleDescriptionInput}
-                                    handleDateInput={handleDateInput} handleAddItem={handleAddItem} />
+                            {/* color={props.activeTodoList.color} */}
+                                <DetailedAddToDo handleBodyInput={handleBodyInput}
+                                    body={body} handleDescriptionInput={handleDescriptionInput}
+                                    handleDateInput={handleDateInput} handleSaveItem={handleSaveChanges} />
                             </DialogContent>
                             <DialogActions>
-                                <Button onMouseDown={handleDetailedAddClose} className={classes.cancelButton}>
+                                <Button onMouseDown={handleEditButtonPressed} className={classes.cancelButton}>
                                     Cancel
                                 </Button>
                             </DialogActions>

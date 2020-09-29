@@ -11,6 +11,12 @@
 # production
 /build
 
+# Bit
+/dist
+.bit
+.bitmap
+bit.json
+
 # misc
 .DS_Store
 .env.local

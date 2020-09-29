@@ -262,9 +262,8 @@ function AddToDo(props) {
                 PaperProps={{ className: classes.todoDialogPaper }}>
                 <div className={classes.overflow}>
                     <DialogContent className={classes.overflow}>
-                        <DetailedAddToDo handleDetailedAddButton={handleDetailedAddButton}
-                            color={props.activeTodoList.color} handleBodyInput={handleTodoInput}
-                            todoInput={todoInput} handleDescriptionInput={handleDescriptionInput}
+                        <DetailedAddToDo color={props.activeTodoList.color} handleBodyInput={handleTodoInput}
+                            body={todoInput} handleDescriptionInput={handleDescriptionInput}
                             handleDateInput={handleDateInput} handleSaveItem={handleAddItem} />
                     </DialogContent>
                     <DialogActions>
