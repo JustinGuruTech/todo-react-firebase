@@ -141,7 +141,7 @@ function AddToDo(props) {
             todoList.todos.push(todo);
 
             // clear inputs
-            clearInputs();
+            // clearInputs();
             // open snackbar
             // TODO
             // close detailed todo form
@@ -149,10 +149,11 @@ function AddToDo(props) {
             setAddedSnackbarOpen(true);
 
             // add basic todo to db with required fields
-            Firestore.addTodoToListById(todoList.id, todoInput, todo.created).then(docRef => {
+            Firestore.addTodoToListById(todoList.id, todo.body, todo.created).then(docRef => {
                 todo.id = docRef.id;  // set correct id of todo
-                setTodoInput(""); // reset todo input
-                setSynced(true);  // now synced
+                clearInputs();
+                // setTodoInput(""); // reset todo input
+                // setSynced(true);  // now synced
             })
             // after adding basic fields, check if need to add extra fields
             .then(() => {
@@ -161,6 +162,9 @@ function AddToDo(props) {
                     [todo.description !== "" ? Firestore.setTodoDescriptionByListId(todoList.id, todo.id, todo.description): '',
                     todo.tags.length > 0 ? Firestore.setTodoTagsByListId(todoList.id, todo.id, todo.tags) : ''],
                     todo.dueDate !== "none" ? Firestore.setTodoDateByListId(todoList.id, todo.id, todo.dueDate) : '')
+                    .then(() => {
+                        setSynced(true);    
+                    })
                     .catch(error => {
                         console.log("error: ", error);
                     })

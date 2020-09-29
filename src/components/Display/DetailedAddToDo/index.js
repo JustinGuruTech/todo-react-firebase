@@ -7,7 +7,7 @@
 import React from 'react';
 import {
     Button, Typography, TextField, Grid, Container,
-    CssBaseline, Avatar, withStyles
+    CssBaseline, Avatar, Divider, withStyles
 } from '@material-ui/core';
 import { OfflinePin } from '@material-ui/icons'
 
@@ -29,7 +29,7 @@ const styles = {
         textAlign: "center"
     },
     inputHeight: {
-        padding: "10px 12px"
+        // padding: "10px 12px"
     },
     submit: {
         backgroundColor: "#080808",
@@ -98,8 +98,10 @@ function DetailedAddToDo(props) {
                                         required
                                         fullWidth
                                         id="body"
+                                        autoFocus
                                         // label="Todo Name"
-                                        placeholder="Todo Name"
+                                        // placeholder="Todo Name"
+                                        label="Add a todo..."
                                         name="body"
                                         value={todoInput}
                                         // autoComplete="email"
@@ -116,12 +118,12 @@ function DetailedAddToDo(props) {
                                 <Grid item xs={12}>
                                     <TextField
                                         multiline
-                                        rowsMax={5}
+                                        rowsMax={7}
                                         variant="outlined"
-                                        required
                                         fullWidth
                                         id="description"
-                                        placeholder="Long Description"
+                                        label="Long Description"
+                                        // placeholder="Long Description"
                                         name="description"
                                         // autoComplete="email"
                                         onChange={handleDescriptionInput}
@@ -137,10 +139,10 @@ function DetailedAddToDo(props) {
                                         multiline
                                         rowsMax={5}
                                         variant="outlined"
-                                        required
                                         fullWidth
                                         id="tags"
-                                        placeholder="Tags"
+                                        label="Tags"
+                                        // placeholder="Tags"
                                         name="tags"
                                         // autoComplete="email"
                                         // onChange={handleTagChange}
@@ -159,7 +161,7 @@ function DetailedAddToDo(props) {
                                 <Grid item xs={12} className={classes.dateDiv}>
                                     <TextField
                                         id="datetime-local"
-                                        label="Due Date"
+                                        label="Due Date (optional)"
                                         type="datetime-local"
                                         onChange={handleDateInput}
                                         className={classes.dateInput}
