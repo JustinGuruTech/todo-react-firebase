@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core';
 import {
     RadioButtonUnchecked, RadioButtonChecked,
-    DeleteOutlineOutlined, Edit, Done
+    DeleteOutlineOutlined, Edit, Done, QueryBuilder
 } from '@material-ui/icons';
 
 import * as Firestore from '../../Firestore'
@@ -49,6 +49,12 @@ const styles = {
     dueDate: {
         fontSize: ".7rem",
         fontFamily: "Inter"
+    },
+    timeRemaining: {
+        fontSize: 14,
+        position: 'relative',
+        top: 3,
+        left: 2
     },
     bodyLabel: {
         lineHeight: "20px",
@@ -211,10 +217,36 @@ function SingleToDo(props) {
             minutes = "0" + minutes;
         }
 
+        if (isToday(date)) {
+            let strDate = ("Today " + hours + ":" + minutes + suffix);
+            return strDate;
+        }
+
         // put together string
-        let strDate = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + hours + ":" + minutes + suffix;
+        let strDate = (date.getMonth() + 1) + "/" + date.getDate() /* + "/" + date.getFullYear()*/ + " " + hours + ":" + minutes + suffix;
         return strDate;
     }
+
+    // returns string displaying time til todo is due
+    function timeRemainingString(date) {
+        let diff = new Date() - date;
+        if (Math.abs(diff / 86400000) > 1) {
+            return (Math.abs(Math.floor(diff / 86400000)) + "d");
+        } else if (Math.abs(diff / 3600000) > 1) {
+            return (Math.abs(Math.floor(diff / 3600000)) + "h");
+        } else if (Math.abs(diff / 60000) > 1) {
+            return (Math.abs(Math.floor(diff / 60000)) + "m");
+        } 
+        return "1m";
+    }
+
+    // check if date is today
+    const isToday = (someDate) => {
+        const today = new Date()
+        return someDate.getDate() === today.getDate() &&
+          someDate.getMonth() === today.getMonth() &&
+          someDate.getFullYear() === today.getFullYear()
+      }
 
     return (
         <div aria-label="Single Task">
@@ -240,7 +272,10 @@ function SingleToDo(props) {
                             }
                             {dueDate !== "none" ? 
                             <div className={classes.dueDate}>
-                                <Typography className={classes.dueDate}>Due: {dateToString(dueDate)}</Typography>
+                                <Typography className={classes.dueDate} 
+                                style={dueDate < new Date() ? {"color": "#bb2b2b"} : {}}>
+                                    {dueDate < new Date() ? "Overdue: " : "Due: " } {dateToString(dueDate)} <QueryBuilder className={classes.timeRemaining}/> {timeRemainingString(dueDate)}
+                                </Typography>
                             </div> : null
                             }
                             </div>

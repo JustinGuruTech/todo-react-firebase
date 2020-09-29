@@ -7,7 +7,7 @@
 import React from 'react';
 import {
     Button, Typography, TextField, Grid, Container,
-    CssBaseline, Avatar, Divider, withStyles
+    CssBaseline, Avatar, withStyles
 } from '@material-ui/core';
 import { OfflinePin } from '@material-ui/icons'
 
@@ -64,14 +64,14 @@ const styles = {
 function DetailedAddToDo(props) {
 
     // functions from props
-    const { handleTodoInput, handleDescriptionInput, 
+    const { handleTodoInput, handleDescriptionInput,
         handleDateInput, handleAddItem } = props;
     // attributes from props
     const { classes, color, todoInput } = props;
 
     // handle form submission
     async function handleSubmit(event) {
-        
+
         event.preventDefault(); // prevent default post event
         handleAddItem();    // call handleAddItem in AddToDo component
 
@@ -82,103 +82,101 @@ function DetailedAddToDo(props) {
             <Container component="main" maxWidth="xs" className={classes.mainContainer}>
                 <CssBaseline />
                 <div className={classes.paper}>
-                    
-                        <form className={classes.form} noValidate onSubmit={handleSubmit}>
-                                <div className={classes.formHeader}>
-                                    <Avatar className={classes.avatar} style={{backgroundColor: color}}>
-                                        <OfflinePin style={{color: "white"}} />
-                                    </Avatar>
-                                    <Typography component="h1" variant="h5" className={classes.iconText}>
-                                        Add New Todo
+                    <form className={classes.form} noValidate onSubmit={handleSubmit}>
+                        <div className={classes.formHeader}>
+                            <Avatar className={classes.avatar} style={{ backgroundColor: color }}>
+                                <OfflinePin style={{ color: "white" }} />
+                            </Avatar>
+                            <Typography component="h1" variant="h5" className={classes.iconText}>
+                                Add New Todo
                                     </Typography>
-                                </div>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        variant="outlined"
-                                        required
-                                        fullWidth
-                                        id="body"
-                                        autoFocus
-                                        // label="Todo Name"
-                                        // placeholder="Todo Name"
-                                        label="Add a todo..."
-                                        name="body"
-                                        value={todoInput}
-                                        // autoComplete="email"
-                                        onChange={handleTodoInput}
-                                        // onBlur={validateName}
-                                        // error={nameError !== ""}
-                                        // helperText={nameError}
-                                        className={classes.bodyInput}
-                                        inputProps={{
-                                            className: classes.inputHeight
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        multiline
-                                        rowsMax={7}
-                                        variant="outlined"
-                                        fullWidth
-                                        id="description"
-                                        label="Long Description"
-                                        // placeholder="Long Description"
-                                        name="description"
-                                        // autoComplete="email"
-                                        onChange={handleDescriptionInput}
-                                        // onBlur={validateName}
-                                        // error={nameError !== ""}
-                                        // helperText={nameError}
-                                        className={classes.bodyInput}
-                                        InputProps={{
-                                            className: classes.inputHeight
-                                        }}
-                                    />
-                                    <TextField
-                                        multiline
-                                        rowsMax={5}
-                                        variant="outlined"
-                                        fullWidth
-                                        id="tags"
-                                        label="Tags"
-                                        // placeholder="Tags"
-                                        name="tags"
-                                        // autoComplete="email"
-                                        // onChange={handleTagChange}
-                                        // onBlur={validateName}
-                                        // error={nameError !== ""}
-                                        // helperText={nameError}
-                                        className={classes.bodyInput}
-                                        InputProps={{
-                                            className: classes.inputHeight
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} className={classes.tagsDiv}>
-                                    No tags yet
-                                </Grid>
-                                <Grid item xs={12} className={classes.dateDiv}>
-                                    <TextField
-                                        id="datetime-local"
-                                        label="Due Date (optional)"
-                                        type="datetime-local"
-                                        onChange={handleDateInput}
-                                        className={classes.dateInput}
-                                        InputLabelProps={{
-                                        shrink: true,
-                                        }}
-                                    />
-                                </Grid> 
-
-                            <Button
-                                type="submit"
+                        </div>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
                                 fullWidth
-                                variant="contained"
-                                className={classes.submit}>
-                                    <div>Create</div>
-                            </Button>
-                        </form>
+                                id="body"
+                                autoFocus
+                                // label="Todo Name"
+                                // placeholder="Todo Name"
+                                label="Add a todo..."
+                                name="body"
+                                value={todoInput}
+                                // autoComplete="email"
+                                onChange={handleTodoInput}
+                                // onBlur={validateName}
+                                // error={nameError !== ""}
+                                // helperText={nameError}
+                                className={classes.bodyInput}
+                                inputProps={{
+                                    className: classes.inputHeight
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                multiline
+                                rowsMax={7}
+                                variant="outlined"
+                                fullWidth
+                                id="description"
+                                label="Long Description"
+                                // placeholder="Long Description"
+                                name="description"
+                                // autoComplete="email"
+                                onChange={handleDescriptionInput}
+                                // onBlur={validateName}
+                                // error={nameError !== ""}
+                                // helperText={nameError}
+                                className={classes.bodyInput}
+                                InputProps={{
+                                    className: classes.inputHeight
+                                }}
+                            />
+                            <TextField
+                                multiline
+                                rowsMax={5}
+                                variant="outlined"
+                                fullWidth
+                                id="tags"
+                                label="Tags"
+                                // placeholder="Tags"
+                                name="tags"
+                                // autoComplete="email"
+                                // onChange={handleTagChange}
+                                // onBlur={validateName}
+                                // error={nameError !== ""}
+                                // helperText={nameError}
+                                className={classes.bodyInput}
+                                InputProps={{
+                                    className: classes.inputHeight
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} className={classes.tagsDiv}>
+                            No tags yet
+                                </Grid>
+                        <Grid item xs={12} className={classes.dateDiv}>
+                            <TextField
+                                id="datetime-local"
+                                label="Due Date (optional)"
+                                type="datetime-local"
+                                onChange={handleDateInput}
+                                className={classes.dateInput}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            className={classes.submit}>
+                            <div>Create</div>
+                        </Button>
+                    </form>
                 </div>
             </Container>
         </div>
