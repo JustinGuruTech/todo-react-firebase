@@ -88,7 +88,7 @@ function DetailedAddToDo(props) {
                             <Avatar className={classes.avatar} style={{ backgroundColor: color }}>
                                 <OfflinePin style={{ color: "white" }} />
                             </Avatar>
-                            <Typography component="h1" variant="h5" className={classes.iconText}>
+                            <Typography className={classes.iconText}>
                                 Add New Todo
                             </Typography>
                         </div>
@@ -125,6 +125,7 @@ function DetailedAddToDo(props) {
                                 label="Long Description"
                                 // placeholder="Long Description"
                                 name="description"
+                                value={description}
                                 // autoComplete="email"
                                 onChange={handleDescriptionInput}
                                 // onBlur={validateName}
@@ -163,6 +164,8 @@ function DetailedAddToDo(props) {
                                 id="datetime-local"
                                 label="Due Date (optional)"
                                 type="datetime-local"
+                                format="yyyy-MM-dd HH:mm:ss"
+                                defaultValue={todoDueDate !== undefined ? todoDueDate.toISOString().slice(0, -1) : ""}
                                 onChange={handleDateInput}
                                 className={classes.dateInput}
                                 InputLabelProps={{

@@ -12,12 +12,28 @@ import { BrowserRouter } from 'react-router-dom';
 import Router from './components/Router';
 import AuthDataProvider from './components/AuthDataProvider';
 
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: [
+      'Inter',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif'
+    ].join(','),
+  }
+});
+
 const App = props => (
+  <ThemeProvider theme={theme}>
   <BrowserRouter>
     <AuthDataProvider>
       <Router />
     </AuthDataProvider>
   </BrowserRouter>
+  </ThemeProvider>
 );
 
 export default App;

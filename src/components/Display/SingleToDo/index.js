@@ -368,8 +368,8 @@ function SingleToDo(props) {
                         <div className={classes.overflow}>
                             <DialogContent className={classes.overflow}>
                                 {/* color={props.activeTodoList.color} */}
-                                <DetailedAddToDo handleBodyInput={handleBodyInput}
-                                    body={body} handleDescriptionInput={handleDescriptionInput}
+                                <DetailedAddToDo handleBodyInput={handleBodyInput} description={description}
+                                    body={body} todoDueDate={dueDate} handleDescriptionInput={handleDescriptionInput}
                                     handleDateInput={handleDateInput} handleSaveItem={handleSaveChanges} />
                             </DialogContent>
                             <DialogActions>
