@@ -1,59 +1,65 @@
 // Justin Edwards
 // 9/21/20
-// SideBar Component - Maps list of todo lists into 
+// SideBar Component - Maps list of todo lists into
 // Sidebar. Shrinks/expands when hamburger clicked.
 
-import React, { useState } from 'react';
-import clsx from 'clsx';
+import React, { useState } from "react";
+import clsx from "clsx";
 import {
-  Drawer, List, ListItem, ListItemIcon, Typography,
-  ListItemText, Divider, withStyles, Button
-} from '@material-ui/core';
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  Typography,
+  ListItemText,
+  Divider,
+  withStyles,
+  Button,
+} from "@material-ui/core";
 import {
   Menu as MenuIcon,
   MenuOpen as MenuOpenIcon,
-  FiberManualRecord as FiberManualRecordIcon
-} from '@material-ui/icons';
+  FiberManualRecord as FiberManualRecordIcon,
+} from "@material-ui/icons";
 
 const drawerWidth = 300;
 
-const styles = theme => ({
+const styles = (theme) => ({
   hide: {
-    display: 'none',
+    display: "none",
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: 'nowrap',
+    whiteSpace: "nowrap",
   },
   drawerOpen: {
     width: drawerWidth,
-    transition: theme.transitions.create('width', {
+    transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
   drawerClose: {
-    transition: theme.transitions.create('width', {
+    transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    overflowX: 'hidden',
+    overflowX: "hidden",
     width: theme.spacing(7) + 1,
-
   },
   sideBarIcon: {
     paddingTop: 20,
     paddingBottom: 15,
     backgroundColor: "#3e3b3b",
     color: "white",
-    marginTop: '48px',
-    '&:hover': {
-      backgroundColor: "#3e3b3bc4"
-    }
+    marginTop: "48px",
+    "&:hover": {
+      backgroundColor: "#3e3b3bc4",
+    },
   },
   menuIcons: {
-    fontSize: "26px"
+    fontSize: "26px",
   },
   openMenuHead: {
     display: "flex",
@@ -64,21 +70,20 @@ const styles = theme => ({
   },
   menuHeadText: {
     fontWeight: "bold",
-    fontFamily: "Inter"
-  }
-})
+    fontFamily: "Inter",
+  },
+});
 
 function SideBar(props) {
-
   // prop functions
-  const { updateTodoListIndex, handleAddListOpen } = props
+  const { updateTodoListIndex, handleAddListOpen } = props;
   // prop attributes
   const { classes, todoListList } = props;
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = () => {
     setOpen(!open);
-  }
+  };
 
   return (
     <Drawer
@@ -98,15 +103,26 @@ function SideBar(props) {
       <Divider />
       <List>
         <ListItem button onClick={toggleDrawer} className={classes.sideBarIcon}>
-          {open ? <div className={classes.openMenuHead}>
-            <Typography className={classes.menuHeadText}>Lists</Typography>
-            <MenuOpenIcon className={classes.menuIcons} />
-          </div> :
-            <MenuIcon className={classes.menuIcons} />}
+          {open ? (
+            <div className={classes.openMenuHead}>
+              <Typography className={classes.menuHeadText}>Lists</Typography>
+              <MenuOpenIcon className={classes.menuIcons} />
+            </div>
+          ) : (
+            <MenuIcon className={classes.menuIcons} />
+          )}
         </ListItem>
         {todoListList.map((list, index) => (
-          <ListItem button key={index} onClick={() => { updateTodoListIndex(index) }}>
-            <ListItemIcon><FiberManualRecordIcon style={{ color: list.color }} /></ListItemIcon>
+          <ListItem
+            button
+            key={index}
+            onClick={() => {
+              updateTodoListIndex(index);
+            }}
+          >
+            <ListItemIcon>
+              <FiberManualRecordIcon style={{ color: list.color }} />
+            </ListItemIcon>
             {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
             <ListItemText primary={list.name} />
           </ListItem>
@@ -114,10 +130,11 @@ function SideBar(props) {
       </List>
       <Divider />
       {/* NEW LIST BUTTON */}
-      {open ? <Button className={classes.addListButton}
-        onClick={handleAddListOpen}>
-        + Add List
-        </Button> : null}
+      {open ? (
+        <Button className={classes.addListButton} onClick={handleAddListOpen}>
+          + Add List
+        </Button>
+      ) : null}
       {/* <List>
           {['All mail', 'Trash', 'Spam'].map((text, index) => (
             <ListItem button key={text}>
@@ -127,7 +144,7 @@ function SideBar(props) {
           ))}
         </List> */}
     </Drawer>
-  )
+  );
 }
 
 export default withStyles(styles)(SideBar);
