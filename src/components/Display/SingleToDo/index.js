@@ -204,10 +204,10 @@ function SingleToDo(props) {
   }
   // save changes and close popup
   function handleSaveChanges() {
-    // // make sure input isn't empty
-    // if (todoInput !== "") {
-    //   setSynced(false); // show syncing symbol
-    //   // edit todo locally while syncing with db
+    // make sure input isn't empty
+    if (todoInput !== "") {
+      setSynced(false); // show syncing symbol
+      // edit todo locally while syncing with db
 
     }
     setEditing(false);
