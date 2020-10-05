@@ -27,7 +27,7 @@ is reading from or writing to the database, the tag at the top
 switches from 'synced' to 'syncing' then back once the promise is 
 fulfilled.
 
-<b>Deployment:<b> https://todo-react-d4370.web.app
+<b>Deployment:</b> https://todo-react-d4370.web.app
   
 <b>Make It Your Own</b>
 
