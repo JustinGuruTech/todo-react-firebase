@@ -175,7 +175,9 @@ function SingleToDo(props) {
   // set new date hook val on input
   function handleNewDateInput({ target }) {
     // take date string and turn it into date object
-    setNewDueDate(new Date(target.value));
+    if (!isNaN(Date.parse(target.value))) {
+      setNewDueDate(new Date(target.value));
+    }
   }
   // clear new todo information on cancel or add
   function clearInputs() {
@@ -191,12 +193,18 @@ function SingleToDo(props) {
   function sendUpdatedTodoToParent() {
     let tempTodo = {
       id: id,
-      body: body,
+      body: newBody,
       status: status,
-      description: description,
-      dueDate: dueDate
+      description: newDescription,
+      dueDate: newDueDate
     };
     props.updateLocalTodo(tempTodo);
+  }
+  // update local hooks with new ones
+  function updateLocalHooks() {
+    setBody(newBody);
+    setDescription(newDescription);
+    setDueDate(newDueDate);
   }
   // starts editing on edit button press
   function handleEditButtonPressed() {
@@ -206,7 +214,10 @@ function SingleToDo(props) {
   function handleSaveChanges() {
     // make sure input isn't empty
     if (todoInput !== "") {
-      setSynced(false); // show syncing symbol
+      setSynced(false);
+      sendUpdatedTodoToParent();
+      updateLocalHooks();
+      // setSynced(false); // show syncing symbol
       // edit todo locally while syncing with db
 
     }
@@ -214,6 +225,7 @@ function SingleToDo(props) {
   }
   // discard changes and close popup
   function handleEditingCancel() {
+    clearInputs();
     setEditing(false);
   }
   // enter key functionality to finish editing

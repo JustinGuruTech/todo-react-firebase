@@ -69,6 +69,10 @@ function TodoPage(props) {
   // const [addingList, setAddingList] = useState(false);
   /* #endregion */
 
+  function setActiveTodoListHandler(newList) {
+    setActiveTodoList(newList);
+  }
+
   /* #region STARTUP */
   // run once on startup
   useEffect(() => {
@@ -196,7 +200,8 @@ function TodoPage(props) {
         />
       </div>
       {/* TODO LIST */}
-      <Todo className={classes.todoMain} activeTodoList={activeTodoList} />
+      <Todo className={classes.todoMain} activeTodoList={activeTodoList} 
+      setActiveTodoList={setActiveTodoListHandler} />
       {/* ADD TODO LIST FORM POPUP */}
       <Dialog
         border={2}

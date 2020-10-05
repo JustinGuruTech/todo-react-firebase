@@ -150,7 +150,7 @@ const styles = (theme) => ({
 function Todo(props) {
 
   /* #region PROPS/HOOKS */
-  const { handleDetailedAddButton } = props;
+  const { handleDetailedAddButton, setActiveTodoList } = props;
   const { activeTodoList, classes } = props;
   // state hooks
   const [todoList, setTodoList] = useState({ id: -1 }); // stores todo list synced with db
@@ -264,11 +264,15 @@ function Todo(props) {
       if (todo.id === newTodo.id) {
         todo.body = newTodo.body;
         todo.status = newTodo.status;
+        todo.description = newTodo.description;
+        todo.dueDate = newTodo.dueDate;
         return newTodo;
       }
       return todo;
     });
-    setTodoList(tempTodoList);
+    console.log(tempTodoList);
+    setActiveTodoList(tempTodoList);
+    setSynced(true);
   }
   /* #endregion */
 
