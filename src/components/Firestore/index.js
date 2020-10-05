@@ -5,10 +5,13 @@
 // Also contains authentication functions for user accounts
 // and fetching user information
 
+/* #region IMPORTS */
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
+/* #endregion */
 
+/* #region FIREBASE CONFIG/INITIALIZATION */
 // config information saved in .env file for privacy
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -20,19 +23,20 @@ const firebaseConfig = {
     appId: process.env.REACT_APP_APP_ID,
     measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
-
 // initialize and get ref to firestore
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 export const auth = firebase.auth();
+/* #endregion */
 
+/* #region TIMESTAMP GETTER */
 // gets the current timestamp of the db
 export const getCurrentTimestamp = () => {
     return firebase.firestore.Timestamp.fromDate(new Date());
 }
+/* #endregion */
 
-/* USER FUNCTIONS */
-
+/* #region USER FUNCTIONS */
 // gets id of signed in user
 const getUserId = () => {
     // check currentUser exists
@@ -44,7 +48,6 @@ const getUserId = () => {
         return Promise.reject("User not found");
     }
 }
-
 // creates a user account given a username and password
 export const createUserAccount = async (email, password, firstName, lastName) => {
     let taskRef = await auth.createUserWithEmailAndPassword(email, password)
@@ -67,7 +70,6 @@ export const createUserAccount = async (email, password, firstName, lastName) =>
     })
     return taskRef;
 }
-
 // sign in a user given a username and password
 export const signInUser = async (email, password) => {
     let taskRef = await auth.signInWithEmailAndPassword(email, password)
@@ -82,7 +84,6 @@ export const signInUser = async (email, password) => {
     })
     return taskRef;
 }
-
 // sign out the current user
 export const signOutUser = async () => {
     let taskRef = await auth.signOut()
@@ -96,7 +97,7 @@ export const signOutUser = async () => {
     })
     return taskRef;
 }
-
+// gets the current users name
 export const getCurrentUserFirstLastName = async () => {
     if (auth.currentUser) {
         let taskRef = await db.collection("users").doc(auth.currentUser.uid).get()
@@ -107,9 +108,9 @@ export const getCurrentUserFirstLastName = async () => {
         return taskRef;
     }
 }
+/* #endregion */
 
-/* TODOLIST QUERY FUNCTIONS */
-
+/* #region TODOLIST QUERY FUNCTIONS */
 // get all todolists for user
 export const getAllTodoLists = async () => {
     let collection = await db.collection("users").doc(getUserId()).collection("todoLists").get()
@@ -119,7 +120,6 @@ export const getAllTodoLists = async () => {
     })
     return collection;
 }
-
 // adds new todo list to firestore db
 export const addNewTodoList = async (name, color) => {
     let timestamp = getCurrentTimestamp();
@@ -138,7 +138,6 @@ export const addNewTodoList = async (name, color) => {
     })
     return docRef;
 }
-
 // gets all todos from a list by listId
 export const getAllTodosFromListById = async (listId) => {
     let collection = await db.collection("users").doc(getUserId())
@@ -149,7 +148,6 @@ export const getAllTodosFromListById = async (listId) => {
     })
     return collection;
 }
-
 // add new todo to list specified by listId
 export const addTodoToListById = async (listId, body, timestamp) => {
     let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos").add({
@@ -163,38 +161,6 @@ export const addTodoToListById = async (listId, body, timestamp) => {
     })
     return taskRef;
 }
-
-// // add new todo to list specified by listId
-// export const addTodoWithDateToListById = async (listId, body, timestamp, date) => {
-//     let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos").add({
-//         body: body,
-//         created: timestamp,
-//         status: "pending",
-//         dueDate: firebase.firestore.Timestamp.fromDate(date)
-//     })
-//     .catch(error => {
-//         console.log("Error adding todo: ", error);
-//         return Promise.reject("Error adding todo");
-//     })
-//     return taskRef;
-// }
-
-// export const addDetailedTodoByListId = async (listId, body, description, date, tags, timestamp) => {
-//     let taskRef = await db.collection("useres").doc(getUserId()).collection("todoLists").doc(listId).collection("todos").add({
-//         body: body,
-//         description: description,
-//         status: "pending",
-//         dueDate: firebase.firestore.Timetsamp.fromDate(date),
-//         tags: tags,
-//         created: timestamp
-//     })
-//     .catch(error => {
-//         console.log("Error adding detailed todo: ", error);
-//         return Promise.reject("Error adding detailed todo");
-//     })
-//     return taskRef;
-// }
-
 // update body of a todo in list specified by listId
 export const updateTodoBodyByListId = async (listId, id, newBody) => {
     let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
@@ -208,7 +174,6 @@ export const updateTodoBodyByListId = async (listId, id, newBody) => {
     })
     return taskRef;
 }
-
 // update status of a todo in list specified by listId
 export const updateTodoStatusByListId = async (listId, id, newStatus) => {
     let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
@@ -222,46 +187,6 @@ export const updateTodoStatusByListId = async (listId, id, newStatus) => {
     })
     return taskRef;
 }
-
-// delete a todo from list specified by listId
-export const deleteTodoByListId = async (listId, id) => {
-    let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
-    .doc(id)
-    .delete()
-    .catch(error => {
-        // log error and return reason for rejection
-        console.log("Error deleting todo: ", error);
-        return Promise.reject("Error deleting item");
-    })
-    return taskRef;
-}
-
-// add/edit date for existing todo
-export const setTodoDateByListId = async (listId, id, date) => {
-    let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
-    .doc(id).update({
-        dueDate: date
-    })
-    .catch(error => {
-        console.log("Error adding date: ", error);
-        return Promise.reject("Error adding date");
-    })
-    return taskRef;
-}
-
-// just sets an array for now, gotta figure out tag system later
-export const setTodoTagsByListId = async (listId, id, tags) => {
-    let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
-    .doc(id).update({
-        tags: tags
-    })
-    .catch(error => {
-        console.log("Error adding tags: ", error);
-        return Promise.reject("Error adding tags");
-    })
-    return taskRef;
-}
-
 // just sets an array for now, gotta figure out tag system later
 export const setTodoDescriptionByListId = async (listId, id, description) => {
     let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
@@ -274,9 +199,45 @@ export const setTodoDescriptionByListId = async (listId, id, description) => {
     })
     return taskRef;
 }
+// add/edit date for existing todo
+export const setTodoDateByListId = async (listId, id, date) => {
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
+    .doc(id).update({
+        dueDate: date
+    })
+    .catch(error => {
+        console.log("Error adding date: ", error);
+        return Promise.reject("Error adding date");
+    })
+    return taskRef;
+}
+// just sets an array for now, gotta figure out tag system later
+export const setTodoTagsByListId = async (listId, id, tags) => {
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
+    .doc(id).update({
+        tags: tags
+    })
+    .catch(error => {
+        console.log("Error adding tags: ", error);
+        return Promise.reject("Error adding tags");
+    })
+    return taskRef;
+}
+// delete a todo from list specified by listId
+export const deleteTodoByListId = async (listId, id) => {
+    let taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId).collection("todos")
+    .doc(id)
+    .delete()
+    .catch(error => {
+        // log error and return reason for rejection
+        console.log("Error deleting todo: ", error);
+        return Promise.reject("Error deleting item");
+    })
+    return taskRef;
+}
+/* #endregion */
 
-/* OLD FUNCTIONS USED TO FETCH TODOS FROM A SINGLE LIST */
-
+/* #region OLD FUNCTIONS FOR SINGLE LIST */
 // return list of all todos in collection
 export const getAllTodos = async() => {
     let collection = await db.collection("users").doc(getUserId()).collection("todos")
@@ -288,7 +249,6 @@ export const getAllTodos = async() => {
     });
     return collection;
 }
-
 // add new todo to db
 export const addTodo = async (body, timestamp) => {
     let taskRef = await db.collection("users").doc(getUserId()).collection("todos").add({
@@ -304,7 +264,6 @@ export const addTodo = async (body, timestamp) => {
     })
     return taskRef;
 }
-
 // update body of a todo
 export const updateTodoBody = async (id, newBody) => {
     let taskRef = await db.collection("users").doc(getUserId()).collection("todos")
@@ -318,7 +277,6 @@ export const updateTodoBody = async (id, newBody) => {
     })
     return taskRef;
 }
-
 // update status of a todo
 export const updateTodoStatus = async (id, newStatus) => {
     let taskRef = await db.collection("users").doc(getUserId()).collection("todos")
@@ -332,7 +290,6 @@ export const updateTodoStatus = async (id, newStatus) => {
     })
     return taskRef;
 }
-
 // delete a todo
 export const deleteTodo = async (id) => {
     let taskRef = await db.collection("users").doc(getUserId()).collection("todos")
@@ -345,3 +302,4 @@ export const deleteTodo = async (id) => {
     })
     return taskRef;
 }
+/* #endregion */

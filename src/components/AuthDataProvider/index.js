@@ -6,6 +6,7 @@
  * Otherwise, initializes empty context to be used in app
  */
 
+ /* #region IMPORTS/EXPORT */
 import React, {
   createContext,
   useState,
@@ -16,10 +17,12 @@ import React, {
 import * as Firestore from "../Firestore";
 
 export const AuthDataContext = createContext(null);
+/* #endregion */
 
-const initialAuthData = {};
-
+const initialAuthData = {}; // initial authdata empty
+// authdata provider
 const AuthDataProvider = (props) => {
+  /* #region USER AUTH */
   const [authData, setAuthData] = useState(initialAuthData);
 
   /* On initial render, it will check for auth info
@@ -43,10 +46,9 @@ const AuthDataProvider = (props) => {
       }
     });
   }, []);
-
+  // set auth data to empty object on logout
   const onLogout = () => setAuthData(initialAuthData);
-
-  // will pass user information into this when user is authenticated
+  // pass user information into this when user is authenticated
   const onLogin = (newAuthData) => {
     Firestore.getCurrentUserFirstLastName().then((response) => {
       let userData = response.data();
@@ -60,13 +62,15 @@ const AuthDataProvider = (props) => {
     });
   };
 
-  // memoizes the information, honestly no clue what is going on here,
-  // need to do some research
+  // memoizes the information
   const authDataValue = useMemo(() => ({ ...authData, onLogin, onLogout }), [
     authData,
   ]);
-  // see above comment
   return <AuthDataContext.Provider value={authDataValue} {...props} />;
+  /* #endregion */
 };
+
+/* #region EXPORTS */
 export const useAuthDataContext = () => useContext(AuthDataContext);
 export default AuthDataProvider;
+/* #endregion */

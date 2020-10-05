@@ -5,6 +5,7 @@
  * sign out and links to profile page (eventually)
  */
 
+ /* #region IMPORTS */
 import React from "react";
 import {
   Divider,
@@ -16,7 +17,9 @@ import {
 import { Person } from "@material-ui/icons";
 import * as Firestore from "../../Firestore";
 import { useAuthDataContext } from "../../AuthDataProvider";
+/* #endregion */
 
+/* #region STYLES */
 const styles = {
   mainCard: {
     backgroundColor: "white",
@@ -43,17 +46,24 @@ const styles = {
     marginBottom: 10,
   },
 };
+/* #endregion */
 
 function NavBar(props) {
+
+  /* #region PROPS/HOOKS */
   const { classes } = props;
   const { user, onLogout } = useAuthDataContext();
+  /* #endregion */
 
+  /* #region SIGN OUT */
   // handles signing out both in firestore and auth provider
   function handleSignOut() {
     Firestore.signOutUser();
     onLogout();
   }
+  /* #endregion */
 
+  /* #region COMPONENT DISPLAY */
   return (
     <Paper className={classes.mainCard} position="static" elevation={1}>
       <Person />
@@ -66,6 +76,7 @@ function NavBar(props) {
       <Button onClick={handleSignOut}>Sign Out</Button>
     </Paper>
   );
+  /* #endregion */
 }
 
 export default withStyles(styles)(NavBar);

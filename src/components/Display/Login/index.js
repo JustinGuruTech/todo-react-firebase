@@ -5,6 +5,7 @@
  * functions for database connectivity
  */
 
+ /* #region IMPORTS */
 import React, { useState } from "react";
 import {
   Button,
@@ -22,7 +23,9 @@ import { AccountCircle } from "@material-ui/icons";
 import { useAuthDataContext } from "../../AuthDataProvider";
 
 import * as Firestore from "../../Firestore";
+/* #endregion */
 
+/* #region STYLES */
 const styles = {
   // mainContainer: {
   //     border: "2px solid black"
@@ -69,11 +72,13 @@ const styles = {
     minHeight: 25,
   },
 };
+/* #endregion */
 
 function Login(props) {
+
+  /* #region PROPS/HOOKS */
   const { classes } = props;
   const { onLogin } = useAuthDataContext();
-
   // input hooks
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -82,16 +87,18 @@ function Login(props) {
   const [passwordError, setPasswordError] = useState("");
   const [signInError, setSignInError] = useState("");
   const [signingIn, setSigningIn] = useState(false);
+  /* #endregion */
 
-  // INPUT HANDLERS //
+  /* #region INPUT HANDLERS */
   function handleEmailChange({ target }) {
     setEmail(target.value);
   }
   function handlePasswordChange({ target }) {
     setPassword(target.value);
   }
+  /* #endregion */
 
-  // BASIC VALIDATION //
+  /* #region BASIC VALIDATION */
   function validateEmail() {
     // empty email
     if (email === "") {
@@ -124,7 +131,9 @@ function Login(props) {
       return true;
     }
   }
+  /* #endregion */
 
+  /* #region FORM SUBMISSION */
   // handle form submission
   function handleSubmit(event) {
     event.preventDefault(); // prevent default post event
@@ -145,7 +154,9 @@ function Login(props) {
         });
     }
   }
+  /* #endregion */
 
+  /* #region COMPONENT DISPLAY */
   return (
     <div className={classes.mainContainer}>
       <Container component="main" maxWidth="xs">
@@ -230,6 +241,7 @@ function Login(props) {
       </Container>
     </div>
   );
+  /* #endregion */
 }
 
 export default withStyles(styles)(Login);

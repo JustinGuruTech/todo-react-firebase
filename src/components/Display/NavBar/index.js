@@ -5,6 +5,7 @@
  * icon
  */
 
+ /* #region IMPORTS */
 import React, { useState } from "react";
 import {
   Button,
@@ -16,7 +17,9 @@ import {
 import { OfflinePin, AccountBox } from "@material-ui/icons";
 import { useAuthDataContext } from "../../AuthDataProvider";
 import ProfileDropdown from "../ProfileDropdown";
+/* #endregion */
 
+/* #region STYLES */
 const styles = {
   mainBar: {
     position: "fixed",
@@ -54,13 +57,18 @@ const styles = {
     position: "absolute",
   },
 };
+/* #endregion */
 
 function NavBar(props) {
+
+  /* #region PROPS/HOOKS */
   const { classes } = props;
   const { user } = useAuthDataContext();
   const [profileOpen, setProfileOpen] = useState(false); // profile open/closed
   const [anchorEl, setAnchorEl] = useState(null); // anchor for profile dropdown
+  /* #endregion */
 
+  /* #region PROFILE OPEN/CLOSE */
   // toggle profile being open/closed
   function toggleProfile(event) {
     setProfileOpen(!profileOpen);
@@ -71,7 +79,9 @@ function NavBar(props) {
   // function closeProfile() {
   //     setProfileOpen(false);
   // }
+  /* #endregion */
 
+  /* #region COMPONENT DISPLAY */
   return (
     <AppBar className={classes.mainBar} position="static">
       <Toolbar className={classes.toolbar}>
@@ -102,6 +112,7 @@ function NavBar(props) {
       </Toolbar>
     </AppBar>
   );
+  /* #endregion */
 }
 
 export default withStyles(styles)(NavBar);

@@ -6,6 +6,7 @@
  * Uses Firestore/index.js functions for database connectivity
  */
 
+ /* #region IMPORTS */
 import React, { useState, useEffect, useRef } from "react";
 
 import {
@@ -34,7 +35,9 @@ import {
 import * as Firestore from "../../Firestore";
 
 import DetailedAddToDo from "../DetailedAddToDo";
+/* #endregion */
 
+/* #region STYLES */
 const styles = {
   mainContainer: {
     width: "100%",
@@ -104,31 +107,31 @@ const styles = {
     width: "100%",
   },
 };
+/* #endregion */
 
 function SingleToDo(props) {
-  // const { detailedAddOpen, handleDetailedAddButton, handleTodoInput,
-  // handleDescriptionInput, handleDateInput, handleAddItem, handleDetailedAddClose} = props;
 
+  /* #region PROPS/HOOKS */
+  // prop functions
+  const { setSynced } = props;
+  // prop attributes
   const { classes, id, listId, todoInput } = props;
-  // state hooks
+  // display hooks
   const [body, setBody] = useState(props.body);
   const [status, setStatus] = useState(props.status);
   const [dueDate, setDueDate] = useState(props.dueDate);
   const [description, setDescription] = useState(props.description);
+  // editing todo hooks
   const [editing, setEditing] = useState(false);
+  const [newBody, setNewBody] = useState(props.body);
+  const [newDueDate, setNewDueDate] = useState(props.dueDate);
+  const [newDescription, setNewDescription] = useState(props.description);
+  // trash open hook
   const [confirmTrashOpen, setConfirmTrashOpen] = useState(false);
   const isFirstRun = useRef(true);
+  /* #endregion */
 
-  // sends updated local values to parent to update todoList hook
-  function sendUpdatedTodoToParent() {
-    let tempTodo = {
-      id: id,
-      body: body,
-      status: status,
-    };
-    props.updateLocalTodo(tempTodo);
-  }
-
+  /* #region STATUS CHANGE */
   // cross off/un-cross off todo item
   function handleIconChange() {
     if (status === "pending") {
@@ -137,7 +140,6 @@ function SingleToDo(props) {
       setStatus("pending");
     }
   }
-
   // called after status hook changes to update status in db
   useEffect(() => {
     // don't run on initial load
@@ -159,48 +161,61 @@ function SingleToDo(props) {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, status]);
+  /* #endregion */
 
-  // // toggle editing on a todo
-  // function toggleEditing() {
-  //     // this checks the value passed in from App.js (editing hook) to
-  //     // see if a todo is already being edited. If so, nothing happens,
-  //     // otherwise the todo edit pressed toggles editing
-  //     if (props.todoEditing) {
-  //         // this checks if the todo pressed is the one already being
-  //         // edited. If so it leaves edit mode, otherwise it returns
-  //         if (editing) {
-  //             setEditing(false);
-  //             props.setSynced(false); // set to syncing;
-  //             Firestore.updateTodoBodyByListId(listId, id, body).then(() => {
-  //                 props.setSynced(true);  // set to synced
-  //             })
-  //                 // catch error from Firestore function and set syncError
-  //                 .catch((error) => {
-  //                     props.setSyncError(error);
-  //                 });
-  //         }
-  //         return;
-  //     }
-  //     setEditing(true);
-  // }
+  /* #region INPUT HANDLERS */
+  // set new body hook val on input
+  function handleNewBodyInput(e) {
+    setNewBody(e.target.value);
+  }
+  // set new description hook val on input
+  function handleNewDescriptionInput(e) {
+    setNewDescription(e.target.value);
+  }
+  // set new date hook val on input
+  function handleNewDateInput({ target }) {
+    // take date string and turn it into date object
+    setNewDueDate(new Date(target.value));
+  }
+  // clear new todo information on cancel or add
+  function clearInputs() {
+    setNewBody("");
+    setNewDescription("");
+    setNewDueDate("none");
+    // setTags([]);
+  }
+  /* #endregion */
 
-  // // whenever editing is changed in SingleToDo, editing in App.js changes to reflect it
-  // useEffect(() => {
-  //     props.setEditing(editing);
-  //     // send updated todo to parent when edited todo is confirmed
-  //     sendUpdatedTodoToParent();
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [editing])
-
+  /* #region EDITING TODO */
+  // sends updated local values to parent to update todoList hook
+  function sendUpdatedTodoToParent() {
+    let tempTodo = {
+      id: id,
+      body: body,
+      status: status,
+      description: description,
+      dueDate: dueDate
+    };
+    props.updateLocalTodo(tempTodo);
+  }
+  // starts editing on edit button press
   function handleEditButtonPressed() {
     setEditing(true);
   }
+  // save changes and close popup
+  function handleSaveChanges() {
+    // // make sure input isn't empty
+    // if (todoInput !== "") {
+    //   setSynced(false); // show syncing symbol
+    //   // edit todo locally while syncing with db
 
-  // handles user saving change to todo
-  function handleEdit(e) {
-    setBody(e.target.value);
+    }
+    setEditing(false);
   }
-
+  // discard changes and close popup
+  function handleEditingCancel() {
+    setEditing(false);
+  }
   // enter key functionality to finish editing
   function handleEnterEdit(e) {
     if (e.keyCode === 13) {
@@ -208,47 +223,21 @@ function SingleToDo(props) {
       // toggleEditing();
     }
   }
-
-  // opens delete confirm dialogue
-  function trashTodo() {
-    setConfirmTrashOpen(true);
-  }
-
-  // closes delete confirm dialogue
-  function handleTrashClose() {
-    setConfirmTrashOpen(false);
-  }
-
-  function handleSaveChanges() {
-    setEditing(false);
-  }
-
-  // set react hook val on text change
-  function handleBodyInput(e) {
-    setBody(e.target.value);
-  }
-  // DETAILED ADD TODO INPUT HANDLERS
-  // for long description of todo
-  function handleDescriptionInput(e) {
-    setDescription(e.target.value);
-  }
-  // for date of todo
-  function handleDateInput({ target }) {
-    // take date string and turn it into date object
-    setDueDate(new Date(target.value));
-  }
   // for adding a tag (when tags are implemented)
   function handleTagsAdded() {
     console.log("tag totally added");
   }
+  /* #endregion */
 
-  function clearInputs() {
-    setBody("");
-    setDescription("");
-    setDueDate("none");
-    // setTags([]);
+  /* #region TRASH TODO HANDLERS */
+  // opens delete confirm dialogue
+  function trashTodo() {
+    setConfirmTrashOpen(true);
   }
-
+  // closes delete confirm dialogue
+  function handleTrashClose() {
+    setConfirmTrashOpen(false);
+  }
   // deletes from db and closes confirm dialogue
   function handleTrashConfirm() {
     props.setSynced(false); // set to syncing
@@ -265,7 +254,9 @@ function SingleToDo(props) {
         props.setSyncError(error);
       });
   }
+  /* #endregion */
 
+  /* #region DATE TIME FUNCTIONS */
   // converts a date object to a string to display
   function dateToString(date) {
     // convert to 12 hour AM/PM time
@@ -322,7 +313,9 @@ function SingleToDo(props) {
       someDate.getFullYear() === today.getFullYear()
     );
   };
+  /* #endregion */
 
+  /* #region COMPONENT DISPLAY */
   return (
     <div aria-label="Single Task">
       <Paper elevation={0} className={classes.mainContainer}>
@@ -353,7 +346,7 @@ function SingleToDo(props) {
                     {body}
                   </Typography>
                 </div>
-                {dueDate !== "none" ? (
+                {dueDate !== "none" && status !== "completed" ? (
                   <Typography
                     className={classes.dueDate}
                     style={dueDate < new Date() ? { color: "#bb2b2b" } : {}}
@@ -438,18 +431,20 @@ function SingleToDo(props) {
               <DialogContent className={classes.overflow}>
                 {/* color={props.activeTodoList.color} */}
                 <DetailedAddToDo
-                  handleBodyInput={handleBodyInput}
-                  description={description}
-                  body={body}
-                  todoDueDate={dueDate}
-                  handleDescriptionInput={handleDescriptionInput}
-                  handleDateInput={handleDateInput}
+                  formTitle="Edit Todo"
+                  buttonLabel="Save Changes"
+                  handleBodyInput={handleNewBodyInput}
+                  description={newDescription}
+                  body={newBody}
+                  todoDueDate={newDueDate}
+                  handleDescriptionInput={handleNewDescriptionInput}
+                  handleDateInput={handleNewDateInput}
                   handleSaveItem={handleSaveChanges}
                 />
               </DialogContent>
               <DialogActions>
                 <Button
-                  onMouseDown={handleEditButtonPressed}
+                  onMouseDown={handleEditingCancel}
                   className={classes.cancelButton}
                 >
                   Cancel
@@ -462,6 +457,7 @@ function SingleToDo(props) {
       <Divider />
     </div>
   );
+  /* #endregion */
 }
 
 export default withStyles(styles)(SingleToDo);

@@ -3,6 +3,7 @@
 // TodoPage Component - Contains NavBar, SideBar, and Todo
 // components
 
+/* #region IMPORTS */
 import React, { useState, useEffect, useRef } from "react";
 import {
   Dialog,
@@ -21,7 +22,9 @@ import SideBar from "../SideBar";
 import AddListForm from "../AddListForm";
 
 import * as Firestore from "../../Firestore";
+/* #endregion */
 
+/* #region STYLES */
 const styles = (theme) => ({
   navBar: {
     position: "absolute",
@@ -46,8 +49,11 @@ const styles = (theme) => ({
     margin: 10,
   },
 });
+/* #endregion */
 
 function TodoPage(props) {
+
+  /* #region PROPS/HOOKS */
   const { classes } = props;
   const isFirstRun = useRef(true);
   // data hooks
@@ -61,7 +67,9 @@ function TodoPage(props) {
   const [addedSnackbarOpen, setAddedSnackbarOpen] = useState(false);
   // will be used for loading symbol
   // const [addingList, setAddingList] = useState(false);
+  /* #endregion */
 
+  /* #region STARTUP */
   // run once on startup
   useEffect(() => {
     // get all todo lists from db
@@ -77,7 +85,9 @@ function TodoPage(props) {
       setTodoListList(todoLists); // set list of todo lists
     });
   }, []);
+  /* #endregion */
 
+  /* #region LIST CHANGE */
   // runs when todo list list (confusing) is set or selected index changes
   useEffect(() => {
     // check if array contains todo lists
@@ -86,13 +96,15 @@ function TodoPage(props) {
       setActiveTodoList(todoListList[todoListIndex]);
     }
   }, [todoListList, todoListIndex]);
-
+  
   // updates index of selected todo list
   // used in Sidebar component
   function updateTodoListIndex(index) {
     setTodoListIndex(index);
   }
+  /* #endregion */
 
+  /* #region ADD NEW LIST */
   // runs when listToAddLocally is changed by
   // Sidebar component
   useEffect(() => {
@@ -120,7 +132,9 @@ function TodoPage(props) {
   function handleAddListClose() {
     setAddListOpen(false);
   }
+  /* #endregion */
 
+  /* #region SNACKBAR NOTIFICATION */
   // handlers for snackbar notification
   // used in AddListForm component
   function handleSnackbarOpen() {
@@ -129,13 +143,17 @@ function TodoPage(props) {
   function handleSnackbarClose() {
     setAddedSnackbarOpen(false);
   }
+  /* #endregion */
 
+  /* #region ERROR SETTING */
   // sets error for adding list
   // used in AddListForm component
   function handleAddListError() {
     setAddListError("Error Adding List");
   }
+  /* #endregion */
 
+  /* #region COMPONENT DISPLAY */
   return (
     <div className={classes.todoPageContainer}>
       <div>
@@ -209,6 +227,7 @@ function TodoPage(props) {
       </Dialog>
     </div>
   );
+  /* #endregion */
 }
 
 export default withStyles(styles)(TodoPage);

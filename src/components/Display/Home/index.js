@@ -5,6 +5,7 @@
  * in pages
  */
 
+ /* #region IMPORTS */
 import React, { useState } from "react";
 import {
   Button,
@@ -19,7 +20,9 @@ import {
 import SignUp from "../SignUp";
 import Login from "../Login";
 import NavBar from "../NavBar";
+/* #endregion */
 
+/* #region STYLES */
 const styles = {
   background: {
     height: "100%",
@@ -75,13 +78,18 @@ const styles = {
     overflowY: "inherit",
   },
 };
+/* #endregion */
 
 function Home(props) {
+
+  /* #region PROPS/HOOKS */
   const { classes } = props;
 
   const [signInOpen, setSignInOpen] = useState(false);
   const [signUpOpen, setSignUpOpen] = useState(false);
+  /* #endregion */
 
+  /* #region FORM OPENING/CLOSING */
   // closing/opening sign in form
   function handleSignInOpen() {
     setSignUpOpen(false);
@@ -98,7 +106,9 @@ function Home(props) {
   function handleSignUpClose() {
     setSignUpOpen(false);
   }
+  /* #endregion */
 
+  /* #region COMPONENT DISPLAY */
   return (
     <Paper elevation={0} className={classes.background}>
       {/* AppBar - Main Header */}
@@ -165,6 +175,7 @@ function Home(props) {
       </div>
     </Paper>
   );
+  /* #endregion */
 }
 
 export default withStyles(styles)(Home);

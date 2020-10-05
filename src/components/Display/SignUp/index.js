@@ -5,6 +5,7 @@
  * functions for database connectivity
  */
 
+ /* #region IMPORTS */
 import React, { useState } from "react";
 import {
   Button,
@@ -22,7 +23,9 @@ import { LockOutlined } from "@material-ui/icons";
 
 import * as Firestore from "../../Firestore";
 import { useAuthDataContext } from "../../AuthDataProvider";
+/* #endregion */
 
+/* #region STYLES */
 const styles = {
   formHeader: {
     marginTop: 15,
@@ -67,11 +70,13 @@ const styles = {
     minHeight: 25,
   },
 };
+/* #endregion */
 
 function SignUp(props) {
+
+  /* #region PROPS/HOOKS */
   const { classes } = props;
   const { onLogin } = useAuthDataContext();
-
   // input hooks
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -86,8 +91,9 @@ function SignUp(props) {
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [signUpError, setSignUpError] = useState("");
   const [signingUp, setSigningUp] = useState(false);
+  /* #endregion */
 
-  // INPUT HANDLERS //
+  /* #region INPUT HANDLERS */
   function handleFirstNameChange({ target }) {
     setFirstName(target.value);
   }
@@ -103,8 +109,9 @@ function SignUp(props) {
   function handleConfirmPasswordChange({ target }) {
     setConfirmPassword(target.value);
   }
+  /* #endregion */
 
-  // BASIC VALIDATION //
+  /* #region BASIC VALIDATION */
   function validateFirstName() {
     // empty first name
     if (firstName === "") {
@@ -171,7 +178,9 @@ function SignUp(props) {
       return true;
     }
   }
+  /* #endregion */
 
+  /* #region FORM SUBMISSION */
   // handle submit form
   function handleSubmit(event) {
     event.preventDefault(); // prevent default post
@@ -199,7 +208,9 @@ function SignUp(props) {
         });
     }
   }
+  /* #endregion */
 
+  /* #region COMPONENT DISPLAY */
   return (
     <div>
       <Container component="main" maxWidth="xs">
@@ -332,6 +343,7 @@ function SignUp(props) {
       </Container>
     </div>
   );
+  /* #endregion */
 }
 
 export default withStyles(styles)(SignUp);

@@ -6,6 +6,7 @@
  * synced, setSynced, and todoList passed in from App.js
  */
 
+ /* #region IMPORTS */
 import React, { useState } from "react";
 
 import {
@@ -28,7 +29,9 @@ import {
 import DetailedAddToDo from "../DetailedAddToDo";
 
 import * as Firestore from "../../Firestore";
+/* #endregion */
 
+/* #region STYLES */
 const styles = {
   inputDateFlex: {
     display: "flex",
@@ -76,45 +79,35 @@ const styles = {
     },
   },
 };
+/* #endregion */
 
 function AddToDo(props) {
+
+  /* #region PROPS/HOOKS */
   // prop functions
   const { setSynced, setSyncError } = props;
   // prop attributes
   const { todoList, synced, classes } = props;
   const [todoInput, setTodoInput] = useState(""); // stores new todo input
-
   // DetailedAddTodo hooks
   const [detailedAddOpen, setDetailedAddOpen] = useState(false);
   const [description, setDescription] = useState("");
   const [todoDueDate, setTodoDueDate] = useState("none");
   const [tags, setTags] = useState([]);
-
+  // confirmation snackbar hook
   const [addedSnackbarOpen, setAddedSnackbarOpen] = useState(false);
+  /* #endregion */
 
-  function handleSnackbarClose() {
-    setAddedSnackbarOpen(false);
-  }
-
-  function handleDetailedAddButton() {
-    // console.log("test");
-    setDetailedAddOpen(true);
-  }
-
-  function handleDetailedAddClose() {
-    setDetailedAddOpen(false);
-  }
-
-  // set react hook val on text change
+  /* #region INPUT HANDLERS */
+  // set body hook val on input
   function handleTodoInput(e) {
     setTodoInput(e.target.value);
   }
-  // DETAILED ADD TODO INPUT HANDLERS
-  // for long description of todo
+  // set description hook val on input
   function handleDescriptionInput(e) {
     setDescription(e.target.value);
   }
-  // for date of todo
+  // set date hook val on input
   function handleDateInput({ target }) {
     // take date string and turn it into date object
     setTodoDueDate(new Date(target.value));
@@ -123,14 +116,25 @@ function AddToDo(props) {
   function handleTagsAdded() {
     console.log("tag totally added");
   }
+  /* #endregion */
 
+  /* #region ADD TODO */
+  // opens detailed add todo form
+  function handleDetailedAddButton() {
+    setDetailedAddOpen(true);
+  }
+  // closes detailed add todo form
+  function handleDetailedAddClose() {
+    setDetailedAddOpen(false);
+  }
+  // clears inputs for new todo
   function clearInputs() {
     setTodoInput("");
     setDescription("");
     setTodoDueDate("none");
     setTags([]);
   }
-
+  // adds item to db and to local hook in parent
   async function handleAddItem() {
     // make sure input isn't empty
     if (todoInput !== "") {
@@ -145,75 +149,48 @@ function AddToDo(props) {
         created: Firestore.getCurrentTimestamp(), // get firestore db timestamp
         id: -1, // temporarily set id to -1
       };
-      todoList.todos.push(todo);
-
-      // clear inputs
-      // clearInputs();
-      // open snackbar
-      // TODO
-      // close detailed todo form
-      setDetailedAddOpen(false);
-      setAddedSnackbarOpen(true);
-
+      todoList.todos.push(todo);  // add local todo
+      setDetailedAddOpen(false);  // close detailed todo form
+      setAddedSnackbarOpen(true); // open snackbar notification
       // add basic todo to db with required fields
       Firestore.addTodoToListById(todoList.id, todo.body, todo.created)
         .then((docRef) => {
           todo.id = docRef.id; // set correct id of todo
           clearInputs();
-          // setTodoInput(""); // reset todo input
-          // setSynced(true);  // now synced
         })
-        // after adding basic fields, check if need to add extra fields
+        // after adding basic fields to db, check if need to add extra fields
         .then(() => {
           // wait for all 3 to resolve
-          Promise.all(
-            [
-              todo.description !== ""
-                ? Firestore.setTodoDescriptionByListId(
-                    todoList.id,
-                    todo.id,
-                    todo.description
-                  )
-                : "",
-              todo.tags.length > 0
-                ? Firestore.setTodoTagsByListId(todoList.id, todo.id, todo.tags)
-                : "",
-            ],
+          Promise.all([
+            // write description if exists
+            todo.description !== ""
+              ? Firestore.setTodoDescriptionByListId(
+                  todoList.id,
+                  todo.id,
+                  todo.description
+                )
+              : "",
+            // write tags if exist
+            todo.tags.length > 0
+              ? Firestore.setTodoTagsByListId(todoList.id, todo.id, todo.tags)
+              : "",
+
+            // write date if exists
             todo.dueDate !== "none"
               ? Firestore.setTodoDateByListId(
                   todoList.id,
                   todo.id,
                   todo.dueDate
                 )
-              : ""
-          )
+              : "",
+          ])
+            // after a successful write to db
             .then(() => {
               setSynced(true);
             })
             .catch((error) => {
               console.log("error: ", error);
             });
-          // // if description, write to db
-          // if (todo.description !== "") {
-          //     Firestore.setTodoDescriptionByListId(todoList.id, todo.id, todo.description)
-          //     .catch(error => {
-          //         console.log(error);
-          //     })
-          // }
-          // // if tags, write to db
-          // if (todo.tags.length > 0) {
-          //     Firestore.setTodoTagsByListId(todoList.id, todo.id, todo.tags)
-          //     .catch(error => {
-          //         console.log(error);
-          //     })
-          // }
-          // // if dueDate, write to db
-          // if (todo.dueDate !== "none") {
-          //     Firestore.setTodoDateByListId(todoList.id, todo.id, todo.dueDate)
-          //     .catch(error => {
-          //         console.log(error);
-          //     })
-          // }
         })
         // catch error from Firestore function and set syncError
         .catch((error) => {
@@ -221,14 +198,19 @@ function AddToDo(props) {
         });
     }
   }
-
   // enter key functionality for add item
   function handleEnterAdd(e) {
     if (e.keyCode === 13) {
       handleAddItem();
     }
   }
+  // closes confirm add snackbar
+  function handleSnackbarClose() {
+    setAddedSnackbarOpen(false);
+  }
+  /* #endregion */
 
+  /* #region COMPONENT DISPLAY */
   return (
     <div>
       <div>
@@ -312,6 +294,8 @@ function AddToDo(props) {
         <div className={classes.overflow}>
           <DialogContent className={classes.overflow}>
             <DetailedAddToDo
+              formTitle="Add Todo"
+              buttonLabel="Create"
               color={props.activeTodoList.color}
               handleBodyInput={handleTodoInput}
               body={todoInput}
@@ -332,6 +316,7 @@ function AddToDo(props) {
       </Dialog>
     </div>
   );
+  /* #endregion */
 }
 
 export default withStyles(styles)(AddToDo);

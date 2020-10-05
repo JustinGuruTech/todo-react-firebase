@@ -4,6 +4,7 @@
 // list. Allows creation of new list with name and color to
 // be used for styling
 
+/* #region IMPORTS */
 import React, { useState } from "react";
 import {
   Button,
@@ -19,7 +20,9 @@ import { OfflinePin } from "@material-ui/icons";
 import { ChromePicker } from "react-color";
 
 import * as Firestore from "../../Firestore";
+/* #endregion */
 
+/* #region STYLES */
 const styles = {
   addListFormContainer: {
     overflow: "visible",
@@ -61,26 +64,30 @@ const styles = {
     marginBottom: 10,
   },
 };
+/* #endregion */
 
 function AddListForm(props) {
-  const { classes } = props;
 
+  /* #region PROPS/HOOKS */
+  const { classes } = props;
   // input hooks
   const [name, setName] = useState("");
   const [color, setColor] = useState("#4fc33f");
   // error hooks
   const [nameError, setNameError] = useState("");
   // const [addListError, setAddListError] = useState(false);
+  /* #endregion */
 
-  // INPUT HANDLERS //
+  /* #region INPUT HANDLERS */
   function handleNameChange({ target }) {
     setName(target.value);
   }
   function handleColorChange(color) {
     setColor(color.hex);
   }
+  /* #endregion */
 
-  // BASIC VALIDATION //
+  /* #region BASIC VALIDATION */
   function validateName() {
     // empty name
     if (name === "") {
@@ -91,7 +98,9 @@ function AddListForm(props) {
       return true;
     }
   }
+  /* #endregion */
 
+  /* #region FORM SUBMISSION */
   // handle form submission
   async function handleSubmit(event) {
     event.preventDefault(); // prevent default post event
@@ -117,7 +126,9 @@ function AddListForm(props) {
         });
     }
   }
+  /* #endregion */
 
+  /* #region COMPONENT DISPLAY */
   return (
     <div className={classes.addListFormContainer}>
       <Container
@@ -183,6 +194,7 @@ function AddListForm(props) {
       </Container>
     </div>
   );
+  /* #endregion */
 }
 
 export default withStyles(styles)(AddListForm);

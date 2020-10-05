@@ -7,6 +7,7 @@
  * Firestore/index.js functions for database connectivity
  */
 
+ /* #region IMPORTS */
 import React, { useState, useEffect } from "react";
 import {
   Paper,
@@ -23,7 +24,9 @@ import AddToDo from "../AddToDo";
 import SingleToDo from "../SingleToDo";
 import * as Firestore from "../../Firestore";
 // import { useAuthDataContext } from '../../AuthDataProvider';
+/* #endregion */
 
+/* #region STYLES */
 const styles = (theme) => ({
   background: {
     marginTop: 50,
@@ -142,8 +145,11 @@ const styles = (theme) => ({
     top: "20px",
   },
 });
+/* #endregion */
 
 function Todo(props) {
+
+  /* #region PROPS/HOOKS */
   const { handleDetailedAddButton } = props;
   const { activeTodoList, classes } = props;
   // state hooks
@@ -153,7 +159,9 @@ function Todo(props) {
   const [loaded, setLoaded] = useState(false); // set to true after initial load from db
   const [synced, setSynced] = useState(false); // set to false in between pressing add and updating db
   const [syncError, setSyncError] = useState(""); // for when sync fails
+  /* #endregion */
 
+  /* #region SYNCING */
   // reset syncError when synced changes to true
   useEffect(() => {
     if (synced === true) {
@@ -161,21 +169,19 @@ function Todo(props) {
     }
   }, [synced]);
 
+  // function for when user tries to resync after sync error
+  function handleResync() {
+    addTodosToState();
+  }
+  /* #endregion */
+
+  /* #region TODO DISPLAY POPULATION */
   // update when active todo list in TodoPage changes
   useEffect(() => {
     // add todos to state
     addTodosToState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTodoList]);
-
-  // when todoList updates
-  useEffect(() => {
-    // check if actual todoList with valid id
-    if (todoList.id !== -1) {
-      setLoaded(true);
-      setSynced(true);
-    }
-  }, [todoList]);
 
   // add todos to state from activeTodoList in TodoPage
   function addTodosToState() {
@@ -227,12 +233,17 @@ function Todo(props) {
       }
     }
   }
+  // when todoList updates
+  useEffect(() => {
+    // check if actual todoList with valid id
+    if (todoList.id !== -1) {
+      setLoaded(true);
+      setSynced(true);
+    }
+  }, [todoList]);
+  /* #endregion */
 
-  // function for when user tries to resync after sync error
-  function handleResync() {
-    addTodosToState();
-  }
-
+  /* #region REMOVE TODO */
   // function to remove a todo item based on it's id
   function removeTodoById(id) {
     let tempTodoList = todoList;
@@ -242,7 +253,9 @@ function Todo(props) {
     });
     setTodoList(tempTodoList);
   }
+  /* #endregion */
 
+  /* #region UPDATE TODO */
   // finds the todo in the todoList hook and updates it's values
   function updateLocalTodo(newTodo) {
     let tempTodoList = todoList;
@@ -257,7 +270,9 @@ function Todo(props) {
     });
     setTodoList(tempTodoList);
   }
+  /* #endregion */
 
+  /* #region COMPONENT DISPLAY */
   return (
     <Paper elevation={0} className={classes.background}>
       <div className={classes.mainTodoContainer}>
@@ -440,6 +455,7 @@ function Todo(props) {
       </div>
     </Paper>
   );
+  /* #endregion */
 }
 
 export default withStyles(styles)(Todo);

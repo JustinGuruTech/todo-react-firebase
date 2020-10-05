@@ -4,11 +4,13 @@
  * and public content
  */
 
+ /* #region IMPORTS */
 import React from 'react';
 import { Route, Switch } from "react-router-dom";
 import Home from '../Display/Home';
 import TodoPage from '../Display/TodoPage';
 import { useAuthDataContext } from '../AuthDataProvider';
+/* #endregion */
 
 // returns Home component if no user in auth data context
 const PrivateRoute = ({ component, ...options }) => {

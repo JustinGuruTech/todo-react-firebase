@@ -3,6 +3,7 @@
 // SideBar Component - Maps list of todo lists into
 // Sidebar. Shrinks/expands when hamburger clicked.
 
+/* #region IMPORTS */
 import React, { useState } from "react";
 import clsx from "clsx";
 import {
@@ -21,9 +22,10 @@ import {
   MenuOpen as MenuOpenIcon,
   FiberManualRecord as FiberManualRecordIcon,
 } from "@material-ui/icons";
+/* #endregion */
 
+/* #region STYLES */
 const drawerWidth = 300;
-
 const styles = (theme) => ({
   hide: {
     display: "none",
@@ -73,18 +75,25 @@ const styles = (theme) => ({
     fontFamily: "Inter",
   },
 });
+/* #endregion */
 
 function SideBar(props) {
+
+  /* #region PROPS/HOOKS */
   // prop functions
   const { updateTodoListIndex, handleAddListOpen } = props;
   // prop attributes
   const { classes, todoListList } = props;
   const [open, setOpen] = useState(false);
+  /* #endregion */
 
+  /* #region OPEN/CLOSE DRAWER */
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  /* #endregion */
 
+  /* #region COMPONENT DISPLAY */
   return (
     <Drawer
       variant="permanent"
@@ -145,6 +154,7 @@ function SideBar(props) {
         </List> */}
     </Drawer>
   );
+  /* #endregion */
 }
 
 export default withStyles(styles)(SideBar);
