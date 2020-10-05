@@ -72,7 +72,6 @@ const styles = {
 /* #endregion */
 
 function DetailedAddToDo(props) {
-
   /* #region PROPS/HOOKS */
   // functions from props
   const {
@@ -82,8 +81,16 @@ function DetailedAddToDo(props) {
     handleSaveItem,
   } = props;
   // attributes from props
-  const { classes, formTitle, buttonLabel, color, body, 
-    description, todoDueDate, tags } = props;
+  const {
+    classes,
+    formTitle,
+    buttonLabel,
+    color,
+    body,
+    description,
+    todoDueDate,
+    tags,
+  } = props;
   /* #endregion */
 
   /* #region FORM SUBMIT */

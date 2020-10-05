@@ -6,7 +6,7 @@
  * Otherwise, initializes empty context to be used in app
  */
 
- /* #region IMPORTS/EXPORT */
+/* #region IMPORTS/EXPORT */
 import React, {
   createContext,
   useState,

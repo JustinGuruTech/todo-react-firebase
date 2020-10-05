@@ -67,7 +67,6 @@ const styles = {
 /* #endregion */
 
 function AddListForm(props) {
-
   /* #region PROPS/HOOKS */
   const { classes } = props;
   // input hooks

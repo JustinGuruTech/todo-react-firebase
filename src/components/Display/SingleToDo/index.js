@@ -6,7 +6,7 @@
  * Uses Firestore/index.js functions for database connectivity
  */
 
- /* #region IMPORTS */
+/* #region IMPORTS */
 import React, { useState, useEffect, useRef } from "react";
 
 import {
@@ -110,10 +110,9 @@ const styles = {
 /* #endregion */
 
 function SingleToDo(props) {
-
   /* #region PROPS/HOOKS */
   // prop attributes
-  const { classes, id, listId, todoInput } = props;
+  const { classes, id, listId, todoInput, color } = props;
   // display hooks
   const [body, setBody] = useState(props.body);
   const [status, setStatus] = useState(props.status);
@@ -152,9 +151,9 @@ function SingleToDo(props) {
       body: body,
       status: status,
       description: description,
-      dueDate: dueDate
+      dueDate: dueDate,
     };
-    sendUpdatedTodoToParent(tempTodo);  // send todo to parent
+    sendUpdatedTodoToParent(tempTodo); // send todo to parent
     // update status in db
     Firestore.updateTodoStatusByListId(listId, id, status)
       .then(() => {
@@ -219,9 +218,9 @@ function SingleToDo(props) {
         body: newBody,
         status: status,
         description: newDescription,
-        dueDate: newDueDate
+        dueDate: newDueDate,
       };
-      sendUpdatedTodoToParent(tempTodo);  // send to parent
+      sendUpdatedTodoToParent(tempTodo); // send to parent
       updateLocalHooks(); // update local hooks
       setEditing(false); // hide edit popup
 
@@ -230,14 +229,17 @@ function SingleToDo(props) {
       // wait for all 3 promises to resolve
       Promise.all([
         // update body if different
-        body !== newBody ?
-          Firestore.updateTodoBodyByListId(listId, id, newBody) : "",
+        body !== newBody
+          ? Firestore.updateTodoBodyByListId(listId, id, newBody)
+          : "",
         // update description if different
-        description !== newDescription ? 
-          Firestore.setTodoDescriptionByListId(listId, id, newDescription) : "",
+        description !== newDescription
+          ? Firestore.setTodoDescriptionByListId(listId, id, newDescription)
+          : "",
         // update DueDate if different
-        dueDate !== newDueDate ?
-          Firestore.setTodoDateByListId(listId, id, newDueDate) : ""
+        dueDate !== newDueDate
+          ? Firestore.setTodoDateByListId(listId, id, newDueDate)
+          : "",
       ])
         // set synced if resolved
         .then(() => {
@@ -246,7 +248,7 @@ function SingleToDo(props) {
         // catch any errors
         .catch((error) => {
           console.log("Error updating in DB: ", error);
-        })
+        });
     }
   }
   // discard changes and close popup
@@ -475,6 +477,7 @@ function SingleToDo(props) {
                   description={newDescription}
                   body={newBody}
                   todoDueDate={newDueDate}
+                  color={color}
                   handleDescriptionInput={handleNewDescriptionInput}
                   handleDateInput={handleNewDateInput}
                   handleSaveItem={handleSaveChanges}

@@ -5,7 +5,7 @@
  * functions for database connectivity
  */
 
- /* #region IMPORTS */
+/* #region IMPORTS */
 import React, { useState } from "react";
 import {
   Button,
@@ -73,7 +73,6 @@ const styles = {
 /* #endregion */
 
 function SignUp(props) {
-
   /* #region PROPS/HOOKS */
   const { classes } = props;
   const { onLogin } = useAuthDataContext();

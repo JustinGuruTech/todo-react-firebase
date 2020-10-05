@@ -5,7 +5,7 @@
  * sign out and links to profile page (eventually)
  */
 
- /* #region IMPORTS */
+/* #region IMPORTS */
 import React from "react";
 import {
   Divider,
@@ -49,7 +49,6 @@ const styles = {
 /* #endregion */
 
 function NavBar(props) {
-
   /* #region PROPS/HOOKS */
   const { classes } = props;
   const { user, onLogout } = useAuthDataContext();

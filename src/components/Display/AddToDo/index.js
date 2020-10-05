@@ -6,7 +6,7 @@
  * synced, setSynced, and todoList passed in from App.js
  */
 
- /* #region IMPORTS */
+/* #region IMPORTS */
 import React, { useState } from "react";
 
 import {
@@ -82,7 +82,6 @@ const styles = {
 /* #endregion */
 
 function AddToDo(props) {
-
   /* #region PROPS/HOOKS */
   // prop functions
   const { setSynced, setSyncError } = props;
@@ -149,8 +148,8 @@ function AddToDo(props) {
         created: Firestore.getCurrentTimestamp(), // get firestore db timestamp
         id: -1, // temporarily set id to -1
       };
-      todoList.todos.push(todo);  // add local todo
-      setDetailedAddOpen(false);  // close detailed todo form
+      todoList.todos.push(todo); // add local todo
+      setDetailedAddOpen(false); // close detailed todo form
       setAddedSnackbarOpen(true); // open snackbar notification
       // add basic todo to db with required fields
       Firestore.addTodoToListById(todoList.id, todo.body, todo.created)

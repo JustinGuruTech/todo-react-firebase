@@ -78,7 +78,6 @@ const styles = (theme) => ({
 /* #endregion */
 
 function SideBar(props) {
-
   /* #region PROPS/HOOKS */
   // prop functions
   const { updateTodoListIndex, handleAddListOpen } = props;

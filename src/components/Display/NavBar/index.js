@@ -5,7 +5,7 @@
  * icon
  */
 
- /* #region IMPORTS */
+/* #region IMPORTS */
 import React, { useState } from "react";
 import {
   Button,
@@ -60,7 +60,6 @@ const styles = {
 /* #endregion */
 
 function NavBar(props) {
-
   /* #region PROPS/HOOKS */
   const { classes } = props;
   const { user } = useAuthDataContext();

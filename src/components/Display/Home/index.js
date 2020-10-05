@@ -5,7 +5,7 @@
  * in pages
  */
 
- /* #region IMPORTS */
+/* #region IMPORTS */
 import React, { useState } from "react";
 import {
   Button,
@@ -81,7 +81,6 @@ const styles = {
 /* #endregion */
 
 function Home(props) {
-
   /* #region PROPS/HOOKS */
   const { classes } = props;
 

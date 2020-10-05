@@ -52,7 +52,6 @@ const styles = (theme) => ({
 /* #endregion */
 
 function TodoPage(props) {
-
   /* #region PROPS/HOOKS */
   const { classes } = props;
   const isFirstRun = useRef(true);
@@ -96,7 +95,7 @@ function TodoPage(props) {
       setActiveTodoList(todoListList[todoListIndex]);
     }
   }, [todoListList, todoListIndex]);
-  
+
   // updates index of selected todo list
   // used in Sidebar component
   function updateTodoListIndex(index) {
@@ -200,8 +199,11 @@ function TodoPage(props) {
         />
       </div>
       {/* TODO LIST */}
-      <Todo className={classes.todoMain} activeTodoList={activeTodoList} 
-      setActiveTodoList={setActiveTodoListHandler} />
+      <Todo
+        className={classes.todoMain}
+        activeTodoList={activeTodoList}
+        setActiveTodoList={setActiveTodoListHandler}
+      />
       {/* ADD TODO LIST FORM POPUP */}
       <Dialog
         border={2}

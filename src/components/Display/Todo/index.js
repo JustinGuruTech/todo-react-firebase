@@ -7,7 +7,7 @@
  * Firestore/index.js functions for database connectivity
  */
 
- /* #region IMPORTS */
+/* #region IMPORTS */
 import React, { useState, useEffect } from "react";
 import {
   Paper,
@@ -148,7 +148,6 @@ const styles = (theme) => ({
 /* #endregion */
 
 function Todo(props) {
-
   /* #region PROPS/HOOKS */
   const { handleDetailedAddButton, setActiveTodoList } = props;
   const { activeTodoList, classes } = props;
@@ -383,6 +382,7 @@ function Todo(props) {
                           status={todo.status}
                           id={todo.id}
                           description={todo.description}
+                          color={activeTodoList.color}
                           refresh={addTodosToState}
                           removeTodoById={removeTodoById}
                           setEditing={setEditing}
@@ -404,6 +404,7 @@ function Todo(props) {
                             status={todo.status}
                             id={todo.id}
                             description={todo.description}
+                            color={activeTodoList.color}
                             refresh={addTodosToState}
                             removeTodoById={removeTodoById}
                             setEditing={setEditing}
@@ -426,6 +427,7 @@ function Todo(props) {
                             status={todo.status}
                             id={todo.id}
                             description={todo.description}
+                            color={activeTodoList.color}
                             refresh={addTodosToState}
                             removeTodoById={removeTodoById}
                             setEditing={setEditing}
