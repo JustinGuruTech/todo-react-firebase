@@ -189,7 +189,7 @@ function AddToDo(props) {
               setSynced(true);
             })
             .catch((error) => {
-              console.log("error: ", error);
+              console.log("Error adding to DB: ", error);
             });
         })
         // catch error from Firestore function and set syncError

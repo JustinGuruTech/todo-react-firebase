@@ -112,8 +112,6 @@ const styles = {
 function SingleToDo(props) {
 
   /* #region PROPS/HOOKS */
-  // prop functions
-  const { setSynced } = props;
   // prop attributes
   const { classes, id, listId, todoInput } = props;
   // display hooks
@@ -148,9 +146,16 @@ function SingleToDo(props) {
       return;
     }
     props.setSynced(false); // set to syncing
-    // send updated todo to parent to reflect status change
-    sendUpdatedTodoToParent();
-    // update status in db then refresh todo list on frontend
+    // updated todo to send to parent
+    let tempTodo = {
+      id: id,
+      body: body,
+      status: status,
+      description: description,
+      dueDate: dueDate
+    };
+    sendUpdatedTodoToParent(tempTodo);  // send todo to parent
+    // update status in db
     Firestore.updateTodoStatusByListId(listId, id, status)
       .then(() => {
         props.setSynced(true); // set to synced
@@ -190,14 +195,7 @@ function SingleToDo(props) {
 
   /* #region EDITING TODO */
   // sends updated local values to parent to update todoList hook
-  function sendUpdatedTodoToParent() {
-    let tempTodo = {
-      id: id,
-      body: newBody,
-      status: status,
-      description: newDescription,
-      dueDate: newDueDate
-    };
+  function sendUpdatedTodoToParent(tempTodo) {
     props.updateLocalTodo(tempTodo);
   }
   // update local hooks with new ones
@@ -214,14 +212,42 @@ function SingleToDo(props) {
   function handleSaveChanges() {
     // make sure input isn't empty
     if (todoInput !== "") {
-      setSynced(false);
-      sendUpdatedTodoToParent();
-      updateLocalHooks();
-      // setSynced(false); // show syncing symbol
-      // edit todo locally while syncing with db
+      props.setSynced(false);
+      // todo to save changes on
+      let tempTodo = {
+        id: id,
+        body: newBody,
+        status: status,
+        description: newDescription,
+        dueDate: newDueDate
+      };
+      sendUpdatedTodoToParent(tempTodo);  // send to parent
+      updateLocalHooks(); // update local hooks
+      setEditing(false); // hide edit popup
 
+      // TODO: show snackbar
+
+      // wait for all 3 promises to resolve
+      Promise.all([
+        // update body if different
+        body !== newBody ?
+          Firestore.updateTodoBodyByListId(listId, id, newBody) : "",
+        // update description if different
+        description !== newDescription ? 
+          Firestore.setTodoDescriptionByListId(listId, id, newDescription) : "",
+        // update DueDate if different
+        dueDate !== newDueDate ?
+          Firestore.setTodoDateByListId(listId, id, newDueDate) : ""
+      ])
+        // set synced if resolved
+        .then(() => {
+          props.setSynced(true);
+        })
+        // catch any errors
+        .catch((error) => {
+          console.log("Error updating in DB: ", error);
+        })
     }
-    setEditing(false);
   }
   // discard changes and close popup
   function handleEditingCancel() {

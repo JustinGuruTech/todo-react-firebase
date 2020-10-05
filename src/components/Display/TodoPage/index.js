@@ -69,10 +69,6 @@ function TodoPage(props) {
   // const [addingList, setAddingList] = useState(false);
   /* #endregion */
 
-  function setActiveTodoListHandler(newList) {
-    setActiveTodoList(newList);
-  }
-
   /* #region STARTUP */
   // run once on startup
   useEffect(() => {
@@ -105,6 +101,10 @@ function TodoPage(props) {
   // used in Sidebar component
   function updateTodoListIndex(index) {
     setTodoListIndex(index);
+  }
+  // set active todo list
+  function setActiveTodoListHandler(newList) {
+    setActiveTodoList(newList);
   }
   /* #endregion */
 

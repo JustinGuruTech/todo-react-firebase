@@ -270,9 +270,7 @@ function Todo(props) {
       }
       return todo;
     });
-    console.log(tempTodoList);
     setActiveTodoList(tempTodoList);
-    setSynced(true);
   }
   /* #endregion */
 
