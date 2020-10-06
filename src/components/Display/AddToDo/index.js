@@ -7,7 +7,7 @@
  */
 
 /* #region IMPORTS */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   Dialog,
@@ -94,7 +94,9 @@ function AddToDo(props) {
   const [todoDueDate, setTodoDueDate] = useState("none");
   const [tags, setTags] = useState([]);
   // confirmation snackbar hook
-  const [addedSnackbarOpen, setAddedSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
   /* #endregion */
 
   /* #region INPUT HANDLERS */
@@ -150,7 +152,7 @@ function AddToDo(props) {
       };
       todoList.todos.push(todo); // add local todo
       setDetailedAddOpen(false); // close detailed todo form
-      setAddedSnackbarOpen(true); // open snackbar notification
+      // setSnackbarOpen(true); // open snackbar notification
       // add basic todo to db with required fields
       Firestore.addTodoToListById(todoList.id, todo.body, todo.created)
         .then((docRef) => {
@@ -185,9 +187,11 @@ function AddToDo(props) {
           ])
             // after a successful write to db
             .then(() => {
+              triggerSnackbar("Todo Added");
               setSynced(true);
             })
             .catch((error) => {
+              triggerSnackbar("Error Adding Todo");
               console.log("Error adding to DB: ", error);
             });
         })
@@ -203,10 +207,23 @@ function AddToDo(props) {
       handleAddItem();
     }
   }
-  // closes confirm add snackbar
-  function handleSnackbarClose() {
-    setAddedSnackbarOpen(false);
+  /* #endregion */
+
+  /* #region SNACKBAR FUNCTIONS */
+  // set snackbar message triggering useEffect to open snackbar
+  function triggerSnackbar(message) {
+    setSnackbarMessage(message);
   }
+  // close snackbar
+  function handleSnackbarClose() {
+    setSnackbarOpen(false);
+  }
+  // when snackbarMessage is changed, show snackbar
+  useEffect(() => {
+    if (snackbarMessage !== "") {
+      setSnackbarOpen(true);
+    }
+  }, [snackbarMessage]);
   /* #endregion */
 
   /* #region COMPONENT DISPLAY */
@@ -219,10 +236,10 @@ function AddToDo(props) {
             vertical: "bottom",
             horizontal: "left",
           }}
-          open={addedSnackbarOpen}
+          open={snackbarOpen}
           autoHideDuration={4000}
           onClose={handleSnackbarClose}
-          message={"Todo Added!"}
+          message={snackbarMessage}
           action={
             <React.Fragment>
               <IconButton

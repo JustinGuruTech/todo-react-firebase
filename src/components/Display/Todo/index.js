@@ -200,8 +200,12 @@ function Todo(props) {
             allTodos.forEach((doc) => {
               let todo = doc.data();
               // add date from db if exists
-              if (todo.dueDate !== undefined) {
-                todo.dueDate = todo.dueDate.toDate();
+              if (todo.dueDate !== undefined && todo.dueDate !== "none") {
+                try {
+                  todo.dueDate = todo.dueDate.toDate();
+                } catch (error) {
+                  todo.dueDate = "none";
+                }
               } else {
                 todo.dueDate = "none";
               }

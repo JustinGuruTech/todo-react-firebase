@@ -21,6 +21,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Snackbar,
   withStyles,
 } from "@material-ui/core";
 import {
@@ -30,6 +31,7 @@ import {
   Edit,
   Done,
   QueryBuilder,
+  Close as CloseIcon,
 } from "@material-ui/icons";
 
 import * as Firestore from "../../Firestore";
@@ -126,6 +128,9 @@ function SingleToDo(props) {
   // trash open hook
   const [confirmTrashOpen, setConfirmTrashOpen] = useState(false);
   const isFirstRun = useRef(true);
+
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   /* #endregion */
 
   /* #region STATUS CHANGE */
@@ -209,6 +214,7 @@ function SingleToDo(props) {
   }
   // save changes and close popup
   function handleSaveChanges() {
+    console.log(newDueDate);
     // make sure input isn't empty
     if (todoInput !== "") {
       props.setSynced(false);
@@ -244,10 +250,12 @@ function SingleToDo(props) {
         // set synced if resolved
         .then(() => {
           props.setSynced(true);
+          triggerSnackbar("Saved Changes");
         })
         // catch any errors
         .catch((error) => {
           console.log("Error updating in DB: ", error);
+          triggerSnackbar("Error Saving Changes");
         });
     }
   }
@@ -297,40 +305,6 @@ function SingleToDo(props) {
   /* #endregion */
 
   /* #region DATE TIME FUNCTIONS */
-  // converts a date object to a string to display
-  function dateToString(date) {
-    // convert to 12 hour AM/PM time
-    let suffix = "AM";
-    let hours = date.getHours();
-    if (hours > 12) {
-      hours -= 12;
-      suffix = "PM";
-    }
-    // set minutes appropriately
-    let minutes = date.getMinutes();
-    if (minutes < 10) {
-      minutes = "0" + minutes;
-    }
-
-    if (isToday(date)) {
-      let strDate = "Today " + hours + ":" + minutes + suffix;
-      return strDate;
-    }
-
-    // put together string
-    let strDate =
-      date.getMonth() +
-      1 +
-      "/" +
-      date.getDate() /* + "/" + date.getFullYear()*/ +
-      " " +
-      hours +
-      ":" +
-      minutes +
-      suffix;
-    return strDate;
-  }
-
   // returns string displaying time til todo is due
   function timeRemainingString(date) {
     let diff = date - new Date();
@@ -355,9 +329,50 @@ function SingleToDo(props) {
   };
   /* #endregion */
 
+  /* #region SNACKBAR FUNCTIONS */
+  // set snackbar message triggering useEffect to open snackbar
+  function triggerSnackbar(message) {
+    setSnackbarMessage(message);
+  }
+  // close snackbar
+  function handleSnackbarClose() {
+    setSnackbarOpen(false);
+  }
+  // when snackbarMessage is changed, show snackbar
+  useEffect(() => {
+    if (snackbarMessage !== "") {
+      setSnackbarOpen(true);
+    }
+  }, [snackbarMessage]);
+  /* #endregion */
+
   /* #region COMPONENT DISPLAY */
   return (
     <div aria-label="Single Task">
+      <div>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          open={snackbarOpen}
+          autoHideDuration={4000}
+          onClose={handleSnackbarClose}
+          message={snackbarMessage}
+          action={
+            <React.Fragment>
+              <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleSnackbarClose}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </React.Fragment>
+          }
+        />
+      </div>
       <Paper elevation={0} className={classes.mainContainer}>
         <Paper elevation={0} className={classes.horizontalFlex}>
           <div className={classes.leftFlex}>
