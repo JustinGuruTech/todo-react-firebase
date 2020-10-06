@@ -168,18 +168,19 @@ export const addNewTodoList = async (name, color) => {
 export const removeTodoList = async (listId) => {
   console.log("listId: ", listId);
   const docRef = await db
-  .collection("users")
-  .doc(getUserId())
-  .collection("todoLists")
-  .doc(listId)
-  .delete()
-  .then(() => {
-    console.log("deleted");
-  })
-  .catch(error => {
-    console.log("delete error: ", error);
-  })
-}
+    .collection("users")
+    .doc(getUserId())
+    .collection("todoLists")
+    .doc(listId)
+    .delete()
+    .then(() => {
+      console.log("deleted");
+    })
+    .catch((error) => {
+      console.log("delete error: ", error);
+    });
+  return docRef;
+};
 /* #endregion */
 
 /* #region TODOS QUERIES */

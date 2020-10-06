@@ -10,16 +10,14 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Snackbar,
   withStyles,
-  IconButton,
 } from "@material-ui/core";
-import { Close as CloseIcon } from "@material-ui/icons";
 
 import Todo from "../Todo";
 import NavBar from "../NavBar";
 import SideBar from "../SideBar";
 import AddListForm from "../AddListForm";
+import Snackbar from "../../Sitewide/Snackbar";
 
 import * as Firestore from "../../Firestore";
 /* #endregion */
@@ -37,6 +35,7 @@ const styles = (theme) => ({
   todoPageContainer: {
     display: "flex",
     overflow: "visible",
+    height: "100%",
   },
   overflow: {
     overflow: "visible",
@@ -63,7 +62,7 @@ function TodoPage(props) {
   const [addListError, setAddListError] = useState("");
   // modal/popup open status hooks
   const [addListOpen, setAddListOpen] = useState(false);
-  const [addedSnackbarOpen, setAddedSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   // will be used for loading symbol
   // const [addingList, setAddingList] = useState(false);
   /* #endregion */
@@ -139,39 +138,30 @@ function TodoPage(props) {
 
   /* #region DELETE LIST */
   function deleteListById(listId) {
-
-    setTodoListIndex(0);
-
+    setTodoListIndex(0); // resets active list
     // filter local list
     let tempTodoListList = todoListList;
     // remove list from hooks
-    tempTodoListList = tempTodoListList.filter(list => {
-      if (list.id !== listId) {
-        return list;
-      }
-    })
-    setTodoListList(tempTodoListList);
-
-    console.log(listId);
+    tempTodoListList = tempTodoListList.filter((list) => {
+      return list.id !== listId;
+    });
+    setTodoListList(tempTodoListList); // set new list
     // remove list from db
     Firestore.removeTodoList(listId)
-    .then(() => {
-      console.log("removed!");
-    })
-    .catch(error => {
-      console.log("error: ", error);
-    })
+      .then(() => {
+        triggerSnackbar("List Removed");
+      })
+      .catch((error) => {
+        triggerSnackbar("Error Removing List");
+        console.log("Error removing list: ", error);
+      });
   }
   /* #endregion */
 
   /* #region SNACKBAR NOTIFICATION */
-  // handlers for snackbar notification
-  // used in AddListForm component
-  function handleSnackbarOpen() {
-    setAddedSnackbarOpen(true);
-  }
-  function handleSnackbarClose() {
-    setAddedSnackbarOpen(false);
+  // set snackbar message triggering useEffect to open snackbar
+  function triggerSnackbar(message) {
+    setSnackbarMessage(message);
   }
   /* #endregion */
 
@@ -189,26 +179,8 @@ function TodoPage(props) {
       <div>
         {/* LIST ADDED NOTIFICATION/SNACKBAR */}
         <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-          open={addedSnackbarOpen}
-          autoHideDuration={4000}
-          onClose={handleSnackbarClose}
-          message={addListError !== "" ? addListError : "List Added!"}
-          action={
-            <React.Fragment>
-              <IconButton
-                size="small"
-                aria-label="close"
-                color="inherit"
-                onClick={handleSnackbarClose}
-              >
-                <CloseIcon fontSize="small" />
-              </IconButton>
-            </React.Fragment>
-          }
+          snackbarMessage={snackbarMessage}
+          setSnackbarMessage={setSnackbarMessage}
         />
       </div>
       {/* NAVBAR */}
@@ -224,6 +196,7 @@ function TodoPage(props) {
           setListToAddLocally={setListToAddLocally}
           updateTodoListIndex={updateTodoListIndex}
           deleteListById={deleteListById}
+          triggerSnackbar={triggerSnackbar}
         />
       </div>
       {/* TODO LIST */}
@@ -231,6 +204,8 @@ function TodoPage(props) {
         className={classes.todoMain}
         activeTodoList={activeTodoList}
         setActiveTodoList={setActiveTodoListHandler}
+        snackbarMessage={snackbarMessage}
+        setSnackbarMessage={setSnackbarMessage}
       />
       {/* ADD TODO LIST FORM POPUP */}
       <Dialog
@@ -242,8 +217,8 @@ function TodoPage(props) {
         <div className={classes.overflow}>
           <DialogContent className={classes.overflow}>
             <AddListForm
+              triggerSnackbar={triggerSnackbar}
               handleAddListClose={handleAddListClose}
-              handleSnackbarOpen={handleSnackbarOpen}
               handleAddListError={handleAddListError}
               setListToAddLocally={
                 setListToAddLocally

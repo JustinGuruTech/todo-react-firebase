@@ -6,36 +6,10 @@
  * events from other components
 
 /* #region IMPORTS */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 
-import {
-  Button,
-  Typography,
-  Paper,
-  Divider,
-  Checkbox,
-  IconButton,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Snackbar,
-  withStyles,
-} from "@material-ui/core";
-import {
-  RadioButtonUnchecked,
-  RadioButtonChecked,
-  DeleteOutlineOutlined,
-  Edit,
-  Done,
-  QueryBuilder,
-  Close as CloseIcon,
-} from "@material-ui/icons";
-
-import * as Firestore from "../../Firestore";
-
-import DetailedAddToDo from "../DetailedAddToDo";
+import { IconButton, Snackbar, withStyles } from "@material-ui/core";
+import { Close as CloseIcon } from "@material-ui/icons";
 /* #endregion */
 
 /* #region STYLES */
@@ -45,12 +19,15 @@ const styles = {};
 function SingleToDo(props) {
   /* #region PROPS/HOOKS */
   // prop attributes
-  const { classes, snackbarMessage, snackbarOpen } = props;
+  const { /*classes,*/ snackbarMessage, setSnackbarMessage } = props;
+  // controls snackbar open/close
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   /* #endregion */
 
   /* #region SNACKBAR FUNCTIONS */
   // close snackbar
   function handleSnackbarClose() {
+    setSnackbarMessage("");
     setSnackbarOpen(false);
   }
   // when snackbarMessage is changed, show snackbar

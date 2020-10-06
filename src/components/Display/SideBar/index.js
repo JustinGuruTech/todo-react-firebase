@@ -15,13 +15,13 @@ import {
   ListItemText,
   Divider,
   withStyles,
-  Button, 
+  Button,
   IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
-  DialogActions
+  DialogActions,
 } from "@material-ui/core";
 import {
   Menu as MenuIcon,
@@ -110,7 +110,7 @@ function SideBar(props) {
     if (todoListList.length > 1) {
       setConfirmTrashOpen(true);
     } else {
-      console.log("must have one list");
+      props.triggerSnackbar("Must Have At Least One List");
     }
   }
   // when the user confirms list deletion
@@ -119,7 +119,7 @@ function SideBar(props) {
     props.deleteListById(listToDelete);
     setConfirmTrashOpen(false); // close popup
   }
-  // cancel list deletion 
+  // cancel list deletion
   function handleTrashClose() {
     setConfirmTrashOpen(false);
   }
@@ -139,8 +139,8 @@ function SideBar(props) {
         <DialogTitle>{"Confirm Delete"}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this todo? It will no longer
-            show up as a completed item.
+            Are you sure you want to delete this todo? It will no longer show up
+            as a completed item.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -156,7 +156,7 @@ function SideBar(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    
+
       <Drawer
         variant="permanent"
         className={clsx(classes.drawer, {
@@ -173,7 +173,11 @@ function SideBar(props) {
         {/* SIDEBAR DRAWER */}
         <Divider />
         <List>
-          <ListItem button onClick={toggleDrawer} className={classes.sideBarIcon}>
+          <ListItem
+            button
+            onClick={toggleDrawer}
+            className={classes.sideBarIcon}
+          >
             {open ? (
               <div className={classes.openMenuHead}>
                 <Typography className={classes.menuHeadText}>Lists</Typography>
@@ -184,7 +188,6 @@ function SideBar(props) {
             )}
           </ListItem>
           {todoListList.map((list, index) => (
-            console.log(list),
             <ListItem
               button
               key={index}
@@ -197,14 +200,18 @@ function SideBar(props) {
               </ListItemIcon>
               {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
               <ListItemText primary={list.name} />
-              <IconButton onClick={() => {
-                openTrashConfirm(list.id);
-              }}>
+              <IconButton
+                onClick={() => {
+                  openTrashConfirm(list.id);
+                }}
+              >
                 <EditIcon />
               </IconButton>
-              <IconButton onClick={() => {
-                openTrashConfirm(list.id);
-              }}>
+              <IconButton
+                onClick={() => {
+                  openTrashConfirm(list.id);
+                }}
+              >
                 <DeleteIcon />
               </IconButton>
             </ListItem>

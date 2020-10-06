@@ -112,7 +112,7 @@ function AddListForm(props) {
       await Firestore.addNewTodoList(name, color)
         .then((newList) => {
           // show snackbar
-          props.handleSnackbarOpen();
+          props.triggerSnackbar("New List Added");
           props.handleAddListClose();
           // add list of todos with dummy flag
           newList.todos = [{ id: -1 }];
@@ -121,7 +121,7 @@ function AddListForm(props) {
         .catch(() => {
           // setAddListError(true);
           props.handleAddListError();
-          props.handleSnackbarOpen();
+          props.triggerSnackbar("Error Adding list");
         });
     }
   }

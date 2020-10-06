@@ -16,7 +16,7 @@ import {
   Avatar,
   withStyles,
 } from "@material-ui/core";
-import { DateRange, OfflinePin } from "@material-ui/icons";
+import { OfflinePin } from "@material-ui/icons";
 /* #endregion */
 
 /* #region STYLES */
@@ -126,9 +126,10 @@ function DetailedAddToDo(props) {
     // if (day < 10) {
     //   day = "0" + day;
     // }
-    let year = date.getYear().toString().slice(1, date.getYear().toString().length);
-    console.log(date.getYear());
-    
+    let year = date
+      .getYear()
+      .toString()
+      .slice(1, date.getYear().toString().length);
 
     // if (isToday(date)) {
     //   let strDate = "Today " + hours + ":" + minutes + suffix;
@@ -137,10 +138,12 @@ function DetailedAddToDo(props) {
 
     // put together string
     let strDate =
-      month + 
+      month +
       "/" +
-      day +  /* + "/" + date.getFullYear()*/ 
-      "/" + year + " " + 
+      day /* + "/" + date.getFullYear()*/ +
+      "/" +
+      year +
+      " " +
       hours +
       ":" +
       minutes +
@@ -150,11 +153,11 @@ function DetailedAddToDo(props) {
 
   // checks if browser supports default date picker
   var isDateSupported = function () {
-    var input = document.createElement('input');
-    var value = 'a';
-    input.setAttribute('type', 'date');
-    input.setAttribute('value', value);
-    return (input.value !== value);
+    var input = document.createElement("input");
+    var value = "a";
+    input.setAttribute("type", "date");
+    input.setAttribute("value", value);
+    return input.value !== value;
   };
   /* #endregion */
 
@@ -252,9 +255,11 @@ function DetailedAddToDo(props) {
                 type="datetime-local"
                 format="MM-dd-yyyy HH:mm:ss"
                 defaultValue={
-                  todoDueDate !== undefined && todoDueDate !== "none" ?
-                  !isDateSupported() ? dateToString(todoDueDate) : 
-                  todoDueDate.toISOString().slice(0, -1) : ""
+                  todoDueDate !== undefined && todoDueDate !== "none"
+                    ? !isDateSupported()
+                      ? dateToString(todoDueDate)
+                      : todoDueDate.toISOString().slice(0, -1)
+                    : ""
                 }
                 placeholder={dateToString(new Date())}
                 onChange={handleDateInput}

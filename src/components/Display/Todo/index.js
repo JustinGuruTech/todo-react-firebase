@@ -211,12 +211,10 @@ function Todo(props) {
               }
               // add empty description if doesn't exist
               if (todo.description === undefined) {
-                console.log("no desc");
                 todo.description = "";
               }
               // add empty tags if no tags
               if (todo.tags === undefined) {
-                console.log("no tags");
                 todo.tags = [];
               }
               todo.id = doc.id;
@@ -325,6 +323,8 @@ function Todo(props) {
             setSyncError={setSyncError}
             handleDetailedAddButton={handleDetailedAddButton}
             activeTodoList={activeTodoList}
+            snackbarMessage={props.snackbarMessage}
+            setSnackbarMessage={props.setSnackbarMessage}
           />
           {/* FILTER BUTTONS */}
           <Paper elevation={0} className={classes.filterButtons}>
@@ -395,6 +395,8 @@ function Todo(props) {
                           setSyncError={setSyncError}
                           dueDate={todo.dueDate}
                           updateLocalTodo={updateLocalTodo}
+                          snackbarMessage={props.snackbarMessage}
+                          setSnackbarMessage={props.setSnackbarMessage}
                         ></SingleToDo>
                       );
                       // map only those with status pending
@@ -417,6 +419,8 @@ function Todo(props) {
                             setSyncError={setSyncError}
                             dueDate={todo.dueDate}
                             updateLocalTodo={updateLocalTodo}
+                            snackbarMessage={props.snackbarMessage}
+                            setSnackbarMessage={props.setSnackbarMessage}
                           ></SingleToDo>
                         );
                       }
@@ -440,6 +444,8 @@ function Todo(props) {
                             setSyncError={setSyncError}
                             dueDate={todo.dueDate}
                             updateLocalTodo={updateLocalTodo}
+                            snackbarMessage={props.snackbarMessage}
+                            setSnackbarMessage={props.setSnackbarMessage}
                           ></SingleToDo>
                         );
                       }
