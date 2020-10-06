@@ -16,7 +16,7 @@ import {
   Avatar,
   withStyles,
 } from "@material-ui/core";
-import { OfflinePin } from "@material-ui/icons";
+import { DateRange, OfflinePin } from "@material-ui/icons";
 /* #endregion */
 
 /* #region STYLES */
@@ -99,6 +99,63 @@ function DetailedAddToDo(props) {
     event.preventDefault(); // prevent default post event
     handleSaveItem(); // call handleAddItem in AddToDo/SingleToDo component
   }
+  /* #endregion */
+
+  /* #region DATE FORMAT */
+  function dateToString(date) {
+    // convert to 12 hour AM/PM time
+    let suffix = "AM";
+    let hours = date.getHours();
+    if (hours > 12) {
+      hours -= 12;
+      suffix = "PM";
+    }
+    // if (hours < 10) {
+    //   hours = "0" + hours;
+    // }
+    // set minutes appropriately
+    let minutes = date.getMinutes();
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    let month = date.getMonth() + 1;
+    // if (month < 10) {
+    //   month = "0" + month;
+    // }
+    let day = date.getDate();
+    // if (day < 10) {
+    //   day = "0" + day;
+    // }
+    let year = date.getYear().toString().slice(1, date.getYear().toString().length);
+    console.log(date.getYear());
+    
+
+    // if (isToday(date)) {
+    //   let strDate = "Today " + hours + ":" + minutes + suffix;
+    //   return strDate;
+    // }
+
+    // put together string
+    let strDate =
+      month + 
+      "/" +
+      day +  /* + "/" + date.getFullYear()*/ 
+      "/" + year + " " + 
+      hours +
+      ":" +
+      minutes +
+      suffix;
+    return strDate;
+  }
+
+  // checks if browser supports default date picker
+  var isDateSupported = function () {
+    var input = document.createElement('input');
+    var value = 'a';
+    input.setAttribute('type', 'date');
+    input.setAttribute('value', value);
+    return (input.value !== value);
+  };
   /* #endregion */
 
   /* #region COMPONENT DISPLAY */
@@ -193,12 +250,13 @@ function DetailedAddToDo(props) {
                 id="datetime-local"
                 label="Due Date (optional)"
                 type="datetime-local"
-                format="yyyy-MM-dd HH:mm:ss"
+                format="MM-dd-yyyy HH:mm:ss"
                 defaultValue={
-                  todoDueDate !== undefined && todoDueDate !== "none"
-                    ? todoDueDate.toISOString().slice(0, -1)
-                    : ""
+                  todoDueDate !== undefined && todoDueDate !== "none" ?
+                  !isDateSupported() ? dateToString(todoDueDate) : 
+                  todoDueDate.toISOString().slice(0, -1) : ""
                 }
+                placeholder={dateToString(new Date())}
                 onChange={handleDateInput}
                 className={classes.dateInput}
                 InputLabelProps={{
