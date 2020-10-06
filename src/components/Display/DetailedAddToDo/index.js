@@ -188,16 +188,10 @@ function DetailedAddToDo(props) {
                 fullWidth
                 id="body"
                 autoFocus
-                // label="Todo Name"
-                // placeholder="Todo Name"
                 label="Add a todo..."
                 name="body"
                 value={body}
-                // autoComplete="email"
                 onChange={handleBodyInput}
-                // onBlur={validateName}
-                // error={nameError !== ""}
-                // helperText={nameError}
                 className={classes.bodyInput}
                 inputProps={{
                   className: classes.inputHeight,
@@ -212,14 +206,9 @@ function DetailedAddToDo(props) {
                 fullWidth
                 id="description"
                 label="Long Description"
-                // placeholder="Long Description"
                 name="description"
                 value={description}
-                // autoComplete="email"
                 onChange={handleDescriptionInput}
-                // onBlur={validateName}
-                // error={nameError !== ""}
-                // helperText={nameError}
                 className={classes.bodyInput}
                 InputProps={{
                   className: classes.inputHeight,

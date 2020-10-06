@@ -70,8 +70,8 @@ function AddListForm(props) {
   /* #region PROPS/HOOKS */
   const { classes } = props;
   // input hooks
-  const [name, setName] = useState("");
-  const [color, setColor] = useState("#4fc33f");
+  const [name, setName] = useState(props.name !== undefined ? props.name : "");
+  const [color, setColor] = useState(props.color !== undefined ? props.color : "#4fc33f");
   // error hooks
   const [nameError, setNameError] = useState("");
   // const [addListError, setAddListError] = useState(false);
