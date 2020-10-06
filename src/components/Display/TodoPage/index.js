@@ -191,10 +191,8 @@ function TodoPage(props) {
       <div className={classes.sideBar}>
         <SideBar
           todoListList={todoListList}
-          handleAddListOpen={handleAddListOpen}
-          listToAddLocally={listToAddLocally}
-          setListToAddLocally={setListToAddLocally}
           updateTodoListIndex={updateTodoListIndex}
+          handleAddListOpen={handleAddListOpen}
           deleteListById={deleteListById}
           triggerSnackbar={triggerSnackbar}
         />
@@ -220,9 +218,7 @@ function TodoPage(props) {
               triggerSnackbar={triggerSnackbar}
               handleAddListClose={handleAddListClose}
               handleAddListError={handleAddListError}
-              setListToAddLocally={
-                setListToAddLocally
-              } /*handleAddingList={handleAddingList}*/
+              setListToAddLocally={setListToAddLocally}
             />
           </DialogContent>
           <DialogActions>
