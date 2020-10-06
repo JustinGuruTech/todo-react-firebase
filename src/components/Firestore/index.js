@@ -123,7 +123,7 @@ export const getCurrentUserFirstLastName = async () => {
 };
 /* #endregion */
 
-/* #region TODOLIST QUERY FUNCTIONS */
+/* #region TODOLIST QUERIES */
 // get all todolists for user
 export const getAllTodoLists = async () => {
   let collection = await db
@@ -164,6 +164,25 @@ export const addNewTodoList = async (name, color) => {
     });
   return docRef;
 };
+// remove list from list of lists (lol)
+export const removeTodoList = async (listId) => {
+  console.log("listId: ", listId);
+  const docRef = await db
+  .collection("users")
+  .doc(getUserId())
+  .collection("todoLists")
+  .doc(listId)
+  .delete()
+  .then(() => {
+    console.log("deleted");
+  })
+  .catch(error => {
+    console.log("delete error: ", error);
+  })
+}
+/* #endregion */
+
+/* #region TODOS QUERIES */
 // gets all todos from a list by listId
 export const getAllTodosFromListById = async (listId) => {
   let collection = await db

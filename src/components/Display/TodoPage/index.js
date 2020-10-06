@@ -137,6 +137,33 @@ function TodoPage(props) {
   }
   /* #endregion */
 
+  /* #region DELETE LIST */
+  function deleteListById(listId) {
+
+    setTodoListIndex(0);
+
+    // filter local list
+    let tempTodoListList = todoListList;
+    // remove list from hooks
+    tempTodoListList = tempTodoListList.filter(list => {
+      if (list.id !== listId) {
+        return list;
+      }
+    })
+    setTodoListList(tempTodoListList);
+
+    console.log(listId);
+    // remove list from db
+    Firestore.removeTodoList(listId)
+    .then(() => {
+      console.log("removed!");
+    })
+    .catch(error => {
+      console.log("error: ", error);
+    })
+  }
+  /* #endregion */
+
   /* #region SNACKBAR NOTIFICATION */
   // handlers for snackbar notification
   // used in AddListForm component
@@ -196,6 +223,7 @@ function TodoPage(props) {
           listToAddLocally={listToAddLocally}
           setListToAddLocally={setListToAddLocally}
           updateTodoListIndex={updateTodoListIndex}
+          deleteListById={deleteListById}
         />
       </div>
       {/* TODO LIST */}
