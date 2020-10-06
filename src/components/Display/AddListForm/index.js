@@ -119,8 +119,7 @@ function AddListForm(props) {
           props.setListToAddLocally(newList);
         })
         .catch(() => {
-          // setAddListError(true);
-          props.handleAddListError();
+          // show error on snackbar;
           props.triggerSnackbar("Error Adding list");
         });
     }

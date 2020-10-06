@@ -259,9 +259,9 @@ function SingleToDo(props) {
     setEditing(false);
   }
   // for adding a tag (when tags are implemented)
-  function handleTagsAdded() {
-    console.log("tag totally added");
-  }
+  // function handleTagsAdded() {
+  //   console.log("tag totally added");
+  // }
   /* #endregion */
 
   /* #region TRASH TODO HANDLERS */

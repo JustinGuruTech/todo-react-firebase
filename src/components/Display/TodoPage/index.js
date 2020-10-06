@@ -59,7 +59,6 @@ function TodoPage(props) {
   const [activeTodoList, setActiveTodoList] = useState({ id: -1 });
   const [todoListIndex, setTodoListIndex] = useState(0);
   const [listToAddLocally, setListToAddLocally] = useState({ id: -1 });
-  const [addListError, setAddListError] = useState("");
   // modal/popup open status hooks
   const [addListOpen, setAddListOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -165,14 +164,6 @@ function TodoPage(props) {
   }
   /* #endregion */
 
-  /* #region ERROR SETTING */
-  // sets error for adding list
-  // used in AddListForm component
-  function handleAddListError() {
-    setAddListError("Error Adding List");
-  }
-  /* #endregion */
-
   /* #region COMPONENT DISPLAY */
   return (
     <div className={classes.todoPageContainer}>
@@ -217,7 +208,6 @@ function TodoPage(props) {
             <AddListForm
               triggerSnackbar={triggerSnackbar}
               handleAddListClose={handleAddListClose}
-              handleAddListError={handleAddListError}
               setListToAddLocally={setListToAddLocally}
             />
           </DialogContent>

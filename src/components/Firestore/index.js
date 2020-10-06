@@ -166,18 +166,15 @@ export const addNewTodoList = async (name, color) => {
 };
 // remove list from list of lists (lol)
 export const removeTodoList = async (listId) => {
-  console.log("listId: ", listId);
   const docRef = await db
     .collection("users")
     .doc(getUserId())
     .collection("todoLists")
     .doc(listId)
     .delete()
-    .then(() => {
-      console.log("deleted");
-    })
     .catch((error) => {
       console.log("delete error: ", error);
+      return Promise.reject("Error removing list");
     });
   return docRef;
 };

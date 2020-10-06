@@ -89,7 +89,7 @@ function DetailedAddToDo(props) {
     body,
     description,
     todoDueDate,
-    tags,
+    // tags,
   } = props;
   /* #endregion */
 

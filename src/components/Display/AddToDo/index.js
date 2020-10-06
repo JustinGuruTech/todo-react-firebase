@@ -105,9 +105,9 @@ function AddToDo(props) {
     setTodoDueDate(new Date(target.value));
   }
   // for adding a tag (when tags are implemented)
-  function handleTagsAdded() {
-    console.log("tag totally added");
-  }
+  // function handleTagsAdded() {
+  //   console.log("tag totally added");
+  // }
   /* #endregion */
 
   /* #region ADD TODO */
