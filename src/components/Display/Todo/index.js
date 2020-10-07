@@ -15,7 +15,6 @@ import {
   Link,
   CircularProgress,
   Typography,
-  Divider,
   withStyles,
 } from "@material-ui/core";
 import { Check, SyncProblem } from "@material-ui/icons";
@@ -45,6 +44,7 @@ const styles = (theme) => ({
   },
   todoTitleContainer: {
     marginBottom: 15,
+    border: "3px solid",
   },
   todoTitle: {
     textAlign: "center",
@@ -275,6 +275,16 @@ function Todo(props) {
   }
   /* #endregion */
 
+  /* #region HEADER COLOR FUNC */
+  function pickTextColorBasedOnBgColorSimple(bgColor, lightColor, darkColor) {
+    var color = bgColor.charAt(0) === "#" ? bgColor.substring(1, 7) : bgColor;
+    var r = parseInt(color.substring(0, 2), 16); // hexToR
+    var g = parseInt(color.substring(2, 4), 16); // hexToG
+    var b = parseInt(color.substring(4, 6), 16); // hexToB
+    return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? darkColor : lightColor;
+  }
+  /* #endregion */
+
   /* #region COMPONENT DISPLAY */
   return (
     <Paper elevation={0} className={classes.background}>
@@ -308,12 +318,35 @@ function Todo(props) {
               </Link>
             </span>
           )}
-          <div className={classes.todoTitleContainer}>
-            <Divider />
-            <Typography className={classes.todoTitle}>
+          <div
+            className={classes.todoTitleContainer}
+            style={{
+              backgroundColor: todoList.id !== -1 ? todoList.color : "white",
+              borderColor:
+                todoList.id !== -1
+                  ? pickTextColorBasedOnBgColorSimple(
+                      todoList.color,
+                      "white",
+                      "black"
+                    )
+                  : "white",
+            }}
+          >
+            <Typography
+              className={classes.todoTitle}
+              style={{
+                color:
+                  todoList.id !== -1
+                    ? pickTextColorBasedOnBgColorSimple(
+                        todoList.color,
+                        "white",
+                        "black"
+                      )
+                    : "white",
+              }}
+            >
               {todoList.name}
             </Typography>
-            <Divider />
           </div>
           {/* ADD TODO COMPONENT */}
           <AddToDo
