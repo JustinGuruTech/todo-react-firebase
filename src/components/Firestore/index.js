@@ -123,7 +123,7 @@ export const getCurrentUserFirstLastName = async () => {
 };
 /* #endregion */
 
-/* #region TODOLIST QUERY FUNCTIONS */
+/* #region TODOLIST QUERIES */
 // get all todolists for user
 export const getAllTodoLists = async () => {
   let collection = await db
@@ -164,6 +164,39 @@ export const addNewTodoList = async (name, color) => {
     });
   return docRef;
 };
+// update todo list name
+export const updateTodoListName = async (listId, name) => {
+  const taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId)
+  .update({
+    name: name
+  })
+  return taskRef;
+}
+// update todo list color
+export const updateTodoListColor = async (listId, color) => {
+  const taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId)
+  .update({
+    color: color
+  })
+  return taskRef;
+}
+// remove list from list of lists (lol)
+export const removeTodoList = async (listId) => {
+  const docRef = await db
+    .collection("users")
+    .doc(getUserId())
+    .collection("todoLists")
+    .doc(listId)
+    .delete()
+    .catch((error) => {
+      console.log("delete error: ", error);
+      return Promise.reject("Error removing list");
+    });
+  return docRef;
+};
+/* #endregion */
+
+/* #region TODOS QUERIES */
 // gets all todos from a list by listId
 export const getAllTodosFromListById = async (listId) => {
   let collection = await db

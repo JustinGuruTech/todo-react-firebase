@@ -70,8 +70,8 @@ function AddListForm(props) {
   /* #region PROPS/HOOKS */
   const { classes } = props;
   // input hooks
-  const [name, setName] = useState("");
-  const [color, setColor] = useState("#4fc33f");
+  const [name, setName] = useState(props.name !== undefined ? props.name : "");
+  const [color, setColor] = useState(props.color !== undefined ? props.color : "#4fc33f");
   // error hooks
   const [nameError, setNameError] = useState("");
   // const [addListError, setAddListError] = useState(false);
@@ -112,16 +112,15 @@ function AddListForm(props) {
       await Firestore.addNewTodoList(name, color)
         .then((newList) => {
           // show snackbar
-          props.handleSnackbarOpen();
+          props.triggerSnackbar("New List Added");
           props.handleAddListClose();
           // add list of todos with dummy flag
           newList.todos = [{ id: -1 }];
           props.setListToAddLocally(newList);
         })
         .catch(() => {
-          // setAddListError(true);
-          props.handleAddListError();
-          props.handleSnackbarOpen();
+          // show error on snackbar;
+          props.triggerSnackbar("Error Adding list");
         });
     }
   }

@@ -7,7 +7,7 @@
  */
 
 /* #region IMPORTS */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import {
   Dialog,
@@ -18,16 +18,11 @@ import {
   TextField,
   IconButton,
   Tooltip,
-  Snackbar,
   withStyles,
 } from "@material-ui/core";
-import {
-  PlaylistAdd as PlaylistAddIcon,
-  Close as CloseIcon,
-} from "@material-ui/icons";
+import { PlaylistAdd as PlaylistAddIcon } from "@material-ui/icons";
 
 import DetailedAddToDo from "../DetailedAddToDo";
-
 import * as Firestore from "../../Firestore";
 /* #endregion */
 
@@ -93,10 +88,6 @@ function AddToDo(props) {
   const [description, setDescription] = useState("");
   const [todoDueDate, setTodoDueDate] = useState("none");
   const [tags, setTags] = useState([]);
-  // confirmation snackbar hook
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-
   /* #endregion */
 
   /* #region INPUT HANDLERS */
@@ -114,9 +105,9 @@ function AddToDo(props) {
     setTodoDueDate(new Date(target.value));
   }
   // for adding a tag (when tags are implemented)
-  function handleTagsAdded() {
-    console.log("tag totally added");
-  }
+  // function handleTagsAdded() {
+  //   console.log("tag totally added");
+  // }
   /* #endregion */
 
   /* #region ADD TODO */
@@ -212,48 +203,13 @@ function AddToDo(props) {
   /* #region SNACKBAR FUNCTIONS */
   // set snackbar message triggering useEffect to open snackbar
   function triggerSnackbar(message) {
-    setSnackbarMessage(message);
+    props.setSnackbarMessage(message);
   }
-  // close snackbar
-  function handleSnackbarClose() {
-    setSnackbarOpen(false);
-  }
-  // when snackbarMessage is changed, show snackbar
-  useEffect(() => {
-    if (snackbarMessage !== "") {
-      setSnackbarOpen(true);
-    }
-  }, [snackbarMessage]);
   /* #endregion */
 
   /* #region COMPONENT DISPLAY */
   return (
     <div>
-      <div>
-        {/* LIST ADDED NOTIFICATION/SNACKBAR */}
-        <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-          open={snackbarOpen}
-          autoHideDuration={4000}
-          onClose={handleSnackbarClose}
-          message={snackbarMessage}
-          action={
-            <React.Fragment>
-              <IconButton
-                size="small"
-                aria-label="close"
-                color="inherit"
-                onClick={handleSnackbarClose}
-              >
-                <CloseIcon fontSize="small" />
-              </IconButton>
-            </React.Fragment>
-          }
-        />
-      </div>
       <Paper elevation={0} className={classes.searchFlex}>
         {/* <div className={classes.inputDateFlex}> */}
         {/* TEXT INPUT */}

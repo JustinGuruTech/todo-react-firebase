@@ -136,7 +136,8 @@ const styles = (theme) => ({
   noTasks: {
     fontSize: 24,
     textAlign: "center",
-    color: "#66b9e2",
+    paddingTop: 10,
+    color: "#000",
   },
   todoLoading: {
     display: "inherit",
@@ -149,12 +150,11 @@ const styles = (theme) => ({
 
 function Todo(props) {
   /* #region PROPS/HOOKS */
-  const { handleDetailedAddButton, setActiveTodoList } = props;
+  const { setActiveTodoList } = props;
   const { activeTodoList, classes } = props;
   // state hooks
   const [todoList, setTodoList] = useState({ id: -1 }); // stores todo list synced with db
   const [filterSelected, setFilterSelected] = useState("all"); // reflects which filter button is active
-  const [editing, setEditing] = useState(false); // reflects whether one of SingleToDo is being edited
   const [loaded, setLoaded] = useState(false); // set to true after initial load from db
   const [synced, setSynced] = useState(false); // set to false in between pressing add and updating db
   const [syncError, setSyncError] = useState(""); // for when sync fails
@@ -211,12 +211,10 @@ function Todo(props) {
               }
               // add empty description if doesn't exist
               if (todo.description === undefined) {
-                console.log("no desc");
                 todo.description = "";
               }
               // add empty tags if no tags
               if (todo.tags === undefined) {
-                console.log("no tags");
                 todo.tags = [];
               }
               todo.id = doc.id;
@@ -323,8 +321,9 @@ function Todo(props) {
             setSynced={setSynced}
             synced={synced}
             setSyncError={setSyncError}
-            handleDetailedAddButton={handleDetailedAddButton}
             activeTodoList={activeTodoList}
+            snackbarMessage={props.snackbarMessage}
+            setSnackbarMessage={props.setSnackbarMessage}
           />
           {/* FILTER BUTTONS */}
           <Paper elevation={0} className={classes.filterButtons}>
@@ -372,7 +371,7 @@ function Todo(props) {
               {loaded ? (
                 todoList.todos.length === 0 ? (
                   <Typography className={classes.noTasks}>
-                    No tasks yet
+                    Nothing to see here...
                   </Typography>
                 ) : (
                   todoList.todos.map((todo) => {
@@ -384,17 +383,16 @@ function Todo(props) {
                           listId={todoList.id}
                           body={todo.body}
                           status={todo.status}
+                          dueDate={todo.dueDate}
                           id={todo.id}
                           description={todo.description}
                           color={activeTodoList.color}
-                          refresh={addTodosToState}
                           removeTodoById={removeTodoById}
-                          setEditing={setEditing}
-                          todoEditing={editing}
                           setSynced={setSynced}
                           setSyncError={setSyncError}
-                          dueDate={todo.dueDate}
                           updateLocalTodo={updateLocalTodo}
+                          snackbarMessage={props.snackbarMessage}
+                          setSnackbarMessage={props.setSnackbarMessage}
                         ></SingleToDo>
                       );
                       // map only those with status pending
@@ -406,17 +404,16 @@ function Todo(props) {
                             listId={todoList.id}
                             body={todo.body}
                             status={todo.status}
+                            dueDate={todo.dueDate}
                             id={todo.id}
                             description={todo.description}
                             color={activeTodoList.color}
-                            refresh={addTodosToState}
                             removeTodoById={removeTodoById}
-                            setEditing={setEditing}
-                            todoEditing={editing}
                             setSynced={setSynced}
                             setSyncError={setSyncError}
-                            dueDate={todo.dueDate}
                             updateLocalTodo={updateLocalTodo}
+                            snackbarMessage={props.snackbarMessage}
+                            setSnackbarMessage={props.setSnackbarMessage}
                           ></SingleToDo>
                         );
                       }
@@ -429,17 +426,16 @@ function Todo(props) {
                             listId={todoList.id}
                             body={todo.body}
                             status={todo.status}
+                            dueDate={todo.dueDate}
                             id={todo.id}
                             description={todo.description}
                             color={activeTodoList.color}
-                            refresh={addTodosToState}
                             removeTodoById={removeTodoById}
-                            setEditing={setEditing}
-                            todoEditing={editing}
                             setSynced={setSynced}
                             setSyncError={setSyncError}
-                            dueDate={todo.dueDate}
                             updateLocalTodo={updateLocalTodo}
+                            snackbarMessage={props.snackbarMessage}
+                            setSnackbarMessage={props.setSnackbarMessage}
                           ></SingleToDo>
                         );
                       }
