@@ -164,6 +164,22 @@ export const addNewTodoList = async (name, color) => {
     });
   return docRef;
 };
+// update todo list name
+export const updateTodoListName = async (listId, name) => {
+  const taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId)
+  .update({
+    name: name
+  })
+  return taskRef;
+}
+// update todo list color
+export const updateTodoListColor = async (listId, color) => {
+  const taskRef = await db.collection("users").doc(getUserId()).collection("todoLists").doc(listId)
+  .update({
+    color: color
+  })
+  return taskRef;
+}
 // remove list from list of lists (lol)
 export const removeTodoList = async (listId) => {
   const docRef = await db

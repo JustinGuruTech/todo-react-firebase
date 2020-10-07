@@ -136,7 +136,8 @@ const styles = (theme) => ({
   noTasks: {
     fontSize: 24,
     textAlign: "center",
-    color: "#66b9e2",
+    paddingTop: 10,
+    color: "#000",
   },
   todoLoading: {
     display: "inherit",
@@ -370,7 +371,7 @@ function Todo(props) {
               {loaded ? (
                 todoList.todos.length === 0 ? (
                   <Typography className={classes.noTasks}>
-                    No tasks yet
+                    Nothing to see here...
                   </Typography>
                 ) : (
                   todoList.todos.map((todo) => {

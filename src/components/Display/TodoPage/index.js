@@ -4,7 +4,7 @@
 // components
 
 /* #region IMPORTS */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,7 +16,7 @@ import {
 import Todo from "../Todo";
 import NavBar from "../NavBar";
 import SideBar from "../SideBar";
-import AddListForm from "../AddListForm";
+import ListForm from "../ListForm";
 import Snackbar from "../../Sitewide/Snackbar";
 
 import * as Firestore from "../../Firestore";
@@ -53,15 +53,17 @@ const styles = (theme) => ({
 function TodoPage(props) {
   /* #region PROPS/HOOKS */
   const { classes } = props;
-  const isFirstRun = useRef(true);
   // data hooks
   const [todoListList, setTodoListList] = useState([]);
   const [activeTodoList, setActiveTodoList] = useState({ id: -1 });
   const [todoListIndex, setTodoListIndex] = useState(0);
-  const [listToAddLocally, setListToAddLocally] = useState({ id: -1 });
   // modal/popup open status hooks
   const [addListOpen, setAddListOpen] = useState(false);
+  const [editListOpen, setEditListOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  // add list hooks
+  const [newName, setNewName] = useState("");
+  const [newColor, setNewColor] = useState("");
   // will be used for loading symbol
   // const [addingList, setAddingList] = useState(false);
   /* #endregion */
@@ -91,6 +93,9 @@ function TodoPage(props) {
     if (todoListList.length > 0) {
       // set active list by index (default 0)
       setActiveTodoList(todoListList[todoListIndex]);
+      // set name/color to be used in changing name/color
+      setNewName(todoListList[todoListIndex].name);
+      setNewColor(todoListList[todoListIndex].color);
     }
   }, [todoListList, todoListIndex]);
 
@@ -106,24 +111,27 @@ function TodoPage(props) {
   /* #endregion */
 
   /* #region ADD NEW LIST */
-  // runs when listToAddLocally is changed by
-  // Sidebar component
-  useEffect(() => {
-    // don't run on initial load
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      return;
-    }
-    // check if list to add is a real one
-    if (listToAddLocally.id !== -1) {
-      // get list of todo lists
-      let tempList = todoListList;
-      tempList.push(listToAddLocally); // add new one
-      setListToAddLocally({ id: -1 }); // reset list to add to dummy
-      setTodoListList(tempList); // set new list of lists
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listToAddLocally]);
+  // runs when Add ListForm Dialog submits
+  function handleAddListSubmit() {
+    // waits for addList to return new list
+    Firestore.addNewTodoList(newName, newColor)
+      .then((newList) => {
+        // show snackbar
+        handleAddListClose();
+        // add list of todos with dummy flag
+        newList.todos = [{ id: -1 }];
+        // add list to todoListList
+        let tempTodoListList = todoListList;
+        tempTodoListList.push(newList);
+        setTodoListList(tempTodoListList);
+        // trigger snackbar
+        triggerSnackbar("New List Added");
+      })
+      .catch(() => {
+        // show error on snackbar;
+        triggerSnackbar("Error Adding list");
+      });
+  }
 
   // handlers for add new list form
   // used in Sidebar and AddListForm components
@@ -132,6 +140,52 @@ function TodoPage(props) {
   }
   function handleAddListClose() {
     setAddListOpen(false);
+  }
+  /* #endregion */
+
+  /* #region EDIT NEW LIST */
+  // runs when Edit ListForm Dialog submits
+  function handleEditListSubmit() {
+    // resolve all promises (db updates) before triggering snackbar
+    Promise.all([
+      activeTodoList.name !== newName
+        ? Firestore.updateTodoListName(activeTodoList.id, newName)
+        : "",
+
+      activeTodoList.color !== newColor
+        ? Firestore.updateTodoListColor(activeTodoList.id, newColor)
+        : "",
+    ])
+      .then(() => {
+        triggerSnackbar("List Updated"); // success snackbar
+      })
+      .catch((error) => {
+        // error log and snackbar
+        console.log("Error Updating List: ", error);
+        triggerSnackbar("Error Updating List");
+      });
+    // copy list and update name/color
+    let tempTodoList = activeTodoList;
+    tempTodoList.name = newName;
+    tempTodoList.color = newColor;
+    // set new active todo list
+    setActiveTodoList(tempTodoList);
+    // update list in list of lists
+    let tempTodoListList = todoListList;
+    tempTodoListList[todoListIndex] = tempTodoList;
+    handleEditListClose(); // close form
+    // reset form inputs
+    setNewName("");
+    setNewColor("");
+  }
+
+  // handlers for add new list form
+  // used in Sidebar and AddListForm components
+  function handleEditListOpen() {
+    setEditListOpen(true);
+  }
+  function handleEditListClose() {
+    setEditListOpen(false);
   }
   /* #endregion */
 
@@ -184,6 +238,7 @@ function TodoPage(props) {
           todoListList={todoListList}
           updateTodoListIndex={updateTodoListIndex}
           handleAddListOpen={handleAddListOpen}
+          handleEditListOpen={handleEditListOpen}
           deleteListById={deleteListById}
           triggerSnackbar={triggerSnackbar}
         />
@@ -205,15 +260,54 @@ function TodoPage(props) {
       >
         <div className={classes.overflow}>
           <DialogContent className={classes.overflow}>
-            <AddListForm
+            {/* <AddListForm
               triggerSnackbar={triggerSnackbar}
               handleAddListClose={handleAddListClose}
               setListToAddLocally={setListToAddLocally}
+            /> */}
+            <ListForm
+              name={newName}
+              setName={setNewName}
+              color={newColor}
+              setColor={setNewColor}
+              handleSubmitOut={handleAddListSubmit}
+              submitLabel="Add New List"
+              oldName={activeTodoList.name}
+              oldColor={activeTodoList.color}
             />
           </DialogContent>
           <DialogActions>
             <Button
               onMouseDown={handleAddListClose}
+              className={classes.cancelButton}
+            >
+              Cancel
+            </Button>
+          </DialogActions>
+        </div>
+      </Dialog>
+      {/* EDIT TODO LIST FORM POPUP */}
+      <Dialog
+        border={2}
+        open={editListOpen}
+        aria-labelledby="form-dialog-title"
+        PaperProps={{ className: classes.dialogPaper }}
+      >
+        <div className={classes.overflow}>
+          <DialogContent className={classes.overflow}>
+            <ListForm
+              name={newName}
+              setName={setNewName}
+              color={newColor}
+              setColor={setNewColor}
+              handleSubmitOut={handleEditListSubmit}
+              submitLabel="Save Changes"
+              editing={true}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onMouseDown={handleEditListClose}
               className={classes.cancelButton}
             >
               Cancel

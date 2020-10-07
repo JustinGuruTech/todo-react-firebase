@@ -4,6 +4,12 @@
  * so that whenever the message is changed, the snackbar 
  * displays. This makes it real easy to show a snackbar on 
  * events from other components
+ * 
+ * Required Props
+ * snackbarMessage - hook that component listens for. When it 
+ *    changes, the useEffect() is triggered to display snackbar
+ * setSnackbarMessage - sets snackbarMessage in the parent which
+ *    then triggers snackbar display as described above
 
 /* #region IMPORTS */
 import React, { useEffect, useState } from "react";

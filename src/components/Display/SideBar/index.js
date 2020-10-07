@@ -82,6 +82,15 @@ const styles = (theme) => ({
     fontWeight: "bold",
     fontFamily: "Inter",
   },
+  sideButtons: {
+    padding: 5,
+  },
+  editButton: {
+    color: "#4949c3",
+  },
+  trashButton: {
+    color: "#bb2b2b",
+  },
 });
 /* #endregion */
 
@@ -180,7 +189,9 @@ function SideBar(props) {
           >
             {open ? (
               <div className={classes.openMenuHead}>
-                <Typography className={classes.menuHeadText}>Lists</Typography>
+                <Typography className={classes.menuHeadText}>
+                  Todo Lists
+                </Typography>
                 <MenuOpenIcon className={classes.menuIcons} />
               </div>
             ) : (
@@ -198,21 +209,22 @@ function SideBar(props) {
               <ListItemIcon>
                 <FiberManualRecordIcon style={{ color: list.color }} />
               </ListItemIcon>
-              {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
               <ListItemText primary={list.name} />
               <IconButton
+                className={classes.sideButtons}
                 onClick={() => {
-                  openTrashConfirm(list.id);
+                  props.handleEditListOpen();
                 }}
               >
-                <EditIcon />
+                <EditIcon className={classes.editButton} />
               </IconButton>
               <IconButton
+                className={classes.sideButtons}
                 onClick={() => {
                   openTrashConfirm(list.id);
                 }}
               >
-                <DeleteIcon />
+                <DeleteIcon className={classes.trashButton} />
               </IconButton>
             </ListItem>
           ))}
