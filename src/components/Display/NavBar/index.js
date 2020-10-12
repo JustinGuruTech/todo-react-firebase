@@ -24,7 +24,7 @@ import SignInDropdown from "../SignInDropdown";
 const styles = theme => ({
   mainBar: {
     position: "fixed",
-    backgroundColor: "white",
+    backgroundColor: "#3d3a3a",
     height: 64,
     borderBottom: "2px solid white",
   },
@@ -37,24 +37,27 @@ const styles = theme => ({
     },
   },
   menuIcon: {
-    color: "black",
+    color: "white",
     fontSize: 40,
     position: "relative",
   },
   iconText: {
     display: "flex",
+    color: "white"
   },
   icon: {
     fontSize: 40,
     marginRight: 10,
-    color: "#3e3b3b",
+    color: "white",
   },
   headTitle: {
-    color: "#3e3b3b",
+    color: "white",
     fontFamily: "Inter",
     fontWeight: 800,
   },
-  profileButton: {},
+  profileButton: {
+    color: "white"
+  },
   accountIcon: {
     paddingRight: 5,
   },
@@ -126,7 +129,7 @@ function NavBar(props) {
         {user ? (
           <div className={classes.iconText}>
             <Button className={classes.profileButton} onClick={toggleProfile}>
-              <AccountBox className={classes.accountIcon} /> Profile
+              <AccountBox className={classes.accountIcon} style={{fontSize: 30}} /> Profile
             </Button>
             {profileOpen ? (
               <ProfileDropdown
@@ -138,7 +141,7 @@ function NavBar(props) {
         ) : (
           <div className={classes.iconText}>
             <Button className={classes.profileButton} onClick={toggleButtons}>
-              <AccountBox className={classes.accountIcon} />
+              <AccountBox className={classes.accountIcon} style={{fontSize: 30}} />
             </Button>
             {buttonsOpen ? (
               <SignInDropdown
@@ -149,23 +152,6 @@ function NavBar(props) {
               />
             ) : null}
           </div>
-
-          // <div className={classes.buttonsDiv}>
-          //   <Button
-          //     className={classes.buttons}
-          //     variant="outlined"
-          //     onClick={handleSignUpOpen}
-          //   >
-          //     Sign Up
-          //   </Button>
-          //   <Button
-          //     className={classes.buttons}
-          //     variant="outlined"
-          //     onClick={handleSignInOpen}
-          //   >
-          //     Sign In
-          //   </Button>
-          // </div>
         )}
       </Toolbar>
     </AppBar>

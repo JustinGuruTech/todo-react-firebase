@@ -104,6 +104,7 @@ const styles = (theme) => ({
     },
   },
   infoTextDivRight: {
+    color: "#3d3a3a",
     padding: 20,
     marginBottom: 50,
     textAlign: "left",
@@ -168,7 +169,8 @@ const styles = (theme) => ({
   button: {
     backgroundColor: "white",
     border: "2px solid black",
-    width: 150,
+    width: 200,
+    height: 45,
     margin: "auto",
     marginRight: 10,
     color: "#080808",
