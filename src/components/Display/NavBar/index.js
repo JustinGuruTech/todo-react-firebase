@@ -26,7 +26,7 @@ const styles = theme => ({
     position: "fixed",
     backgroundColor: "white",
     height: 64,
-    borderBottom: "2px solid #3e3b3b",
+    borderBottom: "2px solid white",
   },
   toolbar: {
     display: "flex",

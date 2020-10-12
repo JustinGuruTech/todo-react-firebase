@@ -18,6 +18,7 @@ import NavBar from "../NavBar";
 import SideBar from "../SideBar";
 import ListForm from "../ListForm";
 import Snackbar from "../../Sitewide/Snackbar";
+import Footer from "../../Sitewide/Footer";
 
 import * as Firestore from "../../Firestore";
 /* #endregion */
@@ -46,6 +47,10 @@ const styles = (theme) => ({
   todoDialogPaper: {
     width: 600,
     margin: 10,
+  },
+  verticalFlex: {
+    display: "flex",
+    flexDirection: "column",
   },
 });
 /* #endregion */
@@ -220,37 +225,41 @@ function TodoPage(props) {
 
   /* #region COMPONENT DISPLAY */
   return (
-    <div className={classes.todoPageContainer}>
-      <div>
-        {/* LIST ADDED NOTIFICATION/SNACKBAR */}
-        <Snackbar
+    <div className={classes.verticalFlex}>
+      <div className={classes.todoPageContainer}>
+        <div>
+          {/* LIST ADDED NOTIFICATION/SNACKBAR */}
+          <Snackbar
+            snackbarMessage={snackbarMessage}
+            setSnackbarMessage={setSnackbarMessage}
+          />
+        </div>
+        {/* NAVBAR */}
+        <div className={classes.navBar}>
+          <NavBar />
+        </div>
+        {/* SIDEBAR */}
+        <div className={classes.sideBar}>
+          <SideBar
+            todoListList={todoListList}
+            updateTodoListIndex={updateTodoListIndex}
+            handleAddListOpen={handleAddListOpen}
+            handleEditListOpen={handleEditListOpen}
+            deleteListById={deleteListById}
+            triggerSnackbar={triggerSnackbar}
+          />
+        </div>
+        {/* TODO LIST */}
+        <Todo
+          className={classes.todoMain}
+          activeTodoList={activeTodoList}
+          setActiveTodoList={setActiveTodoListHandler}
           snackbarMessage={snackbarMessage}
           setSnackbarMessage={setSnackbarMessage}
         />
       </div>
-      {/* NAVBAR */}
-      <div className={classes.navBar}>
-        <NavBar />
-      </div>
-      {/* SIDEBAR */}
-      <div className={classes.sideBar}>
-        <SideBar
-          todoListList={todoListList}
-          updateTodoListIndex={updateTodoListIndex}
-          handleAddListOpen={handleAddListOpen}
-          handleEditListOpen={handleEditListOpen}
-          deleteListById={deleteListById}
-          triggerSnackbar={triggerSnackbar}
-        />
-      </div>
-      {/* TODO LIST */}
-      <Todo
-        className={classes.todoMain}
-        activeTodoList={activeTodoList}
-        setActiveTodoList={setActiveTodoListHandler}
-        snackbarMessage={snackbarMessage}
-        setSnackbarMessage={setSnackbarMessage}
-      />
+      <Footer />
+
       {/* ADD TODO LIST FORM POPUP */}
       <Dialog
         border={2}

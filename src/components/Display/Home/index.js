@@ -15,14 +15,8 @@ import {
   DialogContent,
   DialogActions,
   Grid,
-  Icon,
   withStyles,
 } from "@material-ui/core";
-
-import {
-  GitHub as GitHubIcon,
-  ImportContacts as ImportContactsIcon,
-} from "@material-ui/icons";
 
 import fullScreenShot from "../../../images/full_screen_shot_small.png";
 import addTodoScreenShot from "../../../images/add_todo_date_small.png";
@@ -32,6 +26,7 @@ import firebaseScreenShot from "../../../images/firebase_small.png";
 import SignUp from "../SignUp";
 import Login from "../Login";
 import NavBar from "../NavBar";
+import Footer from "../../Sitewide/Footer";
 /* #endregion */
 
 /* #region STYLES */
@@ -165,17 +160,6 @@ const styles = (theme) => ({
   overflow: {
     overflowY: "inherit",
   },
-  footer: {
-    height: 100,
-    backgroundColor: "#3d3a3a",
-    color: "white",
-  },
-  footerLeft: {
-    paddingRight: 10,
-    borderTop: "5px solid white",
-    display: "flex",
-    justifyContent: "center",
-  },
   buttonDiv: {
     margin: "auto",
     marginBottom: 40,
@@ -193,17 +177,6 @@ const styles = (theme) => ({
       backgroundColor: "#080808",
       color: "#ececec",
     },
-  },
-  footerRight: {
-    paddingLeft: 10,
-    borderTop: "5px solid white",
-    display: "flex",
-    justifyContent: "center",
-  },
-  socialLink: {
-    color: "white",
-    textAlign: "center",
-    margin: "auto 0",
   },
 });
 /* #endregion */
@@ -417,30 +390,7 @@ function Home(props) {
                 </Grid>
               </Grid>
               {/* FOOTER */}
-              <Grid container className={classes.footer}>
-                <Grid className={classes.footerLeft} item xs={6}>
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://github.com/TheDizruptor/todo-react-firebase"
-                    className={classes.socialLink}
-                  >
-                    <Icon component={GitHubIcon} />
-                    <Typography>View Source Code </Typography>
-                  </a>
-                </Grid>
-                <Grid className={classes.footerRight} item xs={6}>
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="http://TheDizruptor.com"
-                    className={classes.socialLink}
-                  >
-                    <Icon component={ImportContactsIcon} />
-                    <Typography>See My Portfolio</Typography>
-                  </a>
-                </Grid>
-              </Grid>
+              <Footer />
             </Grid>
           </Grid>
         </Grid>
