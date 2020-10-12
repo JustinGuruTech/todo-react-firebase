@@ -17,10 +17,11 @@ import {
 import { OfflinePin, AccountBox } from "@material-ui/icons";
 import { useAuthDataContext } from "../../AuthDataProvider";
 import ProfileDropdown from "../ProfileDropdown";
+import SignInDropdown from "../SignInDropdown";
 /* #endregion */
 
 /* #region STYLES */
-const styles = {
+const styles = theme => ({
   mainBar: {
     position: "fixed",
     backgroundColor: "white",
@@ -30,6 +31,10 @@ const styles = {
   toolbar: {
     display: "flex",
     justifyContent: "space-between",
+    [theme.breakpoints.down("xs")]: {
+      //only show on mobile or small screen
+      paddingTop: 4
+    },
   },
   menuIcon: {
     color: "black",
@@ -56,14 +61,32 @@ const styles = {
   profileDropdown: {
     position: "absolute",
   },
-};
+  buttonsDiv: {
+    display: "flex",
+    flexDirection: "row",
+    textAlign: "center",
+  },
+  buttons: {
+    width: 150,
+    margin: "auto",
+    marginRight: 10,
+    color: "#080808",
+    borderColor: "#080808",
+    "&:hover": {
+      backgroundColor: "#080808",
+      color: "#ececec",
+    },
+  },
+});
 /* #endregion */
 
 function NavBar(props) {
   /* #region PROPS/HOOKS */
+  // prop functions
   const { classes } = props;
   const { user } = useAuthDataContext();
   const [profileOpen, setProfileOpen] = useState(false); // profile open/closed
+  const [buttonsOpen, setButtonsOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null); // anchor for profile dropdown
   /* #endregion */
 
@@ -79,6 +102,11 @@ function NavBar(props) {
   //     setProfileOpen(false);
   // }
   /* #endregion */
+
+  function toggleButtons(event) {
+    setButtonsOpen(!buttonsOpen);
+    setAnchorEl(event.currentTarget);
+  }
 
   /* #region COMPONENT DISPLAY */
   return (
@@ -107,7 +135,38 @@ function NavBar(props) {
               />
             ) : null}
           </div>
-        ) : null}
+        ) : (
+          <div className={classes.iconText}>
+            <Button className={classes.profileButton} onClick={toggleButtons}>
+              <AccountBox className={classes.accountIcon} />
+            </Button>
+            {buttonsOpen ? (
+              <SignInDropdown
+                handleSignInOpen={props.handleSignInOpen}
+                handleSignUpOpen={props.handleSignUpOpen}
+                className={classes.profileDropdown}
+                anchorEl={anchorEl}
+              />
+            ) : null}
+          </div>
+
+          // <div className={classes.buttonsDiv}>
+          //   <Button
+          //     className={classes.buttons}
+          //     variant="outlined"
+          //     onClick={handleSignUpOpen}
+          //   >
+          //     Sign Up
+          //   </Button>
+          //   <Button
+          //     className={classes.buttons}
+          //     variant="outlined"
+          //     onClick={handleSignInOpen}
+          //   >
+          //     Sign In
+          //   </Button>
+          // </div>
+        )}
       </Toolbar>
     </AppBar>
   );

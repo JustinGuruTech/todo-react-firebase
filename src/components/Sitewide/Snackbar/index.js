@@ -22,7 +22,7 @@ import { Close as CloseIcon } from "@material-ui/icons";
 const styles = {};
 /* #endregion */
 
-function SingleToDo(props) {
+function CustomSnackbar(props) {
   /* #region PROPS/HOOKS */
   // prop attributes
   const { /*classes,*/ snackbarMessage, setSnackbarMessage } = props;
@@ -74,4 +74,4 @@ function SingleToDo(props) {
   /* #endregion */
 }
 
-export default withStyles(styles)(SingleToDo);
+export default withStyles(styles)(CustomSnackbar);
