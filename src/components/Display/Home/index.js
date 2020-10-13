@@ -271,7 +271,7 @@ function Home(props) {
                 >
                   <img
                     src={fullScreenShot}
-                    alt="test"
+                    alt="Full screenshot of application"
                     className={classes.infoImage}
                   />
                 </Grid>
@@ -286,7 +286,7 @@ function Home(props) {
                 >
                   <img
                     src={addTodoScreenShot}
-                    alt="test"
+                    alt="Screenshot of adding a todo"
                     className={classes.infoImage}
                   />
                 </Grid>
@@ -343,7 +343,7 @@ function Home(props) {
                 >
                   <img
                     src={addListScreenShot}
-                    alt="test"
+                    alt="Screenshot of adding a list"
                     className={classes.infoImage}
                   />
                 </Grid>
@@ -358,7 +358,7 @@ function Home(props) {
                 >
                   <img
                     src={firebaseScreenShot}
-                    alt="test"
+                    alt="Screenshot of firebase"
                     className={classes.infoImage}
                   />
                 </Grid>

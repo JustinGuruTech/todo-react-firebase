@@ -258,7 +258,7 @@ function TodoPage(props) {
           setSnackbarMessage={setSnackbarMessage}
         />
       </div>
-      <Footer dark={false}/>
+      <Footer dark={false} />
 
       {/* ADD TODO LIST FORM POPUP */}
       <Dialog

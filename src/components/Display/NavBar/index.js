@@ -21,7 +21,7 @@ import SignInDropdown from "../SignInDropdown";
 /* #endregion */
 
 /* #region STYLES */
-const styles = theme => ({
+const styles = (theme) => ({
   mainBar: {
     position: "fixed",
     backgroundColor: "white",
@@ -33,7 +33,7 @@ const styles = theme => ({
     justifyContent: "space-between",
     [theme.breakpoints.down("xs")]: {
       //only show on mobile or small screen
-      paddingTop: 4
+      paddingTop: 4,
     },
   },
   menuIcon: {
@@ -57,7 +57,7 @@ const styles = theme => ({
   profileButton: {},
   accountIcon: {
     paddingRight: 5,
-    fontSize: 30
+    fontSize: 30,
   },
   profileDropdown: {
     position: "absolute",
@@ -126,7 +126,11 @@ function NavBar(props) {
         </div>
         {user ? (
           <div className={classes.iconText}>
-            <Button className={classes.profileButton} onClick={toggleProfile}>
+            <Button
+              className={classes.profileButton}
+              onClick={toggleProfile}
+              aria-label="Show profile dropdown"
+            >
               <AccountBox className={classes.accountIcon} /> Profile
             </Button>
             {profileOpen ? (
@@ -138,7 +142,11 @@ function NavBar(props) {
           </div>
         ) : (
           <div className={classes.iconText}>
-            <Button className={classes.profileButton} onClick={toggleButtons}>
+            <Button
+              className={classes.profileButton}
+              onClick={toggleButtons}
+              aria-label="Show sign up & sign in buttons"
+            >
               <AccountBox className={classes.accountIcon} />
             </Button>
             {buttonsOpen ? (
