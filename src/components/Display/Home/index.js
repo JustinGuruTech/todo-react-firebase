@@ -141,6 +141,11 @@ const styles = (theme) => ({
       paddingRight: 0,
     },
   },
+  imageContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "end"
+  },
   infoImage: {
     width: "90%",
     borderRadius: 7,
@@ -267,7 +272,7 @@ function Home(props) {
                   item
                   sm={12}
                   md={7}
-                  style={{ display: "flex", justifyContent: "center" }}
+                  className={classes.imageContainer}
                 >
                   <img
                     src={fullScreenShot}
@@ -282,7 +287,7 @@ function Home(props) {
                   item
                   sm={12}
                   md={7}
-                  style={{ display: "flex", justifyContent: "center" }}
+                  className={classes.imageContainer}
                 >
                   <img
                     src={addTodoScreenShot}
@@ -339,7 +344,7 @@ function Home(props) {
                   item
                   sm={12}
                   md={7}
-                  style={{ display: "flex", justifyContent: "center" }}
+                  className={classes.imageContainer}
                 >
                   <img
                     src={addListScreenShot}
@@ -354,7 +359,7 @@ function Home(props) {
                   item
                   sm={12}
                   md={7}
-                  style={{ display: "flex", justifyContent: "center" }}
+                  className={classes.imageContainer}
                 >
                   <img
                     src={firebaseScreenShot}
