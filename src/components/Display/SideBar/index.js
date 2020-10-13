@@ -42,6 +42,8 @@ const styles = (theme) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: "nowrap",
+    backgroundColor: "#3d3a3a",
+    color: "white"
   },
   drawerOpen: {
     width: drawerWidth,
@@ -49,6 +51,8 @@ const styles = (theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    backgroundColor: "#3d3a3a",
+    color: "white"
   },
   drawerClose: {
     transition: theme.transitions.create("width", {
@@ -57,6 +61,8 @@ const styles = (theme) => ({
     }),
     overflowX: "hidden",
     width: theme.spacing(7) + 1,
+    backgroundColor: "#3d3a3a",
+    color: "white"
   },
   sideBarIcon: {
     paddingTop: 20,
@@ -64,6 +70,7 @@ const styles = (theme) => ({
     backgroundColor: "#3e3b3b",
     color: "white",
     marginTop: "48px",
+    borderBottom: "2px solid white",
     "&:hover": {
       backgroundColor: "#3e3b3bc4",
     },
@@ -91,6 +98,9 @@ const styles = (theme) => ({
   trashButton: {
     color: "#bb2b2b",
   },
+  addListButton: {
+    color: "white"
+  }
 });
 /* #endregion */
 
@@ -202,6 +212,7 @@ function SideBar(props) {
             <ListItem
               button
               key={index}
+              style={{borderBottom: "2px solid white"}}
               onClick={() => {
                 updateTodoListIndex(index);
               }}

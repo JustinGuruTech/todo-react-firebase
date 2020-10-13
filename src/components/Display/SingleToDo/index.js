@@ -45,10 +45,12 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    backgroundColor: "#e0e0e0"
   },
   horizontalFlex: {
     display: "flex",
     justifyContent: "space-between",
+    backgroundColor: "#e0e0e0"
   },
   leftFlex: {
     display: "flex",

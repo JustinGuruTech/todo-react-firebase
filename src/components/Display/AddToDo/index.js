@@ -47,12 +47,15 @@ const styles = {
     height: 55,
     color: "white",
     fontFamily: "Inter",
+    backgroundColor: "#e0e0e0"
   },
   addTextBG: {
-    backgroundColor: "white",
+    backgroundColor: "#e0e0e0",
+    borderRadius: 0
   },
   addTextInput: {
     padding: "12px 10px",
+    backgroundColor: "#e0e0e0"
   },
   addIconButton: {
     padding: 5,
@@ -67,7 +70,7 @@ const styles = {
   addButton: {
     width: "25%",
     backgroundColor: "#303030",
-    border: "1px solid #929292",
+    border: "2px solid #e0e0e0",
     color: "white",
     "&:hover": {
       backgroundColor: "#606060",

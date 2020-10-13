@@ -43,7 +43,7 @@ const styles = (theme) => ({
     borderBottom: "2px solid #d9ecff",
   },
   todoTitleContainer: {
-    marginBottom: 15,
+    marginBottom: 11,
     border: "3px solid",
   },
   todoTitle: {
@@ -84,6 +84,7 @@ const styles = (theme) => ({
   todoList: {
     marginTop: 12,
     minHeight: 600,
+    backgroundColor: "#e0e0e0"
   },
   mainTodoContainer: {
     minHeight: "100%",
@@ -101,7 +102,7 @@ const styles = (theme) => ({
   },
   todoContainer: {
     margin: "auto",
-    backgroundColor: "#e2e2e2",
+    backgroundColor: "#3d3a3a",
     marginTop: 40,
     padding: 40,
     paddingTop: 15,
@@ -111,7 +112,7 @@ const styles = (theme) => ({
     boxSizing: "initial",
   },
   filterButton: {
-    backgroundColor: "#d2d2d2",
+    backgroundColor: "#e0e0e0",
     height: 42,
     width: "32%",
     "&:hover": {
@@ -123,6 +124,7 @@ const styles = (theme) => ({
     color: "white",
     height: 42,
     width: "32%",
+    border: "2px solid #e0e0e0",
     "&:hover": {
       backgroundColor: "#606060",
     },
