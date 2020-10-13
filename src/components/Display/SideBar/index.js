@@ -95,9 +95,9 @@ const styles = (theme) => ({
   trashButton: {
     color: "#bb2b2b",
   },
-  addListButton: {
-    color: "white"
-  }
+  // addListButton: {
+  //   color: "white"
+  // }
 });
 /* #endregion */
 

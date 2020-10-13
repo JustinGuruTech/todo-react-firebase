@@ -1,8 +1,7 @@
 /* Justin Edwards
- * 09/16/2020
- * AppBar Component - Reusable AppBar for application.
- * Checks for auth and conditionally renders profile
- * icon
+ * 10/09/2020
+ * Footer Component - Reusable Footer containing 
+ * link to source code and portfolio
  */
 
 /* #region IMPORTS */

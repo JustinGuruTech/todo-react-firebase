@@ -27,7 +27,7 @@ const styles = {
     padding: 20,
     width: "auto",
     position: "absolute",
-    top: 64,
+    top: 66,
     right: 2,
     textAlign: "center",
     zIndex: 1,

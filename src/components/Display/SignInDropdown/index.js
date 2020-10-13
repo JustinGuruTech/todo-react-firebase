@@ -49,7 +49,7 @@ function SignInDropdown(props) {
 
   /* #region COMPONENT DISPLAY */
   return (
-    <Paper className={classes.mainCard} position="static" elevation={1}>
+    <Paper position="static" elevation={1}>
       <div className={classes.buttonsDiv}>
         <Button
           className={classes.buttons}
