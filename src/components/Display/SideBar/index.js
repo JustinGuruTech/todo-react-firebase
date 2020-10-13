@@ -42,8 +42,7 @@ const styles = (theme) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: "nowrap",
-    backgroundColor: "#3d3a3a",
-    color: "white"
+    backgroundColor: "white",
   },
   drawerOpen: {
     width: drawerWidth,
@@ -51,8 +50,7 @@ const styles = (theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    backgroundColor: "#3d3a3a",
-    color: "white"
+    backgroundColor: "white",
   },
   drawerClose: {
     transition: theme.transitions.create("width", {
@@ -61,8 +59,7 @@ const styles = (theme) => ({
     }),
     overflowX: "hidden",
     width: theme.spacing(7) + 1,
-    backgroundColor: "#3d3a3a",
-    color: "white"
+    backgroundColor: "white",
   },
   sideBarIcon: {
     paddingTop: 20,
