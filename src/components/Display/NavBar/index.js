@@ -57,6 +57,7 @@ const styles = theme => ({
   profileButton: {},
   accountIcon: {
     paddingRight: 5,
+    fontSize: 30
   },
   profileDropdown: {
     position: "absolute",
