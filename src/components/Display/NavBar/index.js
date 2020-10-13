@@ -24,7 +24,7 @@ import SignInDropdown from "../SignInDropdown";
 const styles = theme => ({
   mainBar: {
     position: "fixed",
-    backgroundColor: "#3d3a3a",
+    backgroundColor: "white",
     height: 64,
     borderBottom: "2px solid white",
   },
@@ -37,27 +37,24 @@ const styles = theme => ({
     },
   },
   menuIcon: {
-    color: "white",
+    color: "black",
     fontSize: 40,
     position: "relative",
   },
   iconText: {
     display: "flex",
-    color: "white"
   },
   icon: {
     fontSize: 40,
     marginRight: 10,
-    color: "white",
+    color: "#3e3b3b",
   },
   headTitle: {
-    color: "white",
+    color: "#3e3b3b",
     fontFamily: "Inter",
     fontWeight: 800,
   },
-  profileButton: {
-    color: "white"
-  },
+  profileButton: {},
   accountIcon: {
     paddingRight: 5,
     fontSize: 30
@@ -130,7 +127,7 @@ function NavBar(props) {
         {user ? (
           <div className={classes.iconText}>
             <Button className={classes.profileButton} onClick={toggleProfile}>
-              <AccountBox className={classes.accountIcon} style={{fontSize: 30}} /> Profile
+              <AccountBox className={classes.accountIcon} /> Profile
             </Button>
             {profileOpen ? (
               <ProfileDropdown
@@ -142,7 +139,7 @@ function NavBar(props) {
         ) : (
           <div className={classes.iconText}>
             <Button className={classes.profileButton} onClick={toggleButtons}>
-              <AccountBox className={classes.accountIcon} style={{fontSize: 30}} />
+              <AccountBox className={classes.accountIcon} />
             </Button>
             {buttonsOpen ? (
               <SignInDropdown
