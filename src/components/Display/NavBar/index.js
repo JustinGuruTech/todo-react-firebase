@@ -36,10 +36,10 @@ const styles = (theme) => ({
       //only show on mobile or small screen
       paddingTop: 4,
     },
-    [theme.breakpoints.down(700)]: {
-      //only show on mobile or small screen
-      paddingLeft: 0
-    },
+    // [theme.breakpoints.down(700)]: {
+    //   //only show on mobile or small screen
+    //   paddingLeft: 0
+    // },
   },
   hamburgerDiv: {
     display: "none",
@@ -62,19 +62,21 @@ const styles = (theme) => ({
   },
   icon: {
     fontSize: 40,
-    marginRight: 10,
     color: "#3e3b3b",
   },
   headTitle: {
     color: "#3e3b3b",
     fontFamily: "Inter",
     fontWeight: 800,
-    [theme.breakpoints.down(400)]: {
+    marginLeft: 10,
+    [theme.breakpoints.down(315)]: {
       //only show on mobile or small screen
       display: "none"
     },
   },
-  profileButton: {},
+  profileButton: {
+    color: "#3e3b3b"
+  },
   profileText: {
     [theme.breakpoints.down(400)]: {
       //only show on mobile or small screen
