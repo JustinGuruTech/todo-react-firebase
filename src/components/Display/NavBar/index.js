@@ -9,12 +9,13 @@
 import React, { useState } from "react";
 import {
   Button,
+  IconButton,
   Typography,
   AppBar,
   Toolbar,
   withStyles,
 } from "@material-ui/core";
-import { OfflinePin, AccountBox } from "@material-ui/icons";
+import { OfflinePin, AccountBox, Menu } from "@material-ui/icons";
 import { useAuthDataContext } from "../../AuthDataProvider";
 import ProfileDropdown from "../ProfileDropdown";
 import SignInDropdown from "../SignInDropdown";
@@ -35,6 +36,21 @@ const styles = (theme) => ({
       //only show on mobile or small screen
       paddingTop: 4,
     },
+    [theme.breakpoints.down(700)]: {
+      //only show on mobile or small screen
+      paddingLeft: 0
+    },
+  },
+  hamburgerDiv: {
+    display: "none",
+    [theme.breakpoints.down(700)]: {
+      //only show on mobile or small screen
+      display: "inline-block"
+    },
+  },
+  hamburgerIcon: {
+    fontSize: 40,
+    color: "#3e3b3b"
   },
   menuIcon: {
     color: "black",
@@ -53,8 +69,18 @@ const styles = (theme) => ({
     color: "#3e3b3b",
     fontFamily: "Inter",
     fontWeight: 800,
+    [theme.breakpoints.down(400)]: {
+      //only show on mobile or small screen
+      display: "none"
+    },
   },
   profileButton: {},
+  profileText: {
+    [theme.breakpoints.down(400)]: {
+      //only show on mobile or small screen
+      display: "none"
+    },
+  },
   accountIcon: {
     paddingRight: 5,
     fontSize: 30,
@@ -84,6 +110,7 @@ const styles = (theme) => ({
 function NavBar(props) {
   /* #region PROPS/HOOKS */
   // prop functions
+  const {toggleMobileDrawer} = props;
   const { classes } = props;
   const { user } = useAuthDataContext();
   const [profileOpen, setProfileOpen] = useState(false); // profile open/closed
@@ -97,6 +124,7 @@ function NavBar(props) {
     setProfileOpen(!profileOpen);
     setAnchorEl(event.currentTarget);
   }
+  /* #endregion */
 
   // // will be used later to close profile when clicking outside of it
   // function closeProfile() {
@@ -113,6 +141,12 @@ function NavBar(props) {
   return (
     <AppBar className={classes.mainBar} position="static">
       <Toolbar className={classes.toolbar}>
+        {user ? (
+          <div className={classes.hamburgerDiv}>
+            <IconButton onClick={toggleMobileDrawer}>
+              <Menu className={classes.hamburgerIcon}/>
+            </IconButton>
+          </div> ) : null }
         <div className={classes.iconText}>
           {/* <Menu className={classes.menuIcon} /> */}
           <OfflinePin className={classes.icon} />
@@ -123,7 +157,7 @@ function NavBar(props) {
           >
             To-Do
           </Typography>
-        </div>
+        </div> 
         {user ? (
           <div className={classes.iconText}>
             <Button
@@ -131,7 +165,8 @@ function NavBar(props) {
               onClick={toggleProfile}
               aria-label="Show profile dropdown"
             >
-              <AccountBox className={classes.accountIcon} /> Profile
+              <AccountBox className={classes.accountIcon} /> 
+              <p className={classes.profileText}>Profile</p>
             </Button>
             {profileOpen ? (
               <ProfileDropdown

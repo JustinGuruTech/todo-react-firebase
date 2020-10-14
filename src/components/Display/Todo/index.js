@@ -109,6 +109,11 @@ const styles = (theme) => ({
     minWidth: "40%",
     maxWidth: 500,
     boxSizing: "initial",
+    [theme.breakpoints.down(510)]: {
+      //only show on mobile or small screen
+      padding: 10,
+      marginTop: 10
+    },
   },
   filterButton: {
     backgroundColor: "#d2d2d2",
@@ -116,6 +121,10 @@ const styles = (theme) => ({
     width: "32%",
     "&:hover": {
       backgroundColor: "#b2b2b2",
+    },
+    [theme.breakpoints.down(385)]: {
+      //only show on mobile or small screen
+      fontSize: 11
     },
   },
   filterButtonSelected: {
@@ -125,6 +134,10 @@ const styles = (theme) => ({
     width: "32%",
     "&:hover": {
       backgroundColor: "#606060",
+    },
+    [theme.breakpoints.down(385)]: {
+      //only show on mobile or small screen
+      fontSize: 11
     },
   },
   filterButtons: {

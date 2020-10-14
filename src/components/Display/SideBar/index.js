@@ -4,7 +4,7 @@
 // Sidebar. Shrinks/expands when hamburger clicked.
 
 /* #region IMPORTS */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import {
   Drawer,
@@ -60,6 +60,10 @@ const styles = (theme) => ({
     overflowX: "hidden",
     width: theme.spacing(7) + 1,
     backgroundColor: "white",
+    [theme.breakpoints.down(700)]: {
+      //only show on mobile or small screen
+      width: 0
+    },
   },
   sideBarIcon: {
     paddingTop: 20,
@@ -104,16 +108,23 @@ const styles = (theme) => ({
 function SideBar(props) {
   /* #region PROPS/HOOKS */
   // prop functions
-  const { updateTodoListIndex, handleAddListOpen } = props;
+  const { updateTodoListIndex, handleAddListOpen, closeMobileDrawer } = props;
   // prop attributes
-  const { classes, todoListList } = props;
+  const { classes, todoListList, mobileDrawerOpen } = props;
   const [open, setOpen] = useState(false);
   const [confirmTrashOpen, setConfirmTrashOpen] = useState(false);
   const [listToDelete, setListToDelete] = useState(-1);
   /* #endregion */
 
+  useEffect(() => {
+    setOpen(mobileDrawerOpen);
+  }, [mobileDrawerOpen])
+
   /* #region OPEN/CLOSE DRAWER */
   const toggleDrawer = () => {
+    if (mobileDrawerOpen) {
+      closeMobileDrawer();
+    }
     setOpen(!open);
   };
   /* #endregion */

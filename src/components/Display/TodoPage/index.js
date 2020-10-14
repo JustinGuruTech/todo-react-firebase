@@ -69,9 +69,19 @@ function TodoPage(props) {
   // add list hooks
   const [newName, setNewName] = useState("");
   const [newColor, setNewColor] = useState("");
+
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   // will be used for loading symbol
   // const [addingList, setAddingList] = useState(false);
   /* #endregion */
+
+  function closeMobileDrawer() {
+    setMobileDrawerOpen(false);
+  }
+
+  function toggleMobileDrawer() {
+    setMobileDrawerOpen(!mobileDrawerOpen);
+  }
 
   /* #region STARTUP */
   // run once on startup
@@ -236,7 +246,11 @@ function TodoPage(props) {
         </div>
         {/* NAVBAR */}
         <div className={classes.navBar}>
-          <NavBar />
+          <NavBar 
+            mobileDrawerOpen={mobileDrawerOpen}
+            toggleMobileDrawer={toggleMobileDrawer}
+            closeMobileDrawer={closeMobileDrawer}
+          />
         </div>
         {/* SIDEBAR */}
         <div className={classes.sideBar}>
@@ -247,6 +261,8 @@ function TodoPage(props) {
             handleEditListOpen={handleEditListOpen}
             deleteListById={deleteListById}
             triggerSnackbar={triggerSnackbar}
+            mobileDrawerOpen={mobileDrawerOpen}
+            closeMobileDrawer={closeMobileDrawer}
           />
         </div>
         {/* TODO LIST */}

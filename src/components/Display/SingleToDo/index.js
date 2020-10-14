@@ -38,7 +38,7 @@ import DetailedAddToDo from "../DetailedAddToDo";
 /* #endregion */
 
 /* #region STYLES */
-const styles = {
+const styles = theme => ({
   mainContainer: {
     width: "100%",
     minHeight: 50,
@@ -79,7 +79,11 @@ const styles = {
   },
   dueDate: {
     fontSize: ".7rem",
-    fontFamily: "Inter",
+    textAlign: "right"
+    // fontFamily: "Inter",
+  },
+  longDescription: {
+    fontSize: ".7rem",
   },
   timeRemaining: {
     fontSize: 14,
@@ -88,27 +92,38 @@ const styles = {
     left: 2,
   },
   bodyLabel: {
-    lineHeight: "20px",
+    lineHeight: "1rem",
+    fontSize: "1rem",
     margin: 0,
     fontFamily: "Inter",
+    wordBreak: "break-word"
   },
   bodyLabelCompleted: {
-    lineHeight: "20px",
+    lineHeight: "1rem",
+    fontSize: "1rem",
     margin: 0,
     textDecoration: "line-through",
     fontFamily: "Inter",
   },
   trashIcon: {
     color: "#bb2b2b",
+    [theme.breakpoints.down(700)]: {
+      //only show on mobile or small screen
+      padding: "0 5px 0 5px"
+    },
   },
   editIcon: {
     color: "#4949c3",
+    [theme.breakpoints.down(700)]: {
+      //only show on mobile or small screen
+      padding: 0
+    },
   },
   todoEdit: {
     margin: "auto",
     width: "100%",
   },
-};
+});
 /* #endregion */
 
 function SingleToDo(props) {
@@ -367,8 +382,8 @@ function SingleToDo(props) {
                   </Typography>
                 ) : null}
               </div>
-              <div className={classes.dueDate}>
-                <Typography className={classes.dueDate}>
+              <div>
+                <Typography className={classes.longDescription}>
                   {description}
                 </Typography>
               </div>
