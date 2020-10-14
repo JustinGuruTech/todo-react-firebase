@@ -112,7 +112,10 @@ const styles = (theme) => ({
     [theme.breakpoints.down(510)]: {
       //only show on mobile or small screen
       padding: 10,
-      marginTop: 10
+    },
+    [theme.breakpoints.down(580)]: {
+      //only show on mobile or small screen
+      marginTop: 14
     },
   },
   filterButton: {
@@ -122,7 +125,7 @@ const styles = (theme) => ({
     "&:hover": {
       backgroundColor: "#b2b2b2",
     },
-    [theme.breakpoints.down(385)]: {
+    [theme.breakpoints.down(320)]: {
       //only show on mobile or small screen
       fontSize: 11
     },
